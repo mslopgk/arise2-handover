@@ -81,6 +81,10 @@ export default function Achievements() {
               background:
                 "radial-gradient(130% 120% at 85% 0%, rgba(201,162,39,0.32) 0%, rgba(26,26,27,0) 52%), linear-gradient(155deg, #20201d 0%, #0e0e0f 100%)",
               border: "1px solid rgba(201,162,39,0.4)",
+              color: "#edede8",
+              ["--text" as any]: "#edede8",
+              ["--metal" as any]: "#cfcdc4",
+              ["--muted" as any]: "#b8b8b2",
             }}
           >
             {/* accent graphic block — abstract "podium" bars */}
@@ -143,12 +147,12 @@ export default function Achievements() {
             {achievements.list.map((item, i) => (
               <li
                 key={item}
-                className="ach-list-item flex items-start gap-4 bg-[var(--bg)] p-5"
+                className="ach-list-item flex items-start gap-4 bg-[var(--surface)] p-5"
               >
-                <span className="mono-label mt-1 text-[var(--gold)]">
+                <span className="font-mono text-xl md:text-2xl font-heavy text-[var(--gold)] shrink-0">
                   0{i + 1}
                 </span>
-                <p className="text-sm leading-relaxed text-[var(--text)]">
+                <p className="text-lg md:text-xl font-medium leading-relaxed text-[var(--text)]">
                   {item}
                 </p>
               </li>
