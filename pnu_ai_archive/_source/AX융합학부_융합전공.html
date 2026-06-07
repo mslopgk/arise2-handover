@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AX융합학부 AX융합전공 목록</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #f0f4f8;
+      --card: #ffffff;
+      --text: #1e293b;
+      --sub: #64748b;
+      --border: #e2e8f0;
+
+      /* 분야별 색상 */
+      --c1: #10b981; --c1p: #d1fae5; --c1d: #065f46;  /* 바이오·신약 */
+      --c2: #f59e0b; --c2p: #fef3c7; --c2d: #92400e;  /* 푸드테크AX */
+      --c3: #8b5cf6; --c3p: #ede9fe; --c3d: #4c1d95;  /* 인문·사회·문화 */
+      --c4: #2563eb; --c4p: #dbeafe; --c4d: #1e3a8a;  /* 경영·경통 */
+      --c5: #f97316; --c5p: #ffedd5; --c5d: #7c2d12;  /* 제조AI */
+      --c6: #0ea5e9; --c6p: #e0f2fe; --c6d: #0c4a6e;  /* 항만물류AI */
+      --c7: #6366f1; --c7p: #e0e7ff; --c7d: #312e81;  /* AX융합계산과학 */
+      --c8: #14b8a6; --c8p: #ccfbf1; --c8d: #134e4a;  /* 스마트시티·환경 */
+      --c9: #64748b; --c9p: #f1f5f9; --c9d: #1e293b;  /* 조선해양 */
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ──────── HEADER ──────── */
+    .hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a6e 50%, #0c4a6e 100%);
+      color: white;
+      padding: 56px 40px 48px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 50% 120%, rgba(99,102,241,0.3) 0%, transparent 60%);
+    }
+    .hero-inner { position: relative; z-index: 1; }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 20px; padding: 5px 16px;
+      font-size: 12px; font-weight: 600; letter-spacing: 0.5px;
+      margin-bottom: 16px; color: rgba(255,255,255,0.9);
+    }
+    .hero h1 {
+      font-size: 34px; font-weight: 900;
+      margin-bottom: 10px; letter-spacing: -0.5px;
+    }
+    .hero h1 span { color: #fbbf24; }
+    .hero-desc {
+      font-size: 15px; color: rgba(255,255,255,0.65);
+      margin-bottom: 36px;
+    }
+    .hero-stats {
+      display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;
+    }
+    .h-stat {
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 14px; padding: 16px 28px;
+      min-width: 130px;
+    }
+    .h-stat .n { font-size: 34px; font-weight: 900; color: #fbbf24; }
+    .h-stat .l { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+
+    /* ──────── FILTER BAR ──────── */
+    .filter-bar {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      padding: 16px 40px;
+      position: sticky; top: 0; z-index: 50;
+      overflow-x: auto;
+    }
+    .filter-inner {
+      max-width: 1140px; margin: 0 auto;
+      display: flex; gap: 8px; align-items: center; flex-wrap: nowrap;
+      min-width: max-content;
+    }
+    .filter-label { font-size: 12px; color: var(--sub); font-weight: 600; margin-right: 4px; white-space: nowrap; }
+    .filter-btn {
+      border: none; border-radius: 8px; padding: 7px 14px;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+      transition: all .2s; white-space: nowrap;
+      font-family: inherit;
+    }
+    .filter-btn.all {
+      background: #1e3a6e; color: white;
+    }
+    .filter-btn.all.inactive { background: #f1f5f9; color: var(--sub); }
+
+    /* ──────── MAIN CONTENT ──────── */
+    .container {
+      max-width: 1140px; margin: 0 auto; padding: 40px 24px;
+    }
+
+    /* ──────── SECTION (분야) ──────── */
+    .section-block {
+      margin-bottom: 40px;
+      scroll-margin-top: 80px;
+    }
+    .section-header {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 16px;
+    }
+    .section-num {
+      width: 34px; height: 34px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 900; color: white;
+      flex-shrink: 0;
+    }
+    .section-name {
+      font-size: 18px; font-weight: 800;
+    }
+    .section-count {
+      margin-left: auto;
+      font-size: 12px; font-weight: 700;
+      border-radius: 20px; padding: 3px 12px;
+    }
+
+    /* ──────── MAJOR CARDS GRID ──────── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 14px;
+    }
+    .major-card {
+      background: white;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      padding: 20px 22px;
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow .2s, transform .2s;
+    }
+    .major-card:hover {
+      box-shadow: 0 6px 24px rgba(0,0,0,0.10);
+      transform: translateY(-2px);
+    }
+    .major-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+    }
+    .major-icon {
+      font-size: 20px; margin-bottom: 10px;
+    }
+    .major-name {
+      font-size: 14px; font-weight: 800;
+      line-height: 1.4; margin-bottom: 12px;
+      color: var(--text);
+    }
+    .major-dept {
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .dept-row {
+      display: flex; align-items: flex-start; gap: 6px;
+    }
+    .dept-icon { font-size: 11px; margin-top: 2px; flex-shrink: 0; }
+    .dept-label {
+      font-size: 12px; color: var(--sub); line-height: 1.5;
+    }
+    .dept-label strong { color: var(--text); font-weight: 700; }
+
+    /* ──────── CHART SECTION ──────── */
+    .chart-section {
+      background: white;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      padding: 32px;
+      margin-bottom: 40px;
+    }
+    .chart-section h3 {
+      font-size: 16px; font-weight: 800; margin-bottom: 4px;
+    }
+    .chart-section p {
+      font-size: 13px; color: var(--sub); margin-bottom: 24px;
+    }
+    .chart-grid {
+      display: grid; grid-template-columns: 3fr 2fr; gap: 32px; align-items: center;
+    }
+
+    /* ──────── TABLE VIEW ──────── */
+    .table-section {
+      background: white;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      margin-bottom: 40px;
+    }
+    .table-head {
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--border);
+    }
+    .table-head h3 { font-size: 16px; font-weight: 800; }
+    .table-head p { font-size: 13px; color: var(--sub); margin-top: 2px; }
+    .table-wrap { overflow-x: auto; }
+    table {
+      width: 100%; border-collapse: collapse;
+      font-size: 13px;
+    }
+    thead th {
+      background: #f8fafc;
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 11px; font-weight: 700; color: var(--sub);
+      letter-spacing: 0.5px; text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    tbody tr { border-bottom: 1px solid #f1f5f9; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #fafbfd; }
+    tbody td { padding: 12px 16px; vertical-align: middle; }
+    .td-num {
+      font-weight: 800; font-size: 13px; text-align: center;
+      width: 48px;
+    }
+    .td-field { width: 130px; }
+    .td-field .field-badge {
+      display: inline-block; border-radius: 6px; padding: 3px 10px;
+      font-size: 11px; font-weight: 700;
+    }
+    .td-major { font-weight: 700; }
+    .td-dept { color: var(--sub); font-size: 12px; line-height: 1.5; }
+
+    /* ──────── FOOTER ──────── */
+    footer {
+      text-align: center; padding: 28px;
+      color: var(--sub); font-size: 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 700px) {
+      .hero h1 { font-size: 22px; }
+      .chart-grid { grid-template-columns: 1fr; }
+      .filter-bar { padding: 12px 16px; }
+      .container { padding: 24px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ──────── HERO ──────── -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">부산대학교 AI대학</div>
+    <h1><span>AX융합학부</span> AX융합전공 목록</h1>
+    <p class="hero-desc">산업·기술·인문·환경 전 영역을 아우르는 AI 기반 융합전공 체계</p>
+    <div class="hero-stats">
+      <div class="h-stat">
+        <div class="n">9</div>
+        <div class="l">융합 분야</div>
+      </div>
+      <div class="h-stat">
+        <div class="n">18</div>
+        <div class="l">AX 융합전공</div>
+      </div>
+      <div class="h-stat">
+        <div class="n">11</div>
+        <div class="l">참여 단과대학</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ──────── FILTER BAR ──────── -->
+<div class="filter-bar">
+  <div class="filter-inner">
+    <span class="filter-label">분야 필터</span>
+    <button class="filter-btn all" onclick="filterSection('all', this)">전체</button>
+    <button class="filter-btn" style="background:#d1fae5;color:#065f46;" onclick="filterSection('s1', this)">🧬 바이오·신약</button>
+    <button class="filter-btn" style="background:#fef3c7;color:#92400e;" onclick="filterSection('s2', this)">🌾 푸드테크AX</button>
+    <button class="filter-btn" style="background:#ede9fe;color:#4c1d95;" onclick="filterSection('s3', this)">📚 인문·사회·문화</button>
+    <button class="filter-btn" style="background:#dbeafe;color:#1e3a8a;" onclick="filterSection('s4', this)">💼 경영·경통</button>
+    <button class="filter-btn" style="background:#ffedd5;color:#7c2d12;" onclick="filterSection('s5', this)">🏭 제조AI</button>
+    <button class="filter-btn" style="background:#e0f2fe;color:#0c4a6e;" onclick="filterSection('s6', this)">⚓ 항만물류AI</button>
+    <button class="filter-btn" style="background:#e0e7ff;color:#312e81;" onclick="filterSection('s7', this)">💻 AX계산과학·디지털트윈</button>
+    <button class="filter-btn" style="background:#ccfbf1;color:#134e4a;" onclick="filterSection('s8', this)">🌍 스마트시티·환경·관광</button>
+    <button class="filter-btn" style="background:#f1f5f9;color:#1e293b;" onclick="filterSection('s9', this)">⛵ 조선해양</button>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ──────── CHART ──────── -->
+  <div class="chart-section" id="chart-area">
+    <h3>융합전공 분야별 분포</h3>
+    <p>9개 분야에 걸친 18개 AX 융합전공의 구성 현황</p>
+    <div class="chart-grid">
+      <canvas id="barChart" height="280"></canvas>
+      <canvas id="doughnutChart" height="260"></canvas>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- SECTION 1: 바이오·신약 -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="section-block" id="s1">
+    <div class="section-header">
+      <div class="section-num" style="background:var(--c1);">1</div>
+      <div class="section-name">🧬 바이오·신약</div>
+      <span class="section-count" style="background:var(--c1p);color:var(--c1d);">2개 전공</span>
+    </div>
+    <div class="cards-grid">
+
+      <div class="major-card" style="border-color:var(--c1p);">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c1);border-radius:14px 0 0 14px;"></div>
+        <div class="major-icon">🦠</div>
+        <div class="major-name">AI-바이오 융합전공</div>
+        <div class="major-dept">
+          <div class="dept-row">
+            <span class="dept-icon">🏛️</span>
+            <span class="dept-label"><strong>자연과학대학</strong></span>
+          </div>
+          <div class="dept-row">
+            <span class="dept-icon">📌</span>
+            <span class="dept-label">미생물학과</span>
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <span style="background:var(--c1p);color:var(--c1d);font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;">AI × 바이오</span>
+        </div>
+      </div>
+
+      <div class="major-card" style="border-color:var(--c1p);">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c1);border-radius:14px 0 0 14px;"></div>
+        <div class="major-icon">💊</div>
+        <div class="major-name">AX신약융합전공</div>
+        <div class="major-dept">
+          <div class="dept-row">
+            <span class="dept-icon">🏛️</span>
+            <span class="dept-label"><strong>약학대학</strong></span>
+          </div>
+          <div class="dept-row">
+            <span class="dept-icon">📌</span>
+            <span class="dept-label">약학과 · 제약학과</span>
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <span style="background:var(--c1p);color:var(--c1d);font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;">AI × 신약개발</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- SECTION 2: 푸드테크AX -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="section-block" id="s2">
+    <div class="section-header">
+      <div class="section-num" style="background:var(--c2);">2</div>
+      <div class="section-name">🌾 푸드테크AX</div>
+      <span class="section-count" style="background:var(--c2p);color:var(--c2d);">1개 전공</span>
+    </div>
+    <div class="cards-grid">
+
+      <div class="major-card" style="border-color:var(--c2p);">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c2);border-radius:14px 0 0 14px;"></div>
+        <div class="major-icon">🌱</div>
+        <div class="major-name">에그테크 AX 융합전공</div>
+        <div class="major-dept">
+          <div class="dept-row">
+            <span class="dept-icon">🏛️</span>
+            <span class="dept-label"><strong>생명자원과학대학</strong></span>
+          </div>
+          <div class="dept-row">
+            <span class="dept-icon">📌</span>
+            <span class="dept-label">바이오산업기계공학과</span>
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <span style="background:var(--c2p);color:var(--c2d);font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;">AI × 농업식품기술</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- SECTION 3: 인문·사회·문화 -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="section-block" id="s3">
+    <div class="section-header">
+      <div class="section-num" style="background:var(--c3);">3</div>
+      <div class="section-name">📚 인문·사회·문화</div>
+      <span class="section-count" style="background:var(--c3p);color:var(--c3d);">2개 전공</span>
+    </div>
+    <div class="cards-grid">
+
+      <div class="major-card" style="border-color:var(--c3p);">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c3);border-radius:14px 0 0 14px;"></div>
+        <div class="major-icon">📖</div>
+        <div class="major-name">AX인문융합전공</div>
+        <div class="major-dept">
+          <div class="dept-row">
+            <span class="dept-icon">🏛️</span>
+            <span class="dept-label"><strong>인문대학</strong></span>
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <span style="background:var(--c3p);color:var(--c3d);font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;">AI × 인문학</span>
+        </div>
+      </div>
+
+      <div class="major-card" style="border-color:var(--c3p);">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c3);border-radius:14px 0 0 14px;"></div>
+        <div class="major-icon">📊</div>
+        <div class="major-name">AX·소셜 데이터 분석 융합전공</div>
+        <div class="major-dept">
+          <div class="dept-row">
+            <span class="dept-icon">🏛️</span>
+            <span class="dept-label"><strong>사회과학대학</strong></span>
+          </div>
+          <div class="dept-row">
+            <span class="dept-icon">📌</span>
+            <span class="dept-label">정치외교학과</span>
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <span style="background:var(--c3p);color:var(--c3d);font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;">AI × 사회데이터</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- SECTION 4: 경영·경통 -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="section-block" id="s4">
+    <div class="section-header">
+      <div class="section-num" style="background:var(--c4);">4</div>
+      <div class="section-name">💼 경영·경통</div>
+      <span class="section-count" style="background:var(--c4p);color:var(--c4d);">2개 전공</span>
+    </div>
+    <div class="cards-grid">
+
+      <div class="major-card" style="border-color:var(--c4p);">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c4);border-radius:14px 0 0 14px;"></div>
+        <div class="major-icon">📈</div>
+        <div class="major-name">AX 전략경영 융합전공</div>
+        <div class="major-dept">
+          <div class="dept-row">
+            <span class="dept-icon">🏛️</span>
+            <span class="dept-label"><strong>경영대학</strong></span>
+          </div>
+          <div class="dept-row">
+            <span class="dept-icon">📌</span>
+            <span class="dept-label">경영학과</span>
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <span style="background:var(--c4p);color:var(--c4d);font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;">AI × 전략경영</span>
+        </div>
+      </div>
+
+      <div class="major-card" style="border-color:var(--c4p);">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c4);border-radius:14px 0 0 14px;"></div>
+        <div class="major-icon">⚓</div>
+        <div class="major-name">해양산업·금융 융합전공</div>
+        <div class="major-dept">
+          <div class="dept-row">
+            <span class="dept-icon">🏛️</span>
+            <span class="dept-label"><strong>경제통상대학</strong></span>
+          </div>
+          <div class="dept-row">
+            <span class="dept-icon">📌</span>
+            <span class="dept-label">경제학부</span>
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <span style="background:var(--c4p);color:var(--c4d);font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;">AI × 해양금융</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- SECTION 5: 제조AI -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="section-block" id="s5">
+    <div class="section-header">
+      <div class="section-num" style="background:var(--c5);">5</div>
+      <div class="section-name">🏭 제조AI</div>
+      <span class="section-count" style="background:var(--c5p);color:var(--c5d);">3개 전공</span>
+    </div>
+    <div class="cards-grid">
+
+      <div class="major-card" style="border-color:var(--c5p);">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c5);border-radius:14px 0 0 14px;"></div>
+        <div class="major-icon">🤖</div>
+        <div class="major-name">피지컬AI 빅데이터합성융합전공</div>
+        <div class="major-dept">
+          <div class="dept-row">
+            <span class="dept-icon">🏛️</span>
+            <span class="dept-label"><strong>학부대학</strong> · 첨단융합학부</span>
+          </div>
+          <div class="dept-row">
+            <span class="dept-icon">📌</span>
+            <span class="dept-label">광메카트로닉스공학전공</span>
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <span style="background:var(--c5p);color:var(--c5d);font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;">AI × 피지컬·빅데이터</span>
+        </div>
+      </div>
+
+      <div class="major-card" style="border-color:var(--c5p);">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c5);border-radius:14px 0 0 14px;"></div>
+        <div class="major-icon">⚙️</div>
+        <div class="major-name">제조AI 융합전공 <span style="font-size:11px;color:var(--sub);">(기계)</span></div>
+        <div class="major-dept">
+          <div class="dept-row">
+            <span class="dept-icon">🏛️</span>
+            <span class="dept-label"><strong>공과대학</strong></span>
+          </div>
+          <div class="dept-row">
+            <span class="dept-icon">📌</span>
+            <span class="dept-label">기계공학부</span>
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <span style="background:var(--c5p);color:var(--c5d);font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;">AI × 기계제조</span>
+        </div>
+      </div>
+
+      <div class="major-card" style="border-color:var(--c5p);">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c5);border-radius:14px 0 0 14px;"></div>
+        <div class="major-icon">🔩</div>
+        <div class="major-name">제조AI 융합전공 <span style="font-size:11px;color:var(--sub);">(산업)</span></div>
+        <div class="major-dept">
+          <div class="dept-row">
+            <span class="dept-icon">🏛️</span>
+            <span class="dept-label"><strong>공과대학</strong></span>
+          </div>
+          <div class="dept-row">
+            <span class="dept-icon">📌</span>
+            <span class="dept-label">산업공학과</span>
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <span style="background:var(--c5p);color:var(--c5d);font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;">AI × 산업공학</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- SECTION 6: 항만물류AI -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="section-block" id="s6">
+    <div class="section-header">
+      <div class="section-num" style="background:var(--c6);">6</div>
+      <div class="section-name">⚓ 항만물류AI</div>
+      <span class="section-count" style="background:var(--c6p);color:var(--c6d);">1개 전공</span>
+    </div>
+    <div class="cards-grid">
+
+      <div class="major-card" style="border-color:var(--c6p);">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c6);border-radius:14px 0 0 14px;"></div>
+        <div class="major-icon">🚢</div>
+        <div class="major-name">해양물류AI 융합전공</div>
+        <div class="major-dept">
+          <div class="dept-row">
+            <span class="dept-icon">🏛️</span>
+            <span class="dept-label"><strong>공과대학</strong></span>
+          </div>
+          <div class="dept-row">
+            <span class="dept-icon">📌</span>
+            <span class="dept-label">산업공학과</span>
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <span style="background:var(--c6p);color:var(--c6d);font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;">AI × 항만물류</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- SECTION 7: AX융합계산과학 & 디지털트윈 -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="section-block" id="s7">
+    <div class="section-header">
+      <div class="section-num" style="background:var(--c7);">7</div>
+      <div class="section-name">💻 AX융합계산과학 & 디지털트윈</div>
+      <span class="section-count" style="background:var(--c7p);color:var(--c7d);">4개 전공</span>
+    </div>
+    <div class="cards-grid">
+
+      <div class="major-card" style="border-color:var(--c7p);">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c7);border-radius:14px 0 0 14px;"></div>
+        <div class="major-icon">🔬</div>
+        <div class="major-name">AI 반도체 소자 공정 융합전공</div>
+        <div class="major-dept">
+          <div class="dept-row">
+            <span class="dept-icon">🏛️</span>
+            <span class="dept-label"><strong>학부대학</strong> · 첨단융합학부</span>
+          </div>
+          <div class="dept-row">
+            <span class="dept-icon">📌</span>
+            <span class="dept-label">나노소자집단제조전공</span>
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <span style="background:var(--c7p);color:var(--c7d);font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;">AI × 반도체</span>
+        </div>
+      </div>
+
+      <div class="major-card" style="border-color:var(--c7p);">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c7);border-radius:14px 0 0 14px;"></div>
+        <div class="major-icon">📐</div>
+        <div class="major-name">AI·수리데이터과학 융합전공</div>
+        <div class="major-dept">
+          <div class="dept-row">
+            <span class="dept-icon">🏛️</span>
+            <span class="dept-label"><strong>자연과학대학</strong></span>
+          </div>
+          <div class="dept-row">
+            <span class="dept-icon">📌</span>
+            <span class="dept-label">수학과</span>
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <span style="background:var(--c7p);color:var(--c7d);font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;">AI × 수리과학</span>
+        </div>
+      </div>
+
+      <div class="major-card" style="border-color:var(--c7p);">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c7);border-radius:14px 0 0 14px;"></div>
+        <div class="major-icon">🖥️</div>
+        <div class="major-name">AI융합계산과학</div>
+        <div class="major-dept">
+          <div class="dept-row">
+            <span class="dept-icon">🏛️</span>
+            <span class="dept-label"><strong>학부대학</strong> · 첨단융합학부</span>
+          </div>
+          <div class="dept-row">
+            <span class="dept-icon">📌</span>
+            <span class="dept-label">광메카트로닉스공학전공</span>
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <span style="background:var(--c7p);color:var(--c7d);font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;">AI × 계산과학</span>
+        </div>
+      </div>
+
+      <div class="major-card" style="border-color:var(--c7p);">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c7);border-radius:14px 0 0 14px;"></div>
+        <div class="major-icon">🛩️</div>
+        <div class="major-name">디지털트윈 융합전공</div>
+        <div class="major-dept">
+          <div class="dept-row">
+            <span class="dept-icon">🏛️</span>
+            <span class="dept-label"><strong>공과대학</strong></span>
+          </div>
+          <div class="dept-row">
+            <span class="dept-icon">📌</span>
+            <span class="dept-label">항공우주공학과</span>
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <span style="background:var(--c7p);color:var(--c7d);font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;">AI × 디지털트윈</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- SECTION 8: 스마트시티·해양도시·기후환경·관광 -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="section-block" id="s8">
+    <div class="section-header">
+      <div class="section-num" style="background:var(--c8);">8</div>
+      <div class="section-name">🌍 스마트시티·해양도시·기후환경·관광</div>
+      <span class="section-count" style="background:var(--c8p);color:var(--c8d);">2개 전공</span>
+    </div>
+    <div class="cards-grid">
+
+      <div class="major-card" style="border-color:var(--c8p);">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c8);border-radius:14px 0 0 14px;"></div>
+        <div class="major-icon">🌤️</div>
+        <div class="major-name">AI·지구환경 융합전공</div>
+        <div class="major-dept">
+          <div class="dept-row">
+            <span class="dept-icon">🏛️</span>
+            <span class="dept-label"><strong>자연과학대학</strong></span>
+          </div>
+          <div class="dept-row">
+            <span class="dept-icon">📌</span>
+            <span class="dept-label">대기환경과학과</span>
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <span style="background:var(--c8p);color:var(--c8d);font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;">AI × 기후환경</span>
+        </div>
+      </div>
+
+      <div class="major-card" style="border-color:var(--c8p);">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c8);border-radius:14px 0 0 14px;"></div>
+        <div class="major-icon">🏠</div>
+        <div class="major-name">Lifecare AX 융합전공</div>
+        <div class="major-dept">
+          <div class="dept-row">
+            <span class="dept-icon">🏛️</span>
+            <span class="dept-label"><strong>생활과학대학</strong></span>
+          </div>
+          <div class="dept-row">
+            <span class="dept-icon">📌</span>
+            <span class="dept-label">실내환경디자인학과</span>
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <span style="background:var(--c8p);color:var(--c8d);font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;">AI × 생활환경</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- SECTION 9: 조선해양 -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="section-block" id="s9">
+    <div class="section-header">
+      <div class="section-num" style="background:var(--c9);">9</div>
+      <div class="section-name">⛵ 조선해양</div>
+      <span class="section-count" style="background:var(--c9p);color:var(--c9d);">1개 전공</span>
+    </div>
+    <div class="cards-grid">
+
+      <div class="major-card" style="border-color:var(--c9p);">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c9);border-radius:14px 0 0 14px;"></div>
+        <div class="major-icon">🛳️</div>
+        <div class="major-name">조선해양 AX 융합전공</div>
+        <div class="major-dept">
+          <div class="dept-row">
+            <span class="dept-icon">🏛️</span>
+            <span class="dept-label"><strong>공과대학</strong></span>
+          </div>
+          <div class="dept-row">
+            <span class="dept-icon">📌</span>
+            <span class="dept-label">조선해양공학과</span>
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <span style="background:var(--c9p);color:var(--c9d);font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;">AI × 조선해양</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ──────── TABLE VIEW ──────── -->
+  <div class="table-section" id="table-view">
+    <div class="table-head">
+      <h3>📋 AX융합전공 전체 목록 (표 형식)</h3>
+      <p>9개 분야 · 18개 AX 융합전공 · 참여 단과대학 및 주관학과 일람</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>연번</th>
+            <th>분야</th>
+            <th>융합전공명</th>
+            <th>단과대학</th>
+            <th>주관학과</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <!-- JS로 생성 -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>📌 부산대학교 AI대학 · AX융합학부 AX융합전공 목록</p>
+  <p style="margin-top:4px;font-size:11px;">본 페이지는 AX융합학부 AX융합전공 목록 원본 자료를 기반으로 재구성한 시각화 자료입니다.</p>
+</footer>
+
+<script>
+  /* ── 데이터 ── */
+  const data = [
+    { id:1, field:'바이오·신약',   color:'#10b981', bp:'#d1fae5', bd:'#065f46',
+      majors:[
+        { name:'AI-바이오 융합전공',         dept:'자연과학대학', dept2:'',           major:'미생물학과' },
+        { name:'AX신약융합전공',             dept:'약학대학',     dept2:'',           major:'약학과 · 제약학과' },
+      ]},
+    { id:2, field:'푸드테크AX',    color:'#f59e0b', bp:'#fef3c7', bd:'#92400e',
+      majors:[
+        { name:'에그테크 AX 융합전공',        dept:'생명자원과학대학', dept2:'', major:'바이오산업기계공학과' },
+      ]},
+    { id:3, field:'인문·사회·문화', color:'#8b5cf6', bp:'#ede9fe', bd:'#4c1d95',
+      majors:[
+        { name:'AX인문융합전공',              dept:'인문대학',         dept2:'', major:'-' },
+        { name:'AX·소셜 데이터 분석 융합전공', dept:'사회과학대학',      dept2:'', major:'정치외교학과' },
+      ]},
+    { id:4, field:'경영·경통',     color:'#2563eb', bp:'#dbeafe', bd:'#1e3a8a',
+      majors:[
+        { name:'AX 전략경영 융합전공',        dept:'경영대학',         dept2:'', major:'경영학과' },
+        { name:'해양산업·금융 융합전공',       dept:'경제통상대학',      dept2:'', major:'경제학부' },
+      ]},
+    { id:5, field:'제조AI',        color:'#f97316', bp:'#ffedd5', bd:'#7c2d12',
+      majors:[
+        { name:'피지컬AI 빅데이터합성융합전공', dept:'학부대학 첨단융합학부', dept2:'', major:'광메카트로닉스공학전공' },
+        { name:'제조AI 융합전공 (기계)',        dept:'공과대학',              dept2:'', major:'기계공학부' },
+        { name:'제조AI 융합전공 (산업)',        dept:'공과대학',              dept2:'', major:'산업공학과' },
+      ]},
+    { id:6, field:'항만물류AI',    color:'#0ea5e9', bp:'#e0f2fe', bd:'#0c4a6e',
+      majors:[
+        { name:'해양물류AI 융합전공',          dept:'공과대학', dept2:'', major:'산업공학과' },
+      ]},
+    { id:7, field:'AX융합계산과학 & 디지털트윈', color:'#6366f1', bp:'#e0e7ff', bd:'#312e81',
+      majors:[
+        { name:'AI 반도체 소자 공정 융합전공',  dept:'학부대학 첨단융합학부', dept2:'', major:'나노소자집단제조전공' },
+        { name:'AI·수리데이터과학 융합전공',    dept:'자연과학대학',           dept2:'', major:'수학과' },
+        { name:'AI융합계산과학',               dept:'학부대학 첨단융합학부', dept2:'', major:'광메카트로닉스공학전공' },
+        { name:'디지털트윈 융합전공',           dept:'공과대학',              dept2:'', major:'항공우주공학과' },
+      ]},
+    { id:8, field:'스마트시티·해양도시·기후환경·관광', color:'#14b8a6', bp:'#ccfbf1', bd:'#134e4a',
+      majors:[
+        { name:'AI·지구환경 융합전공',          dept:'자연과학대학',   dept2:'', major:'대기환경과학과' },
+        { name:'Lifecare AX 융합전공',          dept:'생활과학대학',   dept2:'', major:'실내환경디자인학과' },
+      ]},
+    { id:9, field:'조선해양',      color:'#64748b', bp:'#f1f5f9', bd:'#1e293b',
+      majors:[
+        { name:'조선해양 AX 융합전공',          dept:'공과대학', dept2:'', major:'조선해양공학과' },
+      ]},
+  ];
+
+  /* ── 테이블 생성 ── */
+  const tbody = document.getElementById('tableBody');
+  let rowNum = 1;
+  data.forEach(sec => {
+    sec.majors.forEach((m, i) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="td-num" style="color:${sec.color};">${rowNum++}</td>
+        <td class="td-field">
+          <span class="field-badge" style="background:${sec.bp};color:${sec.bd};">${sec.field}</span>
+        </td>
+        <td class="td-major">${m.name}</td>
+        <td class="td-dept">${m.dept}</td>
+        <td class="td-dept">${m.major}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  });
+
+  /* ── Bar Chart: 분야별 전공 수 ── */
+  const barCtx = document.getElementById('barChart').getContext('2d');
+  new Chart(barCtx, {
+    type: 'bar',
+    data: {
+      labels: data.map(d => d.field.length > 10 ? d.field.slice(0,10)+'…' : d.field),
+      datasets: [{
+        label: '융합전공 수',
+        data: data.map(d => d.majors.length),
+        backgroundColor: data.map(d => d.color + 'cc'),
+        borderColor:     data.map(d => d.color),
+        borderWidth: 2,
+        borderRadius: 6,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: c => ` ${c.raw}개 전공` } }
+      },
+      scales: {
+        x: {
+          ticks: { stepSize: 1, callback: v => v+'개' },
+          grid: { color: '#f1f5f9' }
+        },
+        y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+
+  /* ── Doughnut Chart ── */
+  const dCtx = document.getElementById('doughnutChart').getContext('2d');
+  new Chart(dCtx, {
+    type: 'doughnut',
+    data: {
+      labels: data.map(d => d.field),
+      datasets: [{
+        data: data.map(d => d.majors.length),
+        backgroundColor: data.map(d => d.color),
+        borderColor: 'white',
+        borderWidth: 3,
+        hoverOffset: 8,
+      }]
+    },
+    options: {
+      cutout: '55%',
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: { size: 10 }, padding: 8, boxWidth: 12 }
+        },
+        tooltip: {
+          callbacks: {
+            label: c => ` ${c.label}: ${c.raw}개`
+          }
+        }
+      }
+    }
+  });
+
+  /* ── 필터 기능 ── */
+  function filterSection(id, btn) {
+    const allSections = document.querySelectorAll('.section-block');
+    const allBtns = document.querySelectorAll('.filter-btn');
+
+    // 버튼 스타일 초기화
+    allBtns.forEach(b => {
+      if (b.classList.contains('all')) {
+        b.style.background = '#f1f5f9';
+        b.style.color = '#64748b';
+      }
+      b.classList.add('inactive');
+    });
+    btn.style.background = btn.dataset.bg || btn.style.background;
+    btn.classList.remove('inactive');
+
+    if (id === 'all') {
+      btn.style.background = '#1e3a6e';
+      btn.style.color = 'white';
+      allSections.forEach(s => s.style.display = '');
+      document.getElementById('chart-area').style.display = '';
+      document.getElementById('table-view').style.display = '';
+    } else {
+      document.getElementById('chart-area').style.display = 'none';
+      document.getElementById('table-view').style.display = 'none';
+      allSections.forEach(s => {
+        s.style.display = s.id === id ? '' : 'none';
+      });
+      // 해당 섹션으로 스크롤
+      const target = document.getElementById(id);
+      if (target) {
+        setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+      }
+    }
+  }
+</script>
+
+</body>
+</html>

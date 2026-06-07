@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Code — ARISE PNU AI</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    :root {
+      --navy:  #0a2463;
+      --blue:  #1a4fa0;
+      --mid:   #2563eb;
+      --light: #60a5fa;
+      --pale:  #dbeafe;
+      --gold:  #f59e0b;
+      --gold2: #fbbf24;
+      --green: #10b981;
+      --bg:    #f0f4f8;
+      --card:  #ffffff;
+      --text:  #1e293b;
+      --sub:   #64748b;
+      --bdr:   #e2e8f0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--navy);
+      padding: 0 40px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    .nav-brand .logo-box {
+      background: linear-gradient(135deg, var(--gold), #d97706);
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 14px;
+      color: white;
+      letter-spacing: -0.5px;
+    }
+    .nav-brand .brand-text { color: white; font-weight: 800; font-size: 15px; letter-spacing: 0.5px; }
+    .nav-brand .brand-sub  { color: rgba(255,255,255,0.5); font-size: 11px; margin-top: 1px; }
+    .nav-links { display: flex; gap: 6px; }
+    .nav-links a {
+      color: rgba(255,255,255,0.7);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      background: rgba(255,255,255,0.12);
+      color: white;
+    }
+    .nav-badge {
+      background: var(--gold);
+      color: var(--navy);
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-left: 6px;
+    }
+
+    /* ── MAIN ── */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 24px;
+    }
+
+    /* ── CARD ── */
+    .qr-card {
+      background: var(--card);
+      border: 1px solid var(--bdr);
+      border-radius: 24px;
+      padding: 52px 60px 44px;
+      text-align: center;
+      box-shadow: 0 8px 40px rgba(10,36,99,0.10);
+      max-width: 420px;
+      width: 100%;
+    }
+
+    /* ── EYEBROW ── */
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(245,158,11,0.12);
+      border: 1px solid rgba(245,158,11,0.35);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 11px;
+      color: var(--gold);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 22px;
+    }
+    .eyebrow .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold2);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    /* ── QR WRAPPER ── */
+    .qr-wrapper {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      border: 3px solid var(--navy);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 28px;
+      box-shadow: 0 4px 20px rgba(10,36,99,0.10);
+    }
+    #qrcode canvas, #qrcode img {
+      display: block;
+      border-radius: 6px;
+    }
+
+    /* ── URL LABEL ── */
+    .url-label {
+      font-size: 12px;
+      color: var(--sub);
+      margin-bottom: 20px;
+      word-break: break-all;
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 8px 14px;
+      border: 1px solid var(--bdr);
+      font-family: 'Courier New', monospace;
+      letter-spacing: 0.3px;
+    }
+
+    /* ── SITE LINK ── */
+    .site-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      color: white;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 800;
+      padding: 14px 32px;
+      border-radius: 12px;
+      letter-spacing: 0.5px;
+      transition: all .2s;
+      box-shadow: 0 4px 16px rgba(10,36,99,0.25);
+    }
+    .site-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(10,36,99,0.30);
+      background: linear-gradient(135deg, var(--blue), var(--mid));
+    }
+    .site-link .arrow { font-size: 16px; }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: var(--bdr);
+      margin: 28px 0;
+    }
+
+    /* ── CAPTION ── */
+    .caption {
+      font-size: 12px;
+      color: var(--sub);
+      line-height: 1.7;
+    }
+    .caption strong { color: var(--text); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy);
+      color: rgba(255,255,255,0.4);
+      text-align: center;
+      padding: 22px;
+      font-size: 12px;
+    }
+    footer strong { color: var(--gold2); }
+
+    @media(max-width:500px) {
+      .qr-card { padding: 36px 24px 32px; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a class="nav-brand" href="index.html">
+    <div class="logo-box">AI</div>
+    <div>
+      <div class="brand-text">ARISE PNU AI</div>
+      <div class="brand-sub">부산대학교 AI 거점대학</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">홈</a>
+    <a href="part1.html">I. 구심점 확립</a>
+    <a href="part2.html">II. 교육과정 설계</a>
+    <a href="part3.html">III. 생태계 조성</a>
+    <a href="grad.html">대학원 육성</a>
+    <a href="QRCode.html" class="active">QR 코드 <span class="nav-badge">공유</span></a>
+  </div>
+</nav>
+
+<!-- ── MAIN ── -->
+<main>
+  <div class="qr-card">
+
+    <div class="eyebrow">
+      <span class="dot"></span>
+      사이트 바로가기
+    </div>
+
+    <div class="qr-wrapper">
+      <div id="qrcode"></div>
+    </div>
+
+    <div class="url-label">
+      https://inetguru.github.io/pnu_ai/
+    </div>
+
+    <a class="site-link" href="index.html">
+      ARISE PNU AI
+      <span class="arrow">→</span>
+    </a>
+
+    <div class="divider"></div>
+
+    <div class="caption">
+      <strong>부산대학교 AI 거점대학 육성사업 제안서</strong><br>
+      QR 코드를 스캔하거나 아래 링크를 클릭해 웹사이트에 접속하세요.<br>
+      AI Research &amp; Innovation Synergy Ecosystem
+    </div>
+
+  </div>
+</main>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <strong>ARISE PNU AI</strong> — 부산대학교 AI 거점대학 사업 제안서<br>
+  <span style="margin-top:4px;display:block">AI Research &amp; Innovation Synergy Ecosystem · Pusan National University</span>
+</footer>
+
+<script>
+  new QRCode(document.getElementById("qrcode"), {
+    text: "https://inetguru.github.io/pnu_ai/",
+    width: 220,
+    height: 220,
+    colorDark: "#0a2463",
+    colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.H
+  });
+</script>
+
+</body>
+</html>

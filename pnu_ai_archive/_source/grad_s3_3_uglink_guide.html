@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>학석사 연계과정 안내 — ARISE PNU AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════
+   UGLink_Guide — styled to match arise_pnu.html
+   Color palette & typography aligned with PNU AI 거점대학
+═══════════════════════════════════════════════════════ */
+:root{
+  /* arise_pnu 기준 팔레트 */
+  --pnu-navy:       #003087;
+  --pnu-navy-dark:  #001540;
+  --pnu-navy-mid:   #0d47a1;
+  --pnu-gold:       #F0A500;
+  --pnu-gold-lt:    #FFD166;
+  --ai-blue:        #0284C7;
+  --ai-cyan:        #06B6D4;
+  --ax-teal:        #0D9488;
+  --bg-page:        #EEF2FA;
+  --bg-card:        #FFFFFF;
+  --text-1:         #0F1F3D;
+  --text-2:         #3A4F72;
+  --text-3:         #7A8BAA;
+  --border:         #D8E2F0;
+  --shadow-sm:      0 2px 12px rgba(0,40,120,.08);
+  --shadow-md:      0 4px 24px rgba(0,40,120,.12);
+
+  /* 하위 호환 별칭 (기존 클래스용) */
+  --b1:var(--ai-blue);       --b1d:#0369A1;   --b1l:#38BDF8;
+  --b1xl:rgba(2,132,199,.1); --b1xx:rgba(2,132,199,.06);
+  --b2:var(--ax-teal);       --b2d:#0F766E;   --b2l:#2DD4BF;
+  --b2xl:rgba(13,148,136,.1);
+  --accent:var(--pnu-gold);  --acl:rgba(240,165,0,.1);
+  --bg:var(--bg-page);       --surf:var(--bg-card); --surf2:#EEF2FA;
+  --text:var(--text-1);      --muted:var(--text-2); --muted2:var(--text-3);
+  --shadow:var(--shadow-sm);
+  --r:12px; --r2:16px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Noto Sans KR','Apple SD Gothic Neo','맑은 고딕',sans-serif;
+  background:var(--bg-page);color:var(--text-1);line-height:1.75;
+  font-weight:400;overflow-x:hidden;
+}
+
+/* ═══════════ TOP NAV (arise_pnu style) ═══════════ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:54px;background:var(--pnu-navy-dark);
+  display:flex;align-items:center;
+  box-shadow:0 2px 20px rgba(0,0,0,.35);
+}
+.nav-inner{
+  max-width:1200px;margin:0 auto;width:100%;
+  padding:0 28px;height:54px;display:flex;align-items:center;justify-content:space-between;
+}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-mark{
+  background:linear-gradient(135deg,var(--pnu-gold),#d97706);
+  width:32px;height:32px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Montserrat',sans-serif;font-weight:900;font-size:11px;color:white;flex-shrink:0;
+}
+.nav-title{
+  font-family:'Montserrat',sans-serif;font-weight:900;font-size:.93rem;
+  color:var(--pnu-gold);letter-spacing:-.2px;
+}
+.nav-title span{color:rgba(255,255,255,.85);}
+.nav-menu{display:flex;gap:0;list-style:none;}
+.nav-menu a{
+  display:block;padding:0 13px;height:54px;line-height:54px;
+  font-size:.74rem;font-weight:700;color:rgba(255,255,255,.6);
+  text-decoration:none;letter-spacing:.3px;
+  border-bottom:2px solid transparent;transition:color .2s,border-color .2s;
+  white-space:nowrap;
+}
+.nav-menu a:hover,.nav-menu a.active{color:var(--pnu-gold-lt);border-bottom-color:var(--pnu-gold);}
+.nav-cta{
+  padding:6px 16px;background:var(--pnu-gold);color:var(--pnu-navy-dark);
+  text-decoration:none;border-radius:7px;
+  font-size:.76rem;font-weight:800;letter-spacing:.3px;
+  transition:background .2s,transform .15s;white-space:nowrap;
+}
+.nav-cta:hover{background:var(--pnu-gold-lt);transform:translateY(-1px);}
+.ham{display:none;background:none;border:none;cursor:pointer;padding:.3rem;}
+.ham span{display:block;width:22px;height:2px;background:var(--pnu-gold);margin:4px 0;border-radius:2px;transition:.3s;}
+
+/* ═══════════ HERO ═══════════ */
+.hero{
+  min-height:auto;display:flex;flex-direction:column;justify-content:center;align-items:center;
+  text-align:center;padding:4rem 2rem 3.5rem;
+  background:linear-gradient(135deg,#001233 0%,var(--pnu-navy) 45%,#1565C0 75%,#0a3d82 100%);
+  position:relative;overflow:hidden;margin-top:54px;
+}
+.hero-bg-circle{position:absolute;border-radius:50%;pointer-events:none;}
+.hc1{width:700px;height:700px;
+  background:radial-gradient(circle,rgba(6,182,212,.18) 0%,transparent 65%);
+  top:-150px;right:-200px;}
+.hc2{width:500px;height:500px;
+  background:radial-gradient(circle,rgba(240,165,0,.12) 0%,transparent 65%);
+  bottom:-100px;left:-150px;}
+.hero-ring{position:absolute;border-radius:50%;border:1px solid;pointer-events:none;}
+.hr1{width:460px;height:460px;border-color:rgba(6,182,212,.12);top:50%;left:50%;
+  transform:translate(-50%,-50%);}
+.hr2{width:700px;height:700px;border-color:rgba(240,165,0,.07);top:50%;left:50%;
+  transform:translate(-50%,-50%);}
+.ring-dot{position:absolute;width:8px;height:8px;border-radius:50%;top:-4px;left:50%;margin-left:-4px;
+  background:var(--pnu-gold);box-shadow:0 0 12px var(--pnu-gold);}
+.hero>*{position:relative;z-index:1;}
+
+.badge{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:rgba(240,165,0,.14);border:1px solid rgba(240,165,0,.38);
+  border-radius:20px;padding:5px 15px;
+  font-size:.73rem;font-weight:700;color:var(--pnu-gold-lt);
+  letter-spacing:.6px;margin-bottom:1.8rem;
+}
+.badge::before{content:"●";font-size:.42rem;color:var(--ai-cyan);}
+
+.hero-title{
+  font-family:'Montserrat','Noto Sans KR',sans-serif;font-weight:900;
+  font-size:clamp(1.9rem,5vw,3.8rem);line-height:1.15;letter-spacing:-.03em;
+  color:white;margin-bottom:1.2rem;
+}
+.hero-title .em{
+  background:linear-gradient(135deg,var(--pnu-gold) 20%,var(--ai-cyan) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-sub{
+  font-size:clamp(.88rem,1.8vw,1rem);color:rgba(255,255,255,.65);
+  max-width:540px;margin-bottom:2.8rem;line-height:1.9;
+}
+.hero-sub strong{color:var(--pnu-gold-lt);}
+.hero-ctas{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;}
+.btn-p{
+  padding:.8rem 2.1rem;
+  background:linear-gradient(135deg,var(--pnu-gold),#d97706);
+  color:var(--pnu-navy-dark);text-decoration:none;border-radius:8px;
+  font-size:.9rem;font-weight:800;
+  transition:transform .2s,box-shadow .2s;
+  box-shadow:0 4px 18px rgba(240,165,0,.35);
+}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(240,165,0,.5);}
+.btn-s{
+  padding:.8rem 2.1rem;border:1.5px solid rgba(255,255,255,.4);color:rgba(255,255,255,.85);
+  text-decoration:none;border-radius:8px;font-size:.9rem;font-weight:600;
+  background:rgba(255,255,255,.08);transition:background .2s,border-color .2s;
+}
+.btn-s:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.7);}
+.scroll-hint{
+  position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:.4rem;
+  color:rgba(255,255,255,.3);font-size:.7rem;letter-spacing:.12em;
+}
+.scroll-line{width:1.5px;height:32px;background:linear-gradient(to bottom,var(--pnu-gold),transparent);}
+
+/* ═══════════ STATS BAR ═══════════ */
+.stats-bar{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--r2);overflow:hidden;
+  display:grid;grid-template-columns:repeat(4,1fr);
+  max-width:1000px;margin:0 auto;box-shadow:var(--shadow-sm);
+}
+.stat-c{padding:1.8rem 1rem;text-align:center;border-right:1px solid var(--border);transition:background .2s;}
+.stat-c:last-child{border-right:none;}
+.stat-c:hover{background:rgba(2,132,199,.05);}
+.stat-n{
+  font-family:'Montserrat',sans-serif;font-size:1.7rem;font-weight:900;
+  color:var(--pnu-navy);display:block;line-height:1.1;margin-bottom:.2rem;
+}
+.stat-l{font-size:.74rem;color:var(--text-3);line-height:1.5;}
+
+/* ═══════════ SECTION LAYOUT ═══════════ */
+section{padding:5rem 2rem;max-width:1100px;margin:0 auto;}
+.slabel{
+  font-size:.7rem;letter-spacing:.15em;color:var(--pnu-gold);text-transform:uppercase;
+  font-weight:700;margin-bottom:.6rem;display:flex;align-items:center;gap:.55rem;
+  font-family:'Montserrat',sans-serif;
+}
+.slabel::before{content:'';display:block;width:22px;height:2.5px;background:var(--pnu-gold);border-radius:2px;}
+.stitle{
+  font-family:'Montserrat','Noto Sans KR',sans-serif;
+  font-size:clamp(1.5rem,3vw,2.2rem);font-weight:900;line-height:1.28;margin-bottom:1rem;
+  color:var(--text-1);
+}
+.sdesc{color:var(--text-2);font-size:.93rem;max-width:580px;line-height:1.95;margin-bottom:2.8rem;}
+.divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(0,48,135,.15),transparent);}
+
+/* ═══════════ PROGRAM CARDS ═══════════ */
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;margin-top:2.5rem;}
+.pcard{
+  background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--r2);
+  padding:2.2rem;position:relative;overflow:hidden;
+  transition:transform .3s,border-color .3s,box-shadow .3s;box-shadow:var(--shadow-sm);
+}
+.pcard:hover{transform:translateY(-4px);box-shadow:0 12px 36px rgba(0,48,135,.14);}
+.pcard::before{content:'';position:absolute;top:-70px;right:-70px;width:200px;height:200px;border-radius:50%;opacity:.07;}
+.pcard.c1::before{background:var(--pnu-navy);}
+.pcard.c2::before{background:var(--ax-teal);}
+.pcard:hover.c1{border-color:rgba(0,48,135,.4);}
+.pcard:hover.c2{border-color:rgba(13,148,136,.45);}
+.ptag{display:inline-block;font-size:.68rem;letter-spacing:.08em;padding:.2rem .75rem;border-radius:10px;margin-bottom:.9rem;font-weight:700;}
+.ptag.t1{background:rgba(0,48,135,.1);color:var(--pnu-navy);}
+.ptag.t2{background:rgba(13,148,136,.12);color:var(--b2d);}
+.pcard h3{font-family:'Montserrat','Noto Sans KR',sans-serif;font-size:1.15rem;font-weight:800;margin-bottom:.8rem;line-height:1.4;color:var(--text-1);}
+.pcard p{color:var(--text-2);font-size:.88rem;line-height:1.9;}
+.pflow{margin-top:1.4rem;padding:.9rem 1.1rem;background:var(--bg-page);border-radius:9px;border-left:3px solid;}
+.pflow.b1{border-color:var(--pnu-navy);}
+.pflow.b2{border-color:var(--ax-teal);}
+.pflow strong{font-size:.8rem;font-weight:700;color:var(--text-1);display:block;margin-bottom:.35rem;}
+.flow-row{display:flex;flex-wrap:wrap;gap:.3rem;align-items:center;}
+.fc{background:rgba(0,48,135,.08);color:var(--pnu-navy);border-radius:4px;padding:.12rem .5rem;font-size:.74rem;font-weight:600;}
+.fc2{background:rgba(13,148,136,.12);color:var(--b2d);border-radius:4px;padding:.12rem .5rem;font-size:.74rem;font-weight:600;}
+.fa{color:var(--pnu-navy);font-size:.7rem;}
+
+.conv-box{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--r);padding:1.8rem 2.2rem;margin-top:1.4rem;box-shadow:var(--shadow-sm);}
+.conv-box h4{font-family:'Montserrat','Noto Sans KR',sans-serif;font-size:1rem;font-weight:800;margin-bottom:.7rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;}
+.ctag{display:inline-block;background:rgba(240,165,0,.15);color:#a07000;padding:.18rem .65rem;border-radius:4px;font-size:.68rem;font-weight:700;letter-spacing:.05em;}
+.conv-box p{color:var(--text-2);font-size:.87rem;line-height:1.9;}
+
+/* ═══════════ ADVANTAGE ═══════════ */
+.adv-bg{background:linear-gradient(180deg,#EEF2FA 0%,#E4EBF7 100%);}
+.adv-inner{max-width:1100px;margin:0 auto;padding:5rem 2rem;}
+.agrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem;margin-top:2.5rem;}
+.acard{
+  border:1px solid var(--border);border-radius:var(--r);padding:1.7rem 1.6rem;
+  background:var(--bg-card);position:relative;transition:border-color .3s,transform .3s,box-shadow .3s;
+}
+.acard:hover{border-color:var(--pnu-navy);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,48,135,.12);}
+.aicon{position:absolute;top:1.4rem;right:1.4rem;font-size:1.4rem;opacity:.45;}
+.anum{font-family:'Montserrat',sans-serif;font-size:2.4rem;font-weight:900;line-height:1;color:rgba(0,48,135,.13);margin-bottom:.55rem;}
+.acard h4{font-family:'Montserrat','Noto Sans KR',sans-serif;font-size:.95rem;font-weight:800;margin-bottom:.55rem;color:var(--text-1);}
+.acard p{font-size:.85rem;color:var(--text-2);line-height:1.82;}
+
+/* ═══════════ SCHOLARSHIP ═══════════ */
+.schol-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.3rem;margin-top:2.5rem;}
+.schol-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:1.8rem;box-shadow:var(--shadow-sm);transition:border-color .3s,transform .3s;}
+.schol-card:hover{border-color:var(--ai-blue);transform:translateY(-2px);}
+.schol-head{display:flex;align-items:center;gap:.7rem;margin-bottom:1.2rem;padding-bottom:.9rem;border-bottom:1px solid var(--border);}
+.schol-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.si1{background:linear-gradient(135deg,var(--pnu-navy),#1565C0);}
+.si2{background:linear-gradient(135deg,var(--ax-teal),#0891B2);}
+.si3{background:linear-gradient(135deg,var(--pnu-gold),#d97706);}
+.si4{background:linear-gradient(135deg,#7C3AED,#6D28D9);}
+.schol-head h4{font-family:'Montserrat','Noto Sans KR',sans-serif;font-size:.95rem;font-weight:800;line-height:1.3;color:var(--text-1);}
+.schol-sub{font-size:.74rem;color:var(--ai-blue);font-weight:600;}
+.schol-table{width:100%;border-collapse:collapse;font-size:.83rem;}
+.schol-table tr{border-bottom:1px solid rgba(0,48,135,.06);}
+.schol-table tr:last-child{border-bottom:none;}
+.schol-table td{padding:.55rem 0;vertical-align:top;}
+.schol-table td:first-child{color:var(--pnu-navy);font-weight:700;font-size:.76rem;white-space:nowrap;padding-right:.9rem;width:80px;}
+.schol-table td:last-child{color:var(--text-2);line-height:1.7;}
+.schol-note{margin-top:.9rem;padding:.7rem 1rem;background:rgba(2,132,199,.06);border-radius:7px;font-size:.78rem;color:var(--text-2);line-height:1.65;}
+
+/* ═══════════ ELIGIBILITY ═══════════ */
+.egrid{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;margin-top:2.5rem;}
+.ebox{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--r2);padding:2rem 2.2rem;box-shadow:var(--shadow-sm);transition:border-color .3s;}
+.ebox:hover{border-color:var(--pnu-navy);}
+.ehead{display:flex;align-items:center;gap:.7rem;margin-bottom:1.3rem;padding-bottom:.9rem;border-bottom:1px solid var(--border);}
+.ehead-ic{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;color:#fff;flex-shrink:0;}
+.ei1{background:linear-gradient(135deg,var(--pnu-navy),#1565C0);}
+.ei2{background:linear-gradient(135deg,var(--pnu-gold),#d97706);}
+.ehead h4{font-family:'Montserrat','Noto Sans KR',sans-serif;font-size:.96rem;font-weight:800;color:var(--text-1);}
+.etable{width:100%;border-collapse:collapse;}
+.etable tr{border-bottom:1px solid rgba(0,48,135,.07);}
+.etable tr:last-child{border-bottom:none;}
+.etable td{padding:.6rem 0;font-size:.85rem;vertical-align:top;}
+.etable td:first-child{color:var(--pnu-navy);font-weight:700;font-size:.76rem;white-space:nowrap;padding-right:.9rem;width:85px;}
+.etable td:last-child{color:var(--text-2);line-height:1.72;}
+.especial{margin-top:1rem;padding:.8rem 1rem;background:rgba(240,165,0,.08);border-left:3px solid var(--pnu-gold);border-radius:7px;font-size:.79rem;color:var(--text-2);line-height:1.65;}
+
+.credits-section{background:linear-gradient(180deg,#E4EBF7 0%,var(--bg-page) 100%);padding:3rem 2rem;}
+.credits-inner{max-width:1100px;margin:0 auto;}
+.credits-img-wrap{margin-top:2rem;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm);}
+.credits-img-wrap img{width:100%;display:block;}
+
+/* ═══════════ TIMELINE ═══════════ */
+.timeline{margin-top:2.8rem;position:relative;}
+.timeline::before{content:'';position:absolute;left:1.9rem;top:0;bottom:0;width:2.5px;background:linear-gradient(to bottom,var(--pnu-navy),var(--ax-teal),transparent);}
+.tl-i{display:flex;gap:2.3rem;padding-bottom:2.8rem;position:relative;}
+.tl-dot{flex-shrink:0;width:3.8rem;height:3.8rem;border-radius:50%;background:var(--bg-card);border:2.5px solid var(--pnu-navy);display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-size:1.1rem;font-weight:900;color:var(--pnu-navy);z-index:1;position:relative;transition:background .25s,color .25s;box-shadow:0 2px 10px rgba(0,48,135,.18);}
+.tl-i:hover .tl-dot{background:var(--pnu-navy);color:white;}
+.tl-c{padding-top:.4rem;flex:1;}
+.tl-c h4{font-family:'Montserrat','Noto Sans KR',sans-serif;font-size:1rem;font-weight:800;margin-bottom:.35rem;color:var(--text-1);}
+.tl-c p{color:var(--text-2);font-size:.86rem;line-height:1.82;}
+.tlwhen{display:inline-block;font-size:.7rem;letter-spacing:.08em;color:var(--ax-teal);background:rgba(13,148,136,.1);border-radius:4px;padding:.18rem .65rem;margin-bottom:.4rem;font-weight:700;}
+.tlnote{margin-top:.7rem;padding:.65rem .9rem;background:var(--bg-page);border-radius:7px;font-size:.8rem;color:var(--text-2);line-height:1.65;}
+
+/* ═══════════ SCHEDULE ═══════════ */
+.sched-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;box-shadow:var(--shadow-sm);background:var(--bg-card);margin-top:2.5rem;}
+.sched-c{padding:1.8rem 1.2rem;text-align:center;border-right:1px solid var(--border);transition:background .2s;}
+.sched-c:last-child{border-right:none;}
+.sched-c:hover{background:rgba(0,48,135,.04);}
+.sched-step{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--pnu-navy),var(--ai-blue));color:#fff;font-size:.75rem;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto .8rem;font-family:'Montserrat',sans-serif;}
+.sched-c h4{font-family:'Montserrat','Noto Sans KR',sans-serif;font-size:.92rem;font-weight:800;margin-bottom:.4rem;color:var(--text-1);}
+.sched-date{font-size:.8rem;color:var(--pnu-navy);font-weight:700;margin-bottom:.4rem;}
+.sched-c p{font-size:.8rem;color:var(--text-2);line-height:1.6;}
+
+/* ═══════════ FAQ ═══════════ */
+.flist{margin-top:2.5rem;display:flex;flex-direction:column;gap:.8rem;}
+.fi{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:0 2px 8px rgba(0,48,135,.05);}
+.fq{width:100%;background:transparent;border:none;color:var(--text-1);text-align:left;padding:1.1rem 1.5rem;font-family:'Noto Sans KR',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:1rem;transition:background .2s;}
+.fq:hover{background:rgba(0,48,135,.04);}
+.farr{flex-shrink:0;width:21px;height:21px;border-radius:50%;border:1.5px solid var(--pnu-navy);display:flex;align-items:center;justify-content:center;font-size:.82rem;color:var(--pnu-navy);transition:transform .3s;}
+.fi.open .farr{transform:rotate(45deg);}
+.fa-b{max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s;padding:0 1.5rem;color:var(--text-2);font-size:.86rem;line-height:1.88;}
+.fi.open .fa-b{max-height:320px;padding:0 1.5rem 1.2rem;}
+
+/* ═══════════ BOARD ═══════════ */
+.board-section{background:linear-gradient(180deg,var(--bg-page) 0%,#E4EBF7 100%);}
+.board-inner{max-width:1100px;margin:0 auto;padding:5rem 2rem;}
+.board-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:.8rem;}
+.board-tabs{display:flex;gap:.5rem;}
+.btab{padding:.4rem 1rem;border-radius:6px;border:1.5px solid var(--border);background:transparent;color:var(--text-2);font-size:.8rem;cursor:pointer;font-family:'Noto Sans KR',sans-serif;font-weight:600;transition:all .2s;}
+.btab.active,.btab:hover{background:var(--pnu-navy);color:#fff;border-color:var(--pnu-navy);}
+.board-table{width:100%;border-collapse:collapse;background:var(--bg-card);}
+.board-table th{background:linear-gradient(135deg,var(--pnu-navy-dark),var(--pnu-navy));color:#fff;padding:.75rem 1rem;font-size:.78rem;font-weight:700;text-align:left;letter-spacing:.03em;}
+.board-table th:first-child{border-radius:var(--r) 0 0 0;width:50px;text-align:center;}
+.board-table th:last-child{border-radius:0 var(--r) 0 0;}
+.board-table td{padding:.85rem 1rem;font-size:.85rem;border-bottom:1px solid rgba(0,48,135,.07);color:var(--text-2);vertical-align:middle;}
+.board-table td:first-child{text-align:center;color:var(--text-3);}
+.board-table td.title-cell{color:var(--text-1);font-weight:500;}
+.board-table td.title-cell a{text-decoration:none;color:var(--text-1);transition:color .2s;}
+.board-table td.title-cell a:hover{color:var(--pnu-navy);}
+.board-table tr:hover td{background:rgba(0,48,135,.04);}
+.file-tag{display:inline-flex;align-items:center;gap:.3rem;background:rgba(13,148,136,.12);color:var(--b2d);padding:.15rem .55rem;border-radius:4px;font-size:.72rem;font-weight:600;}
+.new-tag{display:inline-block;background:var(--pnu-navy);color:#fff;padding:.1rem .4rem;border-radius:3px;font-size:.65rem;font-weight:700;margin-left:.4rem;}
+
+/* ═══════════ UPLOAD ═══════════ */
+.upload-area{border:2px dashed rgba(0,48,135,.25);border-radius:var(--r);padding:2.5rem;text-align:center;margin-top:1.5rem;background:rgba(0,48,135,.03);transition:border-color .2s,background .2s;cursor:pointer;}
+.upload-area:hover,.upload-area.drag{border-color:var(--pnu-navy);background:rgba(0,48,135,.06);}
+.upload-icon{font-size:2.5rem;margin-bottom:.7rem;display:block;}
+.upload-area h4{font-size:.95rem;font-weight:700;color:var(--text-1);margin-bottom:.3rem;}
+.upload-area p{font-size:.82rem;color:var(--text-2);}
+.upload-area input{display:none;}
+.upload-btn{display:inline-block;margin-top:1rem;padding:.55rem 1.5rem;background:var(--pnu-navy);color:#fff;border-radius:6px;font-size:.83rem;font-weight:700;cursor:pointer;transition:background .2s;}
+.upload-btn:hover{background:var(--pnu-navy-mid);}
+.upload-form{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem;}
+.uf-row{display:flex;flex-direction:column;gap:.35rem;}
+.uf-row.full{grid-column:1/-1;}
+.uf-label{font-size:.78rem;font-weight:700;color:var(--text-1);}
+.uf-input,.uf-select{padding:.6rem .9rem;border:1.5px solid var(--border);border-radius:7px;font-size:.85rem;font-family:'Noto Sans KR',sans-serif;background:var(--bg-card);color:var(--text-1);transition:border-color .2s;appearance:none;}
+.uf-input:focus,.uf-select:focus{outline:none;border-color:var(--pnu-navy);}
+.btn-submit{padding:.75rem 2rem;background:linear-gradient(135deg,var(--pnu-navy),var(--ai-blue));color:#fff;border:none;border-radius:8px;font-size:.88rem;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 16px rgba(0,48,135,.28);}
+.btn-submit:hover{transform:translateY(-1px);box-shadow:0 7px 22px rgba(0,48,135,.38);}
+
+/* ═══════════ CTA BANNER ═══════════ */
+.cta-wrap{padding:0 2rem;}
+.cta-banner{
+  background:linear-gradient(135deg,var(--pnu-navy-dark) 0%,var(--pnu-navy) 50%,#1565C0 100%);
+  border-radius:var(--r2);padding:3.8rem 3rem;text-align:center;
+  max-width:860px;margin:3rem auto 4rem;position:relative;overflow:hidden;
+  box-shadow:0 12px 48px rgba(0,48,135,.35);
+}
+.cta-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(240,165,0,.12),transparent);}
+.cta-banner h2{font-family:'Montserrat',sans-serif;font-size:clamp(1.4rem,3.2vw,1.9rem);font-weight:900;color:#fff;margin-bottom:.7rem;position:relative;}
+.cta-banner p{color:rgba(255,255,255,.75);margin-bottom:2rem;font-size:.92rem;position:relative;}
+.cta-ctas{display:flex;gap:.9rem;justify-content:center;flex-wrap:wrap;position:relative;}
+.bw{padding:.8rem 2.1rem;background:var(--pnu-gold);color:var(--pnu-navy-dark);text-decoration:none;border-radius:8px;font-size:.9rem;font-weight:800;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 14px rgba(240,165,0,.4);}
+.bw:hover{transform:translateY(-2px);box-shadow:0 7px 22px rgba(240,165,0,.55);}
+.bg{padding:.8rem 2.1rem;border:1.5px solid rgba(255,255,255,.45);color:#fff;text-decoration:none;border-radius:8px;font-size:.9rem;transition:background .2s;}
+.bg:hover{background:rgba(255,255,255,.12);}
+
+/* ═══════════ CONTACT ═══════════ */
+.contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:2rem;}
+.cbox{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem 1.6rem;box-shadow:var(--shadow-sm);transition:border-color .3s;}
+.cbox:hover{border-color:var(--pnu-navy);}
+.cbox h4{font-size:.85rem;font-weight:700;color:var(--text-1);margin-bottom:.6rem;}
+.cbox p{font-size:.8rem;color:var(--text-2);line-height:1.7;}
+.cbox .tel{font-size:.95rem;font-weight:700;color:var(--pnu-navy);margin-top:.3rem;}
+
+/* ═══════════ FOOTER ═══════════ */
+footer{
+  background:var(--pnu-navy-dark);color:rgba(255,255,255,.45);
+  padding:2.5rem 2rem;text-align:center;font-size:.8rem;line-height:2.2;
+}
+footer strong{color:var(--pnu-gold);}
+footer a{color:var(--pnu-gold-lt);text-decoration:none;}
+
+/* ═══════════ UTILS ═══════════ */
+.reveal{opacity:1;transform:none;}
+#toast{position:fixed;bottom:2rem;right:2rem;background:var(--pnu-navy);color:#fff;padding:.8rem 1.5rem;border-radius:8px;font-size:.85rem;font-weight:600;opacity:0;transform:translateY(10px);transition:all .3s;z-index:9999;box-shadow:0 4px 20px rgba(0,48,135,.4);}
+#toast.show{opacity:1;transform:translateY(0);}
+
+/* ═══════════ RESPONSIVE ═══════════ */
+@media(max-width:900px){
+  .nav-menu,.nav-cta{display:none;}
+  .ham{display:block;}
+  .pgrid,.egrid,.agrid,.schol-grid,.contact-grid{grid-template-columns:1fr;}
+  .agrid{grid-template-columns:1fr 1fr;}
+  .stats-bar,.sched-grid{grid-template-columns:1fr 1fr;}
+  .stat-c:nth-child(2),.sched-c:nth-child(2){border-right:none;}
+  .stat-c:nth-child(3),.sched-c:nth-child(3){border-top:1px solid var(--border);}
+  .upload-form{grid-template-columns:1fr;}
+  .timeline::before{left:1.5rem;}
+}
+@media(max-width:540px){
+  .agrid{grid-template-columns:1fr;}
+  section{padding:4rem 1.5rem;}
+  .adv-inner{padding:4rem 1.5rem;}
+  .stats-bar{grid-template-columns:1fr 1fr;}
+}
+.mobile-menu{display:none;position:fixed;inset:0;background:var(--pnu-navy-dark);z-index:190;flex-direction:column;align-items:center;justify-content:center;gap:2rem;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{font-size:1.2rem;color:rgba(255,255,255,.85);text-decoration:none;font-weight:600;}
+.mobile-menu a:hover{color:var(--pnu-gold);}
+.mobile-close{position:absolute;top:1.2rem;right:1.5rem;font-size:1.5rem;background:none;border:none;cursor:pointer;color:var(--pnu-gold);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ─── NAV ─── -->
+<nav>
+  <div class="nav-inner">
+    <a href="grad.html" class="nav-logo">
+      <div class="nav-mark">PNU</div>
+      <div>
+        <div style="font-family:Montserrat,sans-serif;font-weight:900;font-size:.9rem;color:var(--pnu-gold);">학석사 연계과정</div>
+        <div style="font-size:.69rem;color:rgba(255,255,255,.45);margin-top:1px;font-family:Montserrat,sans-serif;">ARISE PNU AI · UGLink Guide</div>
+      </div>
+    </a>
+    <ul class="nav-menu">
+      <li><a href="grad.html" style="color:var(--pnu-gold-lt);font-weight:700;">← 대학원 육성</a></li>
+      <li><a href="#programs">과정 소개</a></li>
+      <li><a href="#benefits">혜택</a></li>
+      <li><a href="#eligibility">지원 자격</a></li>
+      <li><a href="#schedule">전형 일정</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#board">자료실</a></li>
+    </ul>
+    <a href="#schedule" class="nav-cta">지금 신청하기</a>
+    <button class="ham" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" onclick="toggleMenu()">✕</button>
+  <a href="#programs" onclick="toggleMenu()">과정 소개</a>
+  <a href="#benefits" onclick="toggleMenu()">혜택 및 장학금</a>
+  <a href="#eligibility" onclick="toggleMenu()">지원 자격</a>
+  <a href="#schedule" onclick="toggleMenu()">전형 일정</a>
+  <a href="#apply" onclick="toggleMenu()">신청 방법</a>
+  <a href="#faq" onclick="toggleMenu()">FAQ</a>
+  <a href="#board" onclick="toggleMenu()">자료실</a>
+</div>
+
+<!-- ─── HERO ─── -->
+<section class="hero" id="top" style="padding:4rem 2rem 3.5rem;max-width:none;">
+<!-- 삭제 
+  <div class="hero-bg-circle hc1"></div>
+  <div class="hero-bg-circle hc2"></div>
+  <div class="hero-ring hr1"><div class="ring-dot"></div></div>
+  <div class="hero-ring hr2"></div>
+-->
+
+  <div class="badge">부산대학교 AI 거점대학 핵심 사업 · 2026학년도 1학기 모집 중</div>
+  <h1 class="hero-title">
+    석사·박사를 더 빠르게,<br>
+    <span class="em">연계과정으로 미래를 앞당기세요</span>
+  </h1>
+  <p class="hero-sub">
+    학부 재학 중 대학원 과목을 미리 이수하고<br>
+    석사·박사 학위를 단기간에 취득하는 부산대학교 특별 트랙.<br>
+    <strong style="color:var(--b1)">접수: 2026. 1. 7.(수) ~ 1. 14.(수)</strong>
+  </p>
+  <div class="hero-ctas">
+    <a href="#apply" class="btn-p">신청 방법 보기 →</a>
+    <a href="#programs" class="btn-s">과정 소개 보기</a>
+  </div>
+  <div class="scroll-hint"><span>SCROLL</span><div class="scroll-line"></div></div>
+</section>
+
+<!-- STATS -->
+<div style="max-width:1100px;margin:0 auto;padding:0 2rem;">
+  <div class="stats-bar reveal">
+    <div class="stat-c"><span class="stat-n">4~7학기</span><span class="stat-l">이수 중인 학생 지원 가능</span></div>
+    <div class="stat-c"><span class="stat-n">3.0점↑</span><span class="stat-l">총 평점평균 기준 (4.5 만점)</span></div>
+    <div class="stat-c"><span class="stat-n">최대 6학점</span><span class="stat-l">매 학기 추가 수강신청 가능</span></div>
+    <div class="stat-c"><span class="stat-n">무시험</span><span class="stat-l">대학원 입학 특별전형 선발</span></div>
+  </div>
+</div>
+
+<!-- ─── PROGRAMS ─── -->
+<section id="programs">
+  <div class="slabel">PROGRAM OVERVIEW</div>
+  <h2 class="stitle">연계과정이란 무엇인가요?</h2>
+  <p class="sdesc">학사과정과 일반대학원과정을 상호 연계함으로써 전공교육의 연속성을 제고하고 학생들의 시간적·재정적 부담을 경감시키는 과정입니다. 일반대학원에 설치된 학과를 대상으로 하며 협동과정·계약학과는 원칙적으로 제외됩니다.</p>
+
+  <div class="pgrid reveal">
+    <div class="pcard c1">
+      <span class="ptag t1">① 학·석사 연계과정</span>
+      <h3>학부 ＋ 석사를 연속으로</h3>
+      <p>학부 재학 중 대학원 과목을 미리 이수하여 석사 학위 취득 기간을 단축하는 과정입니다. 학부 졸업 후 대학원 입학시험 없이 무시험 특별전형으로 바로 진입하며, 선이수한 대학원 과목 6학점은 석사과정 수료학점으로 인정됩니다.</p>
+      <div class="pflow b1">
+        <strong>📋 과정 흐름</strong>
+        <div class="flow-row">
+          <span class="fc">학부 4~7학기</span><span class="fa">→</span>
+          <span class="fc">연계과정 선발</span><span class="fa">→</span>
+          <span class="fc">대학원 과목 선이수(6학점)</span><span class="fa">→</span>
+          <span class="fc">학부 졸업(6~8학기)</span><span class="fa">→</span>
+          <span class="fc">석사 진입 (3학기)</span><span class="fa">→</span>
+          <span class="fc">석사 학위</span>
+        </div>
+      </div>
+    </div>
+    <div class="pcard c2">
+      <span class="ptag t2">② 학·석박사통합 연계과정</span>
+      <h3>학부 ＋ 석사 ＋ 박사까지</h3>
+      <p>학부에서 석사·박사까지 연속으로 이어지는 통합 트랙입니다. 석박통합과정 총 6학기 운영으로 중간에 석사 수료 또는 박사 학위까지 최단기간 취득이 가능합니다. 선이수 대학원 과목 6학점은 박사과정 수료학점으로도 인정됩니다.</p>
+      <div class="pflow b2">
+        <strong>📋 과정 흐름</strong>
+        <div class="flow-row">
+          <span class="fc2">학부 4~7학기</span><span class="fa">→</span>
+          <span class="fc2">연계과정 선발</span><span class="fa">→</span>
+          <span class="fc2">선이수(6학점)</span><span class="fa">→</span>
+          <span class="fc2">학부 졸업</span><span class="fa">→</span>
+          <span class="fc2">석박통합(6학기)</span><span class="fa">→</span>
+          <span class="fc2">박사 학위</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="conv-box reveal">
+    <h4><span class="ctag">③ TRANSFER</span> 연계과정 전환이란?</h4>
+    <p>학·석사 연계과정의 석사과정 재적 중인 자가 학·석박사통합 연계과정으로 전환할 수 있는 제도입니다. <strong>연계과정 수료(예정)자는 지원 불가</strong>이며, 지원자 소속 대학원 박사 <strong>T/O 여석이 있을 시에만 지원 가능</strong>합니다. 전환 심사는 추천서 및 자기소개서 서류심사로 진행합니다.</p>
+  </div>
+  
+  <!-- 유의사항 -->
+  <div class="conv-box reveal" style="margin-top:.9rem;border-color:rgba(106,194,173,.35);">
+    <h4>⚠️ 지원 시 유의사항</h4>
+    <p>
+      1. 학사과정 학과와 진학희망 대학원 석·박사과정의 학과가 일치하지 않아도 지원 가능하나, <strong>복수지원은 불가</strong>합니다.<br>
+      2. 학사과정 졸업 시까지 진학희망 대학원 학과에서 지정하는 <strong>선수과목을 반드시 이수</strong>하여야 연계과정으로 진입 가능합니다.<br>
+      3. <strong>학사과정 졸업 가능자에 한하여</strong> 연계과정으로 진입 가능합니다.
+    </p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── ADVANTAGES ─── -->
+<div class="adv-bg">
+<div class="adv-inner" id="advantages">
+  <div class="slabel">WHY JOIN</div>
+  <h2 class="stitle">이런 점이 좋습니다</h2>
+  <p class="sdesc">시간적·재정적 부담을 줄이고 연구 연속성을 높이는 연계과정의 핵심 장점을 확인하세요.</p>
+  <div class="agrid reveal">
+    <div class="acard"><div class="aicon">⏱</div><div class="anum">01</div><h4>학위 취득 기간 단축</h4><p>학부 재학 중 대학원 과목을 선이수하여 석사·박사 학위 취득 기간을 실질적으로 단축할 수 있습니다.</p></div>
+    <div class="acard"><div class="aicon">📝</div><div class="anum">02</div><h4>졸업논문·시험 면제</h4><p>학부의 졸업논문 또는 졸업시험 등 학과(부)·전공별 졸업요건이 면제되며, 일반선택 6학점도 감면됩니다.</p></div>
+    <div class="acard"><div class="aicon">🎓</div><div class="anum">03</div><h4>대학원 무시험 특별전형</h4><p>연계과정 선발자는 별도의 대학원 입학시험 없이 무시험 특별전형으로 대학원에 진학할 수 있습니다.</p></div>
+    <div class="acard"><div class="aicon">📚</div><div class="anum">04</div><h4>매 학기 6학점 추가 수강</h4><p>연계과정 선발 후 매 학기 최대 6학점까지 추가 수강신청이 가능하여 대학원 과목을 미리 이수할 수 있습니다.</p></div>
+    <div class="acard"><div class="aicon">🔬</div><div class="anum">05</div><h4>6학점 대학원 학점 인정</h4><p>학사과정에서 이수한 대학원 전공 과목 6학점은 석사 또는 박사과정 수료학점으로 그대로 인정됩니다.</p></div>
+    <div class="acard"><div class="aicon">💰</div><div class="anum">06</div><h4>풍부한 장학금 혜택</h4><p>연계과정 장학금(등록금 전액), SAM분야 장려금, BK21 Bridge 장학금, 연구지원장려금 등 다양한 지원이 있습니다.</p></div>
+  </div>
+</div>
+</div>
+
+<!-- ─── BENEFITS ─── -->
+<section id="benefits">
+  <div class="slabel">SCHOLARSHIPS & BENEFITS</div>
+  <h2 class="stitle">혜택 및 장학금 안내</h2>
+  <p class="sdesc">연계과정 선발자에게는 다음과 같은 장학금과 혜택이 지원됩니다. (담당: 학생과 510-1282, 대학원혁신실 510-7988)</p>
+
+  <div class="schol-grid reveal">
+    <!-- 01 연계과정 장학금 -->
+    <div class="schol-card">
+      <div class="schol-head">
+        <div class="schol-icon si1">💎</div>
+        <div>
+          <h4>① 학·석사 및 학·석박사통합 연계과정 장학금</h4>
+          <span class="schol-sub">담당: 학생과 (510-1282)</span>
+        </div>
+      </div>
+      <table class="schol-table">
+        <tr><td>학·석사</td><td>석사과정(총 3학기) 중 <strong>2, 3학기 등록금 전액</strong></td></tr>
+        <tr><td>학·석박사</td><td>석박사통합과정(총 6학기) 중 석사(2·3학기), 박사(5·6학기) <strong>등록금 전액</strong></td></tr>
+      </table>
+      <div class="schol-note">
+        ※ 8학기 이수자(정규졸업 예정자)는 학사과정 졸업 전체평점평균 <strong>3.8 이상</strong>(소수점 셋째자리 절사)일 경우에만 장학금 지급<br>
+        ※ 계약학과 선발 학생은 지급 제외<br>
+        ※ 등록기간에 학생이 자비 등록 후 학기 중 개별 계좌로 지급
+      </div>
+    </div>
+
+    <!-- 02 SAM분야 진흥장려금 -->
+    <div class="schol-card">
+      <div class="schol-head">
+        <div class="schol-icon si2">🌿</div>
+        <div>
+          <h4>② SAM분야 진흥장려금</h4>
+          <span class="schol-sub">인문·사회·자연 / 담당: 학생과 (510-1282)</span>
+        </div>
+      </div>
+      <table class="schol-table">
+        <tr><td>지원대상</td><td>기초보호학문분야(인문·사회·자연) 연계과정 재학생</td></tr>
+        <tr><td>지원내용</td><td>학기당 <strong>50만원 내외</strong></td></tr>
+        <tr><td>지급기준</td><td>심사학기 평균평점 <strong>3.7 이상</strong> + 학업계획서·전공 실적 서류 제출</td></tr>
+      </table>
+      <div class="schol-note">
+        ※ 수업연한 중 마지막 학기자, 초과학기자, 졸업(수료)예정자 제외
+      </div>
+    </div>
+
+    <!-- 03 BK21 Bridge 장학금 -->
+    <div class="schol-card">
+      <div class="schol-head">
+        <div class="schol-icon si3">🏆</div>
+        <div>
+          <h4>③ BK21 Bridge 장학금</h4>
+          <span class="schol-sub">BK21 참여학과 / 담당: 대학원혁신실 (510-7988)</span>
+        </div>
+      </div>
+      <table class="schol-table">
+        <tr><td>지원대상</td><td>연계과정생 중 <strong>학사과정 최종학기 재학생</strong> (BK21 참여학과)</td></tr>
+        <tr><td>지원내용</td><td>최대 4개월 동안 매월 <strong>장학금 70만원</strong>씩 지급</td></tr>
+        <tr><td>조건</td><td>다음 학기 대학원 입학예정자만 신청 가능</td></tr>
+      </table>
+    </div>
+
+    <!-- 04 연구지원장려금 -->
+    <div class="schol-card">
+      <div class="schol-head">
+        <div class="schol-icon si4">🔬</div>
+        <div>
+          <h4>④ 연구지원장려금</h4>
+          <span class="schol-sub">전체 학문분야 / 담당: 대학원혁신실 (510-1901)</span>
+        </div>
+      </div>
+      <table class="schol-table">
+        <tr><td>지원대상</td><td>학·석사 및 학·석박사통합 연계과정 재학생</td></tr>
+        <tr><td>지원내용</td><td>석사과정(3학기) 및 석박통합과정(6학기) 학기당 <strong>50만원</strong></td></tr>
+        <tr><td>사용용도</td><td>학회참석경비, 연구관련 자료수집경비, 연구에 필요한 경비</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 기타 혜택 -->
+  <div class="conv-box reveal" style="margin-top:1.2rem;border-color:rgba(106,194,173,.4);background:var(--b2xl);">
+    <h4>⑤ 기타 혜택</h4>
+    <p>
+      • <strong>졸업논문·시험 면제</strong>: 학부의 졸업논문 또는 졸업시험 등 학과(부) 또는 전공별 졸업요건 면제 (단, 영어 표준외국어능력시험 졸업요건 및 교육인증제 인증요건은 충족 필요)<br>
+      • <strong>졸업학점 감면</strong>: 학부 졸업이수학점 중 일반선택 6학점 감면<br>
+      • <strong>무시험 특별전형</strong>: 대학원 입학 무시험 특별전형으로 선발<br>
+      • <strong>조기 졸업 가능</strong>: 졸업요건 충족 시 6학기 졸업 후 바로 석사과정 진입 가능
+    </p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── ELIGIBILITY ─── -->
+<section id="eligibility">
+  <div class="slabel">ELIGIBILITY</div>
+  <h2 class="stitle">지원 자격 — 정확히 확인하세요</h2>
+  <p class="sdesc">부산대학교 2026학년도 1학기 공식 안내 기준입니다. 학과별 세부 요건이 다를 수 있으니 반드시 소속 학과에 확인하세요.</p>
+
+  <div class="egrid reveal">
+    <div class="ebox">
+      <div class="ehead">
+        <div class="ehead-ic ei1">🎓</div>
+        <h4>① 학·석사 &amp; ② 학·석박사통합 연계과정<br>공통 지원 자격</h4>
+      </div>
+      <table class="etable">
+        <tr><td>이수 학기</td><td>소속 학과(부) 또는 전공의 <strong>4학기 이상 7학기 이내</strong> 이수자로서 학기별 이수학점을 이수한 자<br><em style="font-size:.78rem;">(당해 학기 계절수업 반영 불가)</em></td></tr>
+        <tr><td>이수학점</td><td>학년별 1학기 = 수료학점의 1/2<br>학년별 2학기 = 학년 수료학점<br><em style="font-size:.78rem;">(부산대학교 학칙 제69조 기준)</em></td></tr>
+        <tr><td>성적</td><td>총 평점평균 <strong>3.0점 이상</strong> (4.5 만점 기준)</td></tr>
+        <tr><td>추천</td><td>소속대학 학과(부)장 또는 <strong>지도교수의 추천</strong>을 받은 자</td></tr>
+        <tr><td>기타</td><td>학사과정 학과와 진학희망 대학원 학과가 달라도 지원 가능 (복수지원 불가)</td></tr>
+      </table>
+    </div>
+
+    <div class="ebox">
+      <div class="ehead">
+        <div class="ehead-ic ei2">🔄</div>
+        <h4>③ 연계과정 전환 지원 자격 및<br>학부 졸업 조건</h4>
+      </div>
+      <table class="etable">
+        <tr><td>전환 대상</td><td>학·석사 연계과정의 석사과정 <strong>재적 중인 자</strong></td></tr>
+        <tr><td>전환 제한</td><td>연계과정 <strong>수료(예정)자 지원 불가</strong></td></tr>
+        <tr><td>T/O 조건</td><td>소속 대학원 박사 <strong>T/O 여석이 있을 시</strong>에만 지원 가능</td></tr>
+        <tr><td>졸업학점</td><td>총 이수학점에서 일반선택 <strong>6학점 감한 학점</strong> 이수</td></tr>
+        <tr><td>졸업평점</td><td>6학기 졸업: 4.0 이상 / 7학기: 3.5 이상 / 8학기: 3.25 이상</td></tr>
+      </table>
+      <div class="especial">※ 선수과목: 학사과정 졸업 시까지 진학희망 대학원 학과 지정 선수과목 반드시 이수 필요</div>
+    </div>
+  </div>
+
+  <!-- 학년별 수료학점 표 -->
+  <div style="margin-top:2rem;" class="reveal">
+    <div class="slabel" style="margin-bottom:.8rem;">GRADUATION CREDITS TABLE</div>
+    <h3 style="font-family:'Noto Serif KR',serif;font-size:1.15rem;font-weight:700;margin-bottom:.5rem;">학년별 이수학점 기준표</h3>
+    <p style="color:var(--muted);font-size:.85rem;margin-bottom:1rem;">학과(부)별 수료학점 및 학기별 이수 기준을 확인하세요. 4학기 이상 7학기 이내 해당 학기의 이수학점을 충족해야 지원 가능합니다.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── SCHEDULE ─── -->
+<section id="schedule">
+  <div class="slabel">APPLICATION SCHEDULE</div>
+  <h2 class="stitle">2026학년도 1학기 전형 일정</h2>
+  <p class="sdesc">아래 일정을 반드시 확인하고 기간 내에 지원하세요. 지원서는 소속 단과대학 홈페이지에서 다운로드하여 진학희망 대학원 소속 단과대학 행정실에 제출합니다.</p>
+
+  <div class="sched-grid reveal">
+    <div class="sched-c">
+      <div class="sched-step">①</div>
+      <h4>지원서 교부</h4>
+      <div class="sched-date">2026. 1. 7.(수) ~ 1. 14.(수)</div>
+      <p>소속 단과대학 홈페이지에서 지원서 등 양식 다운로드</p>
+    </div>
+    <div class="sched-c">
+      <div class="sched-step">②</div>
+      <h4>지원서 접수</h4>
+      <div class="sched-date">2026. 1. 7.(수) ~ 1. 14.(수)</div>
+      <p>진학희망 대학원 소속 단과대학 행정실에 제출</p>
+    </div>
+    <div class="sched-c">
+      <div class="sched-step">③</div>
+      <h4>전형 실시</h4>
+      <div class="sched-date">2026. 1. 21.(수)까지</div>
+      <p>모집학과별 시행 (면접 및 학과 전형기준에 따름)</p>
+    </div>
+    <div class="sched-c">
+      <div class="sched-step">④</div>
+      <h4>합격자 발표</h4>
+      <div class="sched-date">2026. 1. 28.(수) (예정)</div>
+      <p>단과대학(모집학과)에서 개별 통지</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── HOW TO APPLY ─── -->
+<section id="apply" style="padding-top:0;">
+  <div class="slabel">APPLICATION PROCESS</div>
+  <h2 class="stitle">신청 방법 — 단계별 안내</h2>
+  <p class="sdesc">아래 절차를 순서대로 따라오세요. 지도교수 상담이 가장 먼저입니다.</p>
+
+  <div class="timeline reveal">
+    <div class="tl-i">
+      <div class="tl-dot">1</div>
+      <div class="tl-c">
+        <span class="tlwhen">STEP 1 · 사전 준비</span>
+        <h4>지도교수 상담 및 추천 확인</h4>
+        <p>소속 학과(부)장 또는 지도(예정) 교수님께 연계과정 지도 의향과 추천 가능 여부를 먼저 확인하세요. 지도교수의 추천은 지원 자격의 핵심 요건입니다. 학사과정 학과와 진학희망 대학원 학과가 달라도 지원 가능합니다.</p>
+      </div>
+    </div>
+    <div class="tl-i">
+      <div class="tl-dot">2</div>
+      <div class="tl-c">
+        <span class="tlwhen">STEP 2 · 자격 확인</span>
+        <h4>이수 학기·성적·학점 기준 자가 점검</h4>
+        <p>소속 학과(부)의 <strong>4학기 이상 7학기 이내</strong> 이수 여부, 학기별 이수학점 충족 여부, 총 평점평균 <strong>3.0점 이상</strong>을 확인하세요. 당해 학기 계절수업은 반영되지 않습니다.</p>
+        <div class="tlnote">이수학점 기준: 학년별 1학기 = 수료학점의 1/2 / 학년별 2학기 = 수료학점 (학칙 제69조)<br>학과별 수료학점 기준은 위 기준표를 참조하세요.</div>
+      </div>
+    </div>
+    <div class="tl-i">
+      <div class="tl-dot">3</div>
+      <div class="tl-c">
+        <span class="tlwhen">STEP 3 · 서류 준비</span>
+        <h4>지원서 및 제출 서류 준비</h4>
+        <p>소속 단과대학 홈페이지에서 지원서 양식을 다운로드 받아 작성합니다. 제출 서류에는 <strong>지원서, 학부 성적증명서, 추천서, 자기소개서</strong> 등이 포함됩니다. 선발 방법은 서류심사가 원칙이나 학과에 따라 면접이 실시될 수 있으니 반드시 지원학과에 문의하세요.</p>
+      </div>
+    </div>
+    <div class="tl-i">
+      <div class="tl-dot">4</div>
+      <div class="tl-c">
+        <span class="tlwhen">STEP 4 · 서류 제출 (1. 7 ~ 1. 14)</span>
+        <h4>진학희망 대학원 소속 단과대학 행정실에 제출</h4>
+        <p>작성한 지원서 및 제출 서류를 <strong>진학희망 대학원이 소속된 단과대학 행정실</strong>에 제출합니다. 모집요강 및 지원서 양식은 소속 단과대학 홈페이지에서 확인하시기 바랍니다.</p>
+      </div>
+    </div>
+    <div class="tl-i">
+      <div class="tl-dot">5</div>
+      <div class="tl-c">
+        <span class="tlwhen">STEP 5 · 전형 및 합격 발표</span>
+        <h4>모집학과별 전형 → 합격자 발표 (1. 28)</h4>
+        <p>학부성적·추천서·자기소개서 등 서류심사(원칙)가 진행되며, 학과에 따라 면접이 병행됩니다. 합격자는 2026. 1. 28.(수)(예정) 단과대학(모집학과)에서 개별 통지합니다.</p>
+      </div>
+    </div>
+    <div class="tl-i">
+      <div class="tl-dot">6</div>
+      <div class="tl-c">
+        <span class="tlwhen">STEP 6 · 선발 이후</span>
+        <h4>대학원 과목 선이수 및 연구 시작</h4>
+        <p>선발 후 매 학기 최대 6학점까지 대학원 과목을 추가 수강할 수 있습니다. 학사과정 졸업가능자에 한하여 연계과정 진입이 가능하며, 졸업 후 무시험 특별전형으로 대학원에 진학합니다. <strong>석사과정 첫 학기는 군입대·질병 외에는 휴학이 허가되지 않습니다.</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── FAQ ─── -->
+<section id="faq">
+  <div class="slabel">FAQ</div>
+  <h2 class="stitle">자주 묻는 질문</h2>
+  <p class="sdesc">리플렛의 Q&A를 기반으로 정리했습니다.</p>
+
+  <div class="flist reveal">
+    <div class="fi">
+      <button class="fq" onclick="tf(this)">학기별 이수학점을 만족하지 않으면 신청이 불가능한가요?<span class="farr">+</span></button>
+      <div class="fa-b">네, 소속 학과(부)·전공의 학기별 이수학점을 이수해야 신청이 가능합니다. 또한 당해학기의 계절수업 이수학점은 반영하지 않습니다. 학년별 수료학점 기준표를 반드시 확인하고 신청하시기 바랍니다.</div>
+    </div>
+    <div class="fi">
+      <button class="fq" onclick="tf(this)">학사과정과 희망 석·박사과정 학과가 다르면 지원이 불가능한가요?<span class="farr">+</span></button>
+      <div class="fa-b">아닙니다. 학사과정과 석사, 박사과정 학과가 동일하지 않아도 신청 가능합니다. 다만, 소속대학 학과(부)장이나 지도교수의 추천을 받아야 합니다.</div>
+    </div>
+    <div class="fi">
+      <button class="fq" onclick="tf(this)">연계과정 선발 후 대학원 과목 수강신청 학점은 어떻게 되나요?<span class="farr">+</span></button>
+      <div class="fa-b">연계과정으로 선발된 학생은 매 학기 최대 6학점까지 추가로 수강신청이 가능합니다.</div>
+    </div>
+    <div class="fi">
+      <button class="fq" onclick="tf(this)">선이수한 대학원 과목 학점은 대학원 진학 후 인정되나요?<span class="farr">+</span></button>
+      <div class="fa-b">학사과정에서 이수한 대학원 전공 과목 6학점은 석사과정 또는 박사과정 수료학점으로 인정됩니다. 단, 건축학인증프로그램(건설융합학부 건축학전공)의 경우 6학점 이내에서 학사와 석사 과목을 상호 이수하여 각각의 졸업 소요학점에 포함할 수 있습니다.</div>
+    </div>
+    <div class="fi">
+      <button class="fq" onclick="tf(this)">4~5학기 이수자로 선발된 후 6학기에 바로 석사과정에 진입할 수 있나요?<span class="farr">+</span></button>
+      <div class="fa-b">연계과정의 6학기 졸업 요건을 충족하면 6학기 후 바로 석사과정으로 진입이 가능합니다. 6학기 졸업요건 충족 시 졸업신청서와 대학원입학지원서를 학교에서 정한 기간 내에 소속대학 행정실로 제출하시면 됩니다.</div>
+    </div>
+    <div class="fi">
+      <button class="fq" onclick="tf(this)">연계과정자의 학부 졸업 평점 요건은 무엇인가요?<span class="farr">+</span></button>
+      <div class="fa-b">연계과정자의 이수학점 총 평점 평균이 6학기 졸업 가능자 4.0 이상, 7학기 졸업 가능자 3.5 이상, 8학기 졸업 가능자 3.25 이상이어야 합니다. 또한 영어 표준외국어능력시험 졸업요건 및 각종 교육인증제 해당 학생은 인증요건을 모두 충족해야 합니다.</div>
+    </div>
+    <div class="fi">
+      <button class="fq" onclick="tf(this)">연계과정을 포기하면 장학금을 반납해야 하나요?<span class="farr">+</span></button>
+      <div class="fa-b">석사 또는 박사과정 중 중도 포기하는 경우 지급받은 장학금 중 포기한 날이 속하는 학기의 장학금은 반납해야 합니다. BK21 Bridge 장학금 및 장려금은 별도 반납 기준에 따릅니다.</div>
+    </div>
+    <div class="fi">
+      <button class="fq" onclick="tf(this)">석사과정 첫 학기에 휴학이 가능한가요?<span class="farr">+</span></button>
+      <div class="fa-b">석사과정 첫 학기는 군입대와 질병을 제외하고는 휴학 허가를 하지 않습니다. 이 외에는 휴학 가능 기간 내로 허가 가능합니다.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── BOARD (자료실 + 업로드) ─── -->
+<div class="board-section" id="board">
+<div class="board-inner">
+  <div class="slabel">NOTICE BOARD</div>
+  <h2 class="stitle">공지사항 및 자료실</h2>
+  <p class="sdesc">연계과정 관련 공지사항, 모집요강, 지원서 양식 등을 확인하고 다운로드하세요.</p>
+
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;flex-wrap:wrap;gap:.7rem;">
+    <div class="board-tabs">
+      <button class="btab active" onclick="switchTab(this,'notice')">공지사항</button>
+      <button class="btab" onclick="switchTab(this,'data')">자료실</button>
+      <button class="btab" onclick="switchTab(this,'upload')">파일 업로드</button>
+    </div>
+    <input type="text" id="searchInput" class="uf-input" placeholder="🔍 제목 검색..." style="width:220px;font-size:.82rem;" oninput="filterBoard()">
+  </div>
+
+  <!-- 공지사항 탭 -->
+  <div id="tab-notice" class="tab-content reveal">
+    <table class="board-table" style="border-radius:var(--r);overflow:hidden;">
+      <thead>
+        <tr>
+          <th>번호</th>
+          <th>분류</th>
+          <th>제목</th>
+          <th>등록일</th>
+          <th>첨부</th>
+        </tr>
+      </thead>
+      <tbody id="notice-tbody">
+        <tr>
+          <td>5</td>
+          <td><span style="background:rgba(0,117,193,.12);color:var(--b1);padding:.1rem .5rem;border-radius:4px;font-size:.72rem;font-weight:600;">공지</span></td>
+          <td class="title-cell"><a href="#">2026학년도 1학기 학·석사 및 학·석박사통합 연계과정 모집 안내</a> <span class="new-tag">NEW</span></td>
+          <td>2026.01.03</td>
+          <td><span class="file-tag">📎 PDF</span></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><span style="background:rgba(106,194,173,.18);color:var(--b2d);padding:.1rem .5rem;border-radius:4px;font-size:.72rem;font-weight:600;">안내</span></td>
+          <td class="title-cell"><a href="#">2026학년도 1학기 모집 리플렛 및 포스터 배포 안내</a></td>
+          <td>2026.01.03</td>
+          <td><span class="file-tag">📎 PDF</span></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><span style="background:rgba(244,168,0,.12);color:#b07a00;padding:.1rem .5rem;border-radius:4px;font-size:.72rem;font-weight:600;">서식</span></td>
+          <td class="title-cell"><a href="#">학년별 수료학점 기준표 (2026 기준)</a></td>
+          <td>2026.01.03</td>
+          <td><span class="file-tag">📎 XLSX</span></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><span style="background:rgba(0,117,193,.12);color:var(--b1);padding:.1rem .5rem;border-radius:4px;font-size:.72rem;font-weight:600;">공지</span></td>
+          <td class="title-cell"><a href="#">2025학년도 2학기 연계과정 선발 결과 안내</a></td>
+          <td>2025.08.20</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td><span style="background:rgba(106,194,173,.18);color:var(--b2d);padding:.1rem .5rem;border-radius:4px;font-size:.72rem;font-weight:600;">안내</span></td>
+          <td class="title-cell"><a href="#">(통합)연계과정 운영 안내 (학칙 제69조)</a></td>
+          <td>2025.03.01</td>
+          <td><span class="file-tag">📎 HWP</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="text-align:center;margin-top:1.2rem;">
+      <span style="font-size:.8rem;color:var(--muted);">총 5건의 공지사항</span>
+    </div>
+  </div>
+
+  <!-- 자료실 탭 -->
+  <div id="tab-data" class="tab-content reveal" style="display:none;">
+    <table class="board-table" style="border-radius:var(--r);overflow:hidden;">
+      <thead>
+        <tr>
+          <th>번호</th>
+          <th>분류</th>
+          <th>파일명</th>
+          <th>등록일</th>
+          <th>다운로드</th>
+        </tr>
+      </thead>
+      <tbody id="data-tbody">
+        <tr>
+          <td>3</td>
+          <td><span class="file-tag">📄 PDF</span></td>
+          <td class="title-cell"><a href="#" onclick="fakeDownload(event,'2026학년도_제1학기_학석박사통합_안내_리플렛.pdf')">2026학년도 1학기 학·석박사통합 연계과정 안내 리플렛 (최종)</a> <span class="new-tag">NEW</span></td>
+          <td>2026.01.03</td>
+          <td><button onclick="fakeDownload(event,'리플렛.pdf')" style="background:var(--b1);color:#fff;border:none;border-radius:5px;padding:.3rem .7rem;font-size:.75rem;cursor:pointer;">⬇ 다운로드</button></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><span class="file-tag">📄 PDF</span></td>
+          <td class="title-cell"><a href="#" onclick="fakeDownload(event,'2026학년도_제1학기_학석박사통합_안내_포스터.pdf')">2026학년도 1학기 학·석박사통합 연계과정 안내 포스터 (최종)</a> <span class="new-tag">NEW</span></td>
+          <td>2026.01.03</td>
+          <td><button onclick="fakeDownload(event,'포스터.pdf')" style="background:var(--b1);color:#fff;border:none;border-radius:5px;padding:.3rem .7rem;font-size:.75rem;cursor:pointer;">⬇ 다운로드</button></td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td><span class="file-tag">📊 XLSX</span></td>
+          <td class="title-cell"><a href="#" onclick="fakeDownload(event,'학년별_수료학점.xlsx')">학년별 수료학점 기준표</a></td>
+          <td>2026.01.03</td>
+          <td><button onclick="fakeDownload(event,'수료학점.xlsx')" style="background:var(--b2d);color:#fff;border:none;border-radius:5px;padding:.3rem .7rem;font-size:.75rem;cursor:pointer;">⬇ 다운로드</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <div id="uploaded-files-list" style="margin-top:1rem;"></div>
+  </div>
+
+  <!-- 업로드 탭 -->
+  <div id="tab-upload" class="tab-content" style="display:none;">
+    <div class="upload-area reveal" id="dropZone"
+      ondragover="event.preventDefault();this.classList.add('drag')"
+      ondragleave="this.classList.remove('drag')"
+      ondrop="handleDrop(event)">
+      <span class="upload-icon">📁</span>
+      <h4>파일을 여기에 드래그하거나 클릭하여 업로드하세요</h4>
+      <p>PDF, HWP, XLSX, DOC, PNG, JPG 등 모든 파일 형식 지원 (최대 50MB)</p>
+      <input type="file" id="fileInput" multiple onchange="handleFiles(this.files)">
+      <label class="upload-btn" for="fileInput">파일 선택</label>
+    </div>
+
+    <div class="upload-form" style="margin-top:1.5rem;">
+      <div class="uf-row">
+        <label class="uf-label">업로더 이름 *</label>
+        <input type="text" class="uf-input" id="uploader" placeholder="이름 입력">
+      </div>
+      <div class="uf-row">
+        <label class="uf-label">소속 학과(부) *</label>
+        <input type="text" class="uf-input" id="dept" placeholder="학과명 입력">
+      </div>
+      <div class="uf-row">
+        <label class="uf-label">분류</label>
+        <select class="uf-select uf-input" id="category">
+          <option value="공지">공지</option>
+          <option value="서식">서식/양식</option>
+          <option value="안내">안내자료</option>
+          <option value="기타">기타</option>
+        </select>
+      </div>
+      <div class="uf-row">
+        <label class="uf-label">제목 *</label>
+        <input type="text" class="uf-input" id="fileTitle" placeholder="게시물 제목 입력">
+      </div>
+      <div class="uf-row full">
+        <label class="uf-label">설명 (선택)</label>
+        <input type="text" class="uf-input" id="fileDesc" placeholder="파일에 대한 간단한 설명">
+      </div>
+    </div>
+
+    <div id="file-preview" style="margin-top:1rem;display:flex;flex-wrap:wrap;gap:.7rem;"></div>
+
+    <div style="margin-top:1.5rem;display:flex;gap:1rem;align-items:center;">
+      <button class="btn-submit" onclick="submitUpload()">📤 업로드 등록</button>
+      <button onclick="clearForm()" style="padding:.7rem 1.5rem;background:transparent;border:1.5px solid var(--border);border-radius:8px;font-size:.85rem;color:var(--muted);cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:border-color .2s;">초기화</button>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ─── CONTACT ─── -->
+<section id="contact">
+  <div class="slabel">CONTACT</div>
+  <h2 class="stitle">문의처 안내</h2>
+  <div class="contact-grid reveal">
+    <div class="cbox">
+      <h4>📋 모집전형 총괄 및 학사관련</h4>
+      <p>학사과 (학적)</p>
+      <p class="tel">☎ 510-1212~3</p>
+      <p style="margin-top:.3rem;">학사과 (수업)</p>
+      <p class="tel">☎ 510-1221~3</p>
+    </div>
+    <div class="cbox">
+      <h4>💎 장학금·SAM분야 진흥장려금</h4>
+      <p>학생과</p>
+      <p class="tel">☎ 510-1282</p>
+      <p style="margin-top:.3rem;">등록금 문의</p>
+      <p class="tel">재무과 ☎ 510-1051</p>
+    </div>
+    <div class="cbox">
+      <h4>🔬 BK21 Bridge 장학금·연구지원</h4>
+      <p>대학원혁신실</p>
+      <p class="tel">☎ 510-7988 / 1901</p>
+      <p style="margin-top:.3rem;">지원서 교부·접수</p>
+      <p style="font-size:.8rem;color:var(--muted);">진학희망 대학원 소속 단과대학 행정실</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-wrap">
+  <div class="cta-banner reveal">
+    <h2>지금이 바로 시작할 때입니다</h2>
+    <p>2026. 1. 7.(수) ~ 1. 14.(수) 접수 기간을 놓치지 마세요.<br>지도교수 상담 → 서류 준비 → 단과대학 행정실 제출</p>
+    <div class="cta-ctas">
+      <a href="#apply" class="bw">신청 방법 보기</a>
+      <a href="#board" class="bg">지원서 다운로드</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p><strong>부산대학교 대학원 입학처 / 학사과</strong></p>
+  <p>☎ 학사과(학적) 510-1212~3 | (수업) 510-1221~3 | 학생과 510-1282 | 대학원혁신실 510-7988</p>
+  <p>🌐 <a href="https://www.pusan.ac.kr" target="_blank">www.pusan.ac.kr</a></p>
+  <p style="margin-top:.7rem;font-size:.75rem;">본 페이지의 내용은 2026학년도 1학기 공식 안내 기준이며, 세부 사항은 소속 단과대학 및 학과에 따라 상이할 수 있습니다. 반드시 소속 학과 사무실에 문의하여 최신 모집 공고를 확인하시기 바랍니다.</p>
+</footer>
+
+<div id="toast"></div>
+
+</div><!-- /.wrap -->
+<script>
+// NAV
+function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open');}
+
+// FAQ
+function tf(btn){
+  const fi=btn.closest('.fi');
+  const was=fi.classList.contains('open');
+  document.querySelectorAll('.fi.open').forEach(e=>e.classList.remove('open'));
+  if(!was)fi.classList.add('open');
+}
+
+// TABS
+function switchTab(btn,tab){
+  document.querySelectorAll('.btab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.tab-content').forEach(t=>t.style.display='none');
+  document.getElementById('tab-'+tab).style.display='block';
+}
+
+// BOARD SEARCH
+function filterBoard(){
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  document.querySelectorAll('#notice-tbody tr,#data-tbody tr').forEach(tr=>{
+    const txt=tr.textContent.toLowerCase();
+    tr.style.display=txt.includes(q)?'':'none';
+  });
+}
+
+// UPLOAD
+let selectedFiles=[];
+function handleFiles(files){
+  for(const f of files){
+    if(!selectedFiles.find(x=>x.name===f.name))selectedFiles.push(f);
+  }
+  renderPreview();
+}
+function handleDrop(e){
+  e.preventDefault();
+  document.getElementById('dropZone').classList.remove('drag');
+  handleFiles(e.dataTransfer.files);
+}
+function renderPreview(){
+  const p=document.getElementById('file-preview');
+  p.innerHTML='';
+  selectedFiles.forEach((f,i)=>{
+    const chip=document.createElement('div');
+    chip.style.cssText='display:inline-flex;align-items:center;gap:.5rem;background:var(--b1xx);border:1px solid var(--border);border-radius:6px;padding:.4rem .8rem;font-size:.8rem;color:var(--text);';
+    chip.innerHTML=`<span>${getIcon(f.name)}</span><span>${f.name} (${(f.size/1024).toFixed(0)}KB)</span><button onclick="removeFile(${i})" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:.9rem;padding:0;">✕</button>`;
+    p.appendChild(chip);
+  });
+}
+function getIcon(name){
+  const ext=name.split('.').pop().toLowerCase();
+  if(['pdf'].includes(ext)) return '📄';
+  if(['xlsx','xls'].includes(ext)) return '📊';
+  if(['hwp','hwpx'].includes(ext)) return '📝';
+  if(['png','jpg','jpeg','gif'].includes(ext)) return '🖼';
+  if(['doc','docx'].includes(ext)) return '📃';
+  return '📁';
+}
+function removeFile(i){selectedFiles.splice(i,1);renderPreview();}
+function clearForm(){
+  selectedFiles=[];
+  renderPreview();
+  ['uploader','dept','fileTitle','fileDesc'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fileInput').value='';
+}
+
+// Toast
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+function submitUpload(){
+  const uploader=document.getElementById('uploader').value.trim();
+  const dept=document.getElementById('dept').value.trim();
+  const title=document.getElementById('fileTitle').value.trim();
+  const cat=document.getElementById('category').value;
+  if(!uploader||!dept||!title){showToast('⚠ 이름, 소속, 제목을 모두 입력해주세요.');return;}
+  if(selectedFiles.length===0){showToast('⚠ 업로드할 파일을 선택해주세요.');return;}
+
+  // Add to data table (client-side demo)
+  const tbody=document.getElementById('data-tbody');
+  const count=tbody.querySelectorAll('tr').length+1;
+  const today=new Date();
+  const dateStr=`${today.getFullYear()}.${String(today.getMonth()+1).padStart(2,'0')}.${String(today.getDate()).padStart(2,'0')}`;
+  const filesHtml=selectedFiles.map(f=>`<span class="file-tag">${getIcon(f.name)} ${f.name.split('.').pop().toUpperCase()}</span>`).join(' ');
+  const newRow=`<tr>
+    <td>${count}</td>
+    <td><span style="background:rgba(0,117,193,.12);color:var(--b1);padding:.1rem .5rem;border-radius:4px;font-size:.72rem;font-weight:600;">${cat}</span></td>
+    <td class="title-cell"><a href="#">${title}</a> <span class="new-tag">NEW</span></td>
+    <td>${dateStr}</td>
+    <td>${filesHtml}</td>
+  </tr>`;
+  tbody.insertAdjacentHTML('afterbegin',newRow);
+
+  showToast(`✅ "${title}" 파일이 등록되었습니다!`);
+  clearForm();
+  switchTab(document.querySelector('.btab[onclick*="data"]'),'data');
+}
+
+function fakeDownload(e,name){
+  e.preventDefault();
+  showToast(`⬇ "${name}" 다운로드를 시작합니다...`);
+}
+
+// NAV ACTIVE
+window.addEventListener('scroll',()=>{
+  const sections=['programs','benefits','eligibility','schedule','faq','board'];
+  const scrollY=window.scrollY+100;
+  sections.forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    const link=document.querySelector(`.nav-menu a[href="#${id}"]`);
+    if(!link)return;
+    if(el.offsetTop<=scrollY && el.offsetTop+el.offsetHeight>scrollY){
+      document.querySelectorAll('.nav-menu a').forEach(a=>a.classList.remove('active'));
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            

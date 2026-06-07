@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Part II — AI 전문·융합교육과정 | ARISE PNU AI</title>
+  <style>
+    :root{
+      --navy:#0a2463;--blue:#1a4fa0;--mid:#2563eb;--light:#60a5fa;--pale:#dbeafe;
+      --gold:#f59e0b;--gold2:#fbbf24;--green:#10b981;--teal:#0ea5e9;
+      --amber:#d97706;--red:#dc2626;--purple:#7c3aed;
+      --bg:#f0f4f8;--card:#ffffff;--text:#1e293b;--sub:#64748b;--bdr:#e2e8f0;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif;background:var(--bg);color:var(--text);line-height:1.65;display:flex;flex-direction:column;min-height:100vh}
+
+    /* ── NAV ── */
+    nav{background:var(--navy);padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+    .nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .nav-brand .lb{background:linear-gradient(135deg,var(--gold),#d97706);width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;color:white}
+    .nav-brand .bt{color:white;font-weight:800;font-size:14px}
+    .nav-links{display:flex;gap:4px}
+    .nav-links a{color:rgba(255,255,255,.65);font-size:12px;font-weight:600;padding:6px 12px;border-radius:6px;text-decoration:none;transition:all .2s;white-space:nowrap}
+    .nav-links a:hover{background:rgba(255,255,255,.1);color:white}
+    .nav-links a.active{background:rgba(245,158,11,.3);color:var(--gold2)}
+    .nav-badge{background:var(--gold);color:var(--navy);font-size:9px;font-weight:800;padding:2px 5px;border-radius:3px;margin-left:4px}
+
+    /* ── PAGE HEADER ── */
+    .page-header{background:linear-gradient(135deg,#451a03,#92400e,#d97706);padding:44px 40px 36px;color:white}
+    .page-header-inner{max-width:1100px;margin:0 auto}
+    .breadcrumb{font-size:12px;color:rgba(255,255,255,.5);margin-bottom:12px}
+    .breadcrumb a{color:rgba(255,255,255,.6);text-decoration:none}
+    .part-badge{display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:4px 14px;font-size:12px;font-weight:700;color:var(--gold2);margin-bottom:12px}
+    .page-header h1{font-size:26px;font-weight:900;margin-bottom:8px;line-height:1.3}
+    .page-header p{font-size:14px;color:rgba(255,255,255,.7);max-width:720px;line-height:1.7}
+    .task-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+    .task-pill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:5px 14px;font-size:12px;color:rgba(255,255,255,.85);font-weight:600}
+
+    /* ── LAYOUT ── */
+    .layout{display:flex;max-width:1100px;margin:32px auto;padding:0 24px;gap:28px;align-items:flex-start;flex:1}
+    .sidebar{width:220px;flex-shrink:0;position:sticky;top:76px;max-height:calc(100vh - 100px);overflow-y:auto;background:#fff;border-radius:12px;padding:16px 8px;box-shadow:0 1px 8px rgba(0,0,0,.07);align-self:flex-start}
+    .side-title{font-size:11px;font-weight:700;color:var(--sub);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;padding:0 8px}
+    .side-link{display:block;font-size:12px;padding:6px 10px;border-radius:7px;color:var(--sub);text-decoration:none;transition:all .2s;border-left:3px solid transparent;margin-bottom:1px}
+    .side-link:hover{background:rgba(217,119,6,.07);color:var(--amber)}
+    .side-link.active{background:#fffbeb;color:var(--amber);border-left-color:var(--gold);font-weight:700}
+    .side-link.sub{padding-left:18px;font-size:11px}
+    .main{flex:1;min-width:0}
+
+    /* ── SECTION BLOCKS ── */
+    .block{background:var(--card);border:1px solid var(--bdr);border-radius:16px;padding:28px 32px;margin-bottom:24px;scroll-margin-top:80px}
+    .block-num{font-size:11px;font-weight:700;color:var(--sub);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+    .block-title{font-size:19px;font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+    .block-title .icon{font-size:22px}
+    .block-desc{font-size:14px;color:var(--sub);margin-bottom:20px;line-height:1.7}
+    .divider{height:1px;background:var(--bdr);margin:22px 0}
+    .sub-sec{scroll-margin-top:80px;margin-top:24px}
+    .sub-sec-title{font-size:14px;font-weight:800;margin-bottom:10px;color:var(--text);display:flex;align-items:center;gap:8px}
+    .sub-sec-title .badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:5px;color:white}
+    .highlight-term{display:inline-block;background:linear-gradient(135deg,#1d4ed8,#7c3aed);color:white;font-weight:800;padding:1px 8px;border-radius:5px;font-size:.95em}
+
+    /* ── KP BOXES ── */
+    .kp-box{background:#f8fafc;border-left:4px solid var(--mid);border-radius:0 8px 8px 0;padding:12px 16px;margin-bottom:10px;font-size:13px;color:var(--text);line-height:1.7}
+    .kp-box.amber{border-left-color:var(--gold)}
+    .kp-box.green{border-left-color:var(--green)}
+    .kp-box.purple{border-left-color:var(--purple)}
+    .kp-box.red{border-left-color:var(--red)}
+    .kp-box.teal{border-left-color:var(--teal)}
+
+    /* ── GRIDS & CARDS ── */
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+    .grid-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px}
+    .card{background:var(--card);border:1px solid var(--bdr);border-radius:12px;padding:18px}
+    .card.blue{background:#dbeafe;border-color:#93c5fd}
+    .card.amber{background:#fef3c7;border-color:#fde68a}
+    .card.green{background:#dcfce7;border-color:#86efac}
+    .card.purple{background:#ede9fe;border-color:#c4b5fd}
+    .card.teal{background:#ccfbf1;border-color:#5eead4}
+    .card.red{background:#fee2e2;border-color:#fca5a5}
+    .card .c-icon{font-size:22px;margin-bottom:8px}
+    .card .c-title{font-size:13px;font-weight:800;margin-bottom:6px}
+    .card .c-body{font-size:12px;line-height:1.7;color:var(--sub)}
+
+    /* ── FEATURE BOX ── */
+    .feature-box{background:#f8fafc;border:1px solid var(--bdr);border-radius:14px;padding:18px 22px;color:var(--text);margin:12px 0}
+    .feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+    .feature-item{background:white;border:1px solid var(--bdr);border-radius:10px;padding:12px}
+    .feature-item .fi-en{font-size:10px;color:var(--sub);font-style:italic;margin-bottom:3px}
+    .feature-item .fi-title{font-size:12px;font-weight:800;color:var(--text);margin-bottom:4px}
+    .feature-item .fi-desc{font-size:11px;color:var(--sub);line-height:1.6}
+    .feature-item .fi-tag{display:inline-block;background:rgba(245,158,11,.3);border:1px solid rgba(245,158,11,.4);border-radius:4px;font-size:10px;color:var(--gold2);padding:1px 6px;margin-top:4px;font-weight:700}
+
+    /* ── TRACK BOX ── */
+    .track-box{background:linear-gradient(135deg,#040d1a,#0a2463);border-radius:14px;padding:22px 26px;color:white;margin-top:12px}
+    .track-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:10px;font-size:12px}
+    .track-node{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:4px 10px;color:white;white-space:nowrap}
+    .track-arrow{color:rgba(255,255,255,.4);font-size:14px}
+
+    /* ── CLASS ROWS ── */
+    .class-row{display:flex;align-items:flex-start;gap:10px;background:#f8fafc;border:1px solid var(--bdr);border-radius:8px;padding:8px 14px;margin-bottom:5px}
+    .class-row .cr-level{flex-shrink:0;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;margin-top:2px;white-space:nowrap}
+    .class-row .cr-name{font-size:12px;font-weight:800;margin-bottom:2px}
+    .class-row .cr-desc{font-size:11px;color:var(--sub);line-height:1.5}
+    .class-row .cr-tools{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+    .class-row .cr-tools span{background:#f0f4f8;border:1px solid var(--bdr);border-radius:4px;font-size:10px;padding:2px 6px;color:var(--sub)}
+
+    /* ── MISC ── */
+    .embed-note{background:#f8fafc;border:1px solid var(--bdr);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px;font-size:13px;color:var(--sub);margin-bottom:16px}
+    .embed-note a{color:var(--mid);font-weight:700;text-decoration:none}
+    .link-chip{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:7px;font-size:12px;font-weight:700;color:var(--mid);text-decoration:none}
+    .link-chip:hover{background:#dbeafe}
+    .todo{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;font-size:12px;color:#92400e;display:flex;gap:8px;align-items:flex-start;margin-top:10px}
+    .wip{background:#f8fafc;border:1px dashed #cbd5e1;border-radius:8px;padding:14px;text-align:center;color:var(--sub);font-size:13px;margin-top:12px}
+    .conf-item{background:#f8fafc;border:1px solid var(--bdr);border-radius:8px;padding:10px 14px;margin-bottom:8px}
+    .conf-item .ci-cat{font-size:11px;font-weight:700;color:var(--mid);margin-bottom:4px}
+    .conf-item .ci-list{font-size:12px;color:var(--sub);line-height:1.7}
+    .img-card{background:white;border:1px solid var(--bdr);border-radius:10px;overflow:hidden;margin-top:4px}
+    .img-card img{width:100%;display:block;max-height:280px;object-fit:contain;background:#fafafa}
+    .img-card .ic-cap{padding:8px 14px;font-size:11px;color:var(--sub);background:#f8fafc;border-top:1px solid var(--bdr)}
+
+    footer{background:var(--navy);color:rgba(255,255,255,.4);text-align:center;padding:24px;font-size:12px;margin-top:auto}
+
+    /* Notices */
+.notice{display:flex;gap:11px;padding:14px 16px;border-radius:10px;margin:14px 0;font-size:.87rem;}
+.notice.blue{background:#EFF6FF;border:1px solid #BFDBFE;color:#1D4ED8;}
+.notice.amber{background:#FFFBEB;border:1px solid #FDE68A;color:#92400E;}
+.notice.red{background:#FEF2F2;border:1px solid #FECACA;color:#991B1B;}
+.notice.green{background:#F0FDF4;border:1px solid #A7F3D0;color:#065F46;}
+.notice-ico{flex-shrink:0;font-size:1rem;margin-top:2px;}
+
+    @media(max-width:860px){
+      .layout{flex-direction:column}
+      .sidebar{width:100%;position:static}
+      .grid-2,.grid-3,.feature-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a class="nav-brand" href="index.html">
+    <div class="lb">AI</div>
+    <div class="bt">ARISE PNU AI</div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">홈</a>
+    <a href="grad.html">대학원 육성</a>
+    <a href="part1.html">I. 구심점 확립</span></a>
+    <a href="part2.html" class="active">II. 교육과정</a>
+    <a href="part3.html">III. 생태계</a>
+    <a href="actions.html">실행 항목</a>
+    <a href="QRCode.html" class="nav-qr">📱 QR</a>
+  </div>
+</nav>  
+<!--
+<nav>
+  <a class="nav-brand" href="index.html">
+    <div class="lb">AI</div>
+    <div class="bt">ARISE PNU AI</div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">홈</a>
+    <a href="part1.html">I. 구심점 확립 <span class="nav-badge">완성</span></a>
+    <a href="part2.html" class="active">II. 교육과정 설계</a>
+    <a href="part3.html">III. 생태계</a>
+  </div>
+</nav>
+-->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="breadcrumb"><a href="index.html">ARISE PNU AI</a> / Part II</div>
+    <div class="part-badge">PART II · ver 0.5071</div>
+    <h1>AI 전문·융합교육과정 설계 및 운영</h1>
+    <p>교원·교육과정·교육기반 3대 요소로 체계화한 AI 교육 전략.<BR>Teaching AI / Beyond Learning AI / Teaching with AI 분류 체계와 KPI 기반 운영 방안을 제시합니다.</p>
+    <div class="task-pills">
+      <span class="task-pill">👩‍🏫 교원</span>
+      <span class="task-pill">📚 교육과정</span>
+      <span class="task-pill">🏗️ 교육기반 인프라</span>
+      <span class="task-pill">⚙️ 교육기반 조직·제도</span>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="side-title">목차</div>
+    <a class="side-link" href="#overview">1. 개요 및 접근법</a>
+    <a class="side-link" href="#faculty">2. 교원</a>
+    <a class="side-link sub" href="#fac-core">— AI/AX 중점교원 제도</a>
+    <a class="side-link sub" href="#fac-ext">— 외부 전문가 참여</a>
+    <a class="side-link sub" href="#fac-bench">— 우수 교원 확보</a>
+    <a class="side-link" href="#curriculum">3. 교육과정</a>
+    <a class="side-link sub" href="#edu-class" style="font-size:10px;font-weight:800;color:var(--amber);letter-spacing:.5px;text-transform:uppercase;padding-top:6px;">　① 개요</a>
+    <a class="side-link sub" style="font-size:10px;font-weight:800;color:var(--amber);letter-spacing:.5px;pointer-events:none;text-transform:uppercase;padding-top:6px;">　② 교육 분류별 설계</a>
+    <a class="side-link sub" href="#edu-a">— 가. AI 기초 교육</a>
+    <a class="side-link sub" href="#edu-b">— 나. AI 역량 교육</a>
+    <a class="side-link sub" href="#edu-c">— 다. AI 전문 교육</a>
+    <a class="side-link sub" href="#edu-d">— 라. AI 융합 교육</a>
+    <a class="side-link sub" href="#edu-e">— 마. AI 실전형 교육</a>
+    <a class="side-link sub" href="#edu-f">— 바. 대학원 AI 교육</a>
+    <a class="side-link sub" href="#edu-g">— 사. AI 특화 창업 교육</a>
+    <a class="side-link sub" href="#edu-h">— 아. AI 활용 교육</a>
+    <a class="side-link sub" href="#edu-dept-a" style="font-size:10px;font-weight:800;color:var(--amber);letter-spacing:.5px;text-transform:uppercase;padding-top:6px;" >　③ 학과/전공별 교육과정</a>
+    <a class="side-link" href="#infra">4. 교육기반 인프라</a>
+    <a class="side-link" href="#org">5. 교육기반 조직·제도</a>
+  </aside>
+
+  <main class="main">
+
+    <!-- 1. 개요 -->
+    <div class="block" id="overview">
+      <div class="block-num">Section 1</div>
+      <div class="block-title"><span class="icon">📋</span>개요 및 접근법</div>
+      <div class="block-desc">AI 전문·융합교육과정 설계 및 운영 분야 (과업 2) 교육부 지정 세부 과업과 부산대학교의 접근 방안</div>
+      <div class="embed-note">
+        <span style="font-size:20px;flex-shrink:0">📄</span>
+        <span>AI 전문·융합교육과정 설계 및 운영 분야: <a href="pdf/교육부-AI거점대학-과업2-AI 전문 융합교육과정 설계 및 운영.pdf" target="_blank">과업2 가이드라인 PDF ↗</a></span>
+      </div>
+      <div class="grid-4" style="margin-bottom:18px;">
+        <div class="card "><div class="c-icon">📚</div><div class="c-title" style="color:#92400e;">전문교육</div><div class="c-body">AI 개발자에 요구되는 역량 변화를 반영한 교육과정 재설계, 전공 과목에서 AI 윤리교육 통합 설계 추진</div></div>
+        <div class="card "><div class="c-icon">📚</div><div class="c-title" style="color:#92400e;">융합교육</div><div class="c-body">AI 전공자가 도메인 지식을 습득하고, 도메인 전공자는
+AI를 이해·활용할 수 있는 분야별 AI 융합교과 개발</div></div>
+        <div class="card "><div class="c-icon">📚</div><div class="c-title" style="color:#92400e;">실젼형 교육</div><div class="c-body">기업 현장 데이터 기반 실전 문제를 학생들이 AI를
+활용하여 해결하고 기업 재직자가 멘토링하는 실전형 프로젝트 운영</div></div>
+        <div class="card "><div class="c-icon">🏗️</div><div class="c-title" style="color:#4c1d95;">교육기반</div><div class="c-body">AI 교원의 AI 교육·연구 실적 및 기여도를 반영할 수 있도록교원업적평가 개선 및 AI 교육 기여 교원 대상 인센티브 부여</div></div>
+      </div>
+      
+      <div style="background:#f0f7ff;border-radius:10px;padding:16px 20px;margin-bottom:18px;">
+        <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:8px;">📌 접근 전략</div>
+        <div style="font-size:13px;color:var(--text);line-height:1.8;">
+          ✦ 위 4가지 세부 과업을 <strong>교원 · 교육과정 · 교육기반</strong> 3가지 요소로 구분하여 추진 방향을 체계화<br>
+          ✦ 각 요소별로 <strong>핵심 KPI를 정의하고 목표치를 제시</strong>하여 제안의 신뢰도를 부각<br>
+          ✦<strong>준비되어 있음</strong>(펜토미노 포함 기존 교육 혁신 작업)과 <strong>큰 규모</strong>(수혜·배출 학생 지표)를 강조
+        </div>
+      </div>
+      <div class="grid-3" style="margin-bottom:18px;">
+        <div class="card blue"><div class="c-icon">👩‍🏫</div><div class="c-title" style="color:#1e3a8a;">교원</div><div class="c-body">AI/AX 중점교원 제도 도입, 외부 산업계 전문가 교육 참여 확대, KPI 제시</div></div>
+        <div class="card amber"><div class="c-icon">📚</div><div class="c-title" style="color:#92400e;">교육과정</div><div class="c-body">8개 AI/AX 교육 분류 체계, 다양한 학습 트랙, 전공·융합 교육과정 상세 설계</div></div>
+        <div class="card purple"><div class="c-icon">🏗️</div><div class="c-title" style="color:#4c1d95;">교육기반</div><div class="c-body">인프라·플랫폼 구축, 교원 평가제도 개선, 조교 제도 개편, 다분반·집중수업 도입</div></div>
+      </div>
+
+    </div>
+
+    <!-- 2. 교원 -->
+    <div class="block" id="faculty">
+      <div class="block-num">Section 2</div>
+      <div class="block-title"><span class="icon">👩‍🏫</span>교원</div>
+      <div class="block-desc">AI/AX 중점교원 제도 도입과 산업계 외부 전문가 교육 참여 확대를 통해 교육 역량을 강화합니다.</div>
+
+      <div class="sub-sec" id="fac-core">
+        <div class="sub-sec-title">
+          <span class="badge" style="background:var(--mid);">1</span>
+          <span class="highlight-term">AI/AX 중점교원</span> 제도 도입 및 확대
+        </div>
+        <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:12px 16px;margin-bottom:12px;font-size:13px;color:#1e3a8a;">
+          💡 <strong style="color:#1d4ed8;">AI/AX 중점교원</strong> 제도란 AI 기술을 전공 연구·교육에 실질적으로 접목한 교원을 공식 인정하고 지원하는 체계입니다.
+        </div>
+        <div class="grid-2">
+          <div style="background:#f0f7ff;border-radius:10px;padding:16px 18px;">
+            <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:10px;"><span class="icon">🎓</span> 요건 정립 (다음 두가지 중 한가지 이상)</div>
+            <div class="kp-box" style="margin-bottom:8px;background:white;">
+              <strong>연구 기반</strong> — 전공 분야에 AI 기술·도구를 접목하여 우수 연구 성과를 창출한 교원
+            </div>
+            <div class="kp-box" style="background:white;">
+              <strong>교육 기반</strong> — 전공 분야에 AI 기술·도구를 접목하여 교과목을 운영하여 교육 품질 향상에 기여한 교원
+            </div>
+          </div>
+          <div style="background:#fff7ed;border-radius:10px;padding:16px 18px;">
+            <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:10px;"><span class="icon">🎯</span> 목표</div>
+            <div style="font-size:13px;color:var(--text);line-height:1.8;">
+              ✦ AI/AX 중점교원 지정 및 현황 파악 후 목표치 제시<br>
+              ✦ <strong>신임 교원의 50% 이상</strong>을 AI/AX 중점교원으로 채용<br>
+              ✦ 신규 채용 수요 조사 시 AI/AX 중점교원 여부 포함
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sub-sec" id="fac-ext">
+        <div class="sub-sec-title"><span class="badge" style="background:var(--amber);">2</span>산업체·연구소 외부 AI/AX 전문가 교육 참여 확대</div>
+        <div class="grid-3">
+          <div class="card amber">
+            <div class="c-icon">🎯</div>
+            <div class="c-title" style="color:#92400e;">AI/AX 멘토 (Mentor)</div>
+            <div class="c-body">실전형 AI 프로젝트 지도. <BR> <strong>수백 명</strong> 확보 목표.</div>
+          </div>
+          <div class="card blue">
+            <div class="c-icon">🎓</div>
+            <div class="c-title" style="color:#1e3a8a;">AI/AX 교육자 (Instructor)</div>
+            <div class="c-body">AI/AX 교과 교육 직접 참여. <BR>겸임 교원 지위 부여. <strong>수십 명</strong> 확보 목표.</div>
+          </div>
+          <div class="card purple">
+            <div class="c-icon">🏗️</div>
+            <div class="c-title" style="color:#4c1d95;">AI/AX 설계자 (Architect)</div>
+            <div class="c-body">AI/AX 교육·연구 설계 참여. <BR>특임 교원 지위 부여. <strong>십수 명</strong> 확보 목표.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- S2.3 우수 교원 확보 방안 — 해외 선진 사례 벤치마킹 -->
+      <div class="sub-sec" id="fac-bench">
+        <div class="sub-sec-title"><span class="badge" style="background:var(--purple);">3</span>우수 교원 확보 방안 — 해외 선진 사례 벤치마킹</div>
+
+        <div class="kp-box" style="border-left-color:#dc2626;background:#fff5f5;">
+          AI 인재 글로벌 전쟁 — Meta 4년 3억 달러, 美 빅테크 AI 초봉 <strong>40만 달러(약 5.5억 원)</strong> 수준.<br>
+          한국 고급 AI 인재 <strong>약 40%</strong> 해외 이탈(세계 최심각).
+          국립대 정년트랙 급여로는 산업계 대비 <strong>1/3~1/5 수준</strong>만 제공 가능 — 구조적 제도 혁신 필요
+        </div>
+
+        <div style="margin-top:14px;">
+          <div style="font-size:12px;font-weight:700;color:var(--sub);margin-bottom:10px;letter-spacing:.5px;">🌐 해외 선진 사례 벤치마킹 4대 제도 혁신 방안</div>
+          <div class="grid-2" style="gap:14px;">
+
+            <div style="background:#f5f3ff;border-radius:12px;padding:16px 18px;border-top:4px solid var(--purple);">
+              <div style="font-size:12px;font-weight:800;color:#4c1d95;margin-bottom:6px;">
+                🔗 산학일체형 교수제 (One-Body)
+                <span style="font-size:10px;font-weight:700;background:#ddd6fe;color:#4c1d95;border-radius:4px;padding:1px 6px;margin-left:6px;">Stanford 벤치마킹</span>
+              </div>
+              <div style="font-size:12px;color:var(--text);line-height:1.8;">
+                대학-기업 <strong>공동임용 (Dual Affiliation)</strong><br>
+                「교육공무원법」 §15 · 「산업교육진흥법」 §9 근거<br>
+                AI 거점대학 <strong>겸직특례 제도 신설</strong> 필요<br>
+                주당 20~40% 기업활동 공식 연구시간 인정<br>
+                기업 매칭펀드 <strong>연 2~3천만 원</strong> + 기술이전료 배분 최대 <strong>50%</strong>
+              </div>
+            </div>
+
+            <div style="background:#fff7ed;border-radius:12px;padding:16px 18px;border-top:4px solid var(--amber);">
+              <div style="font-size:12px;font-weight:800;color:#92400e;margin-bottom:6px;">
+                🏥 AI 병원형 수익회계제 (AI Clinic Model)
+                <span style="font-size:10px;font-weight:700;background:#fde68a;color:#92400e;border-radius:4px;padding:1px 6px;margin-left:6px;">의대 수당 준용</span>
+              </div>
+              <div style="font-size:12px;color:var(--text);line-height:1.8;">
+                산학협력단 내 <strong>AI 산업회계(AI Clinic Account)</strong> 신설<br>
+                수익 배분 — 대학운영비 <strong>40%</strong> / 교원성과급 <strong>60%</strong><br>
+                산학 프로젝트·자문·기술이전 수익을 실질 보상으로 연결<br>
+                「산학협력단 설치·운영 규정」 개정 + 감사원 유권해석으로 법적 근거 확보
+              </div>
+            </div>
+
+            <div style="background:#f0fdf4;border-radius:12px;padding:16px 18px;border-top:4px solid var(--green);">
+              <div style="font-size:12px;font-weight:800;color:#065f46;margin-bottom:6px;">
+                🚀 창업 휴직형 교수제 (AI Startup Sabbatical)
+                <span style="font-size:10px;font-weight:700;background:#bbf7d0;color:#065f46;border-radius:4px;padding:1px 6px;margin-left:6px;">Stanford 벤치마킹</span>
+              </div>
+              <div style="font-size:12px;color:var(--text);line-height:1.8;">
+                「교육공무원법」 §44 근거 <strong>AI 창업특별휴직제</strong> 신설<br>
+                최대 <strong>2년</strong>(성과 시 1년 추가 연장) 허용<br>
+                창업성과(매출·특허·투자유치·고용창출)를 <strong>연구실적으로 인정</strong><br>
+                기술이전료 배분 확대(최대 50%) + 수익금 개인성과급 전환
+              </div>
+            </div>
+
+            <div style="background:#eff6ff;border-radius:12px;padding:16px 18px;border-top:4px solid var(--blue);">
+              <div style="font-size:12px;font-weight:800;color:#1e3a8a;margin-bottom:6px;">
+                🛤️ 다중 트랙 제도 (Multi-Track)
+                <span style="font-size:10px;font-weight:700;background:#bfdbfe;color:#1e3a8a;border-radius:4px;padding:1px 6px;margin-left:6px;">CMU 벤치마킹</span>
+              </div>
+              <div style="font-size:12px;color:var(--text);line-height:1.8;">
+                정년트랙 외 <strong>3개 트랙 병행</strong> 신설<br>
+                ✦ <strong>Professor of Practice</strong> — 산업경력 10년+ 전문가<br>
+                ✦ <strong>Research Faculty</strong> — 연구전담 트랙<br>
+                ✦ <strong>Teaching Faculty</strong> — 교육전담 트랙<br>
+                변동보상 — 기본급 <strong>40%</strong> + 성과급 <strong>60%</strong>
+              </div>
+            </div>
+
+          </div>
+
+          <div style="background:linear-gradient(135deg,#0a2463,#1a4fa0);border-radius:12px;padding:16px 20px;color:white;margin-top:14px;">
+            <div style="font-size:12px;font-weight:800;margin-bottom:8px;">
+              🔀 공동임용 제도 강화 (Joint Appointment)
+              <span style="font-size:10px;font-weight:700;background:rgba(255,255,255,.2);border-radius:4px;padding:1px 8px;margin-left:6px;">MIT Cross-Appointment 벤치마킹</span>
+            </div>
+            <div class="grid-2" style="gap:10px;">
+              <div style="font-size:12px;color:rgba(255,255,255,.85);line-height:1.8;">
+                AI 단과대학 ↔ 타 단과대(공대·의대·인문사회대) 교원 <strong style="color:#93c5fd;">공동소속</strong> 구성<br>
+                AI 단과대가 타 학과 교원의 <strong style="color:#93c5fd;">인사·예산 일부 직접 관리</strong>
+              </div>
+              <div style="font-size:12px;color:rgba(255,255,255,.85);line-height:1.8;">
+                해외 석학 초빙교수제(Visiting/Joint Professor) + 국제 공동강의<br>
+                AI 거점대학이 해외 유수 대학(MIT·Stanford·CMU)과 <strong style="color:#93c5fd;">공동임용 협정</strong> 체결
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sub-sec" id="fac-kpi">
+        <div class="sub-sec-title"><span class="badge" style="background:var(--green);">KPI</span>교원 KPI</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <div style="flex:1;min-width:180px;background:linear-gradient(135deg,var(--navy),var(--blue));border-radius:12px;padding:16px;text-align:center;color:white;">
+            <div style="font-size:22px;font-weight:900;color:var(--gold2);margin-bottom:4px;">AI/AX 중점교원 수</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.7);">AI/AX 중점교원 수 및 비중</div>
+          </div>
+          <div style="flex:1;min-width:180px;background:linear-gradient(135deg,var(--navy),var(--blue));border-radius:12px;padding:16px;text-align:center;color:white;">
+            <div style="font-size:22px;font-weight:900;color:var(--gold2);margin-bottom:4px;">AI/AX 겸임교원 수 </div>
+            <div style="font-size:11px;color:rgba(255,255,255,.7);">외부 AI/AX 전문가 참여 인원수</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. 교육과정 -->
+    <div class="block" id="curriculum">
+      <div class="block-num">Section 3</div>
+      <div class="block-title"><span class="icon">📚</span>교육과정</div>
+      <div class="block-desc">Teaching AI / Beyond Learning AI / Teaching with AI 세 영역, 8개 분류의 AI/AX 교육 체계를 설계합니다.</div>
+
+      <!-- 교육 분류 체계 -->
+      <div class="sub-sec" id="edu-class">
+        <div class="sub-sec-title"><span class="badge" style="background:var(--navy);">분류</span>AI/AX 교육 분류 체계</div>
+
+        <!-- 교육과정 설계 핵심 원칙 5개 -->
+        <div style="margin:14px 0 18px;">
+          <div style="font-size:11px;font-weight:700;color:var(--sub);letter-spacing:.8px;margin-bottom:10px;text-transform:uppercase;">교육과정 설계의 핵심 원칙</div>
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;">
+
+            <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:12px 14px;">
+              <div style="font-size:9.5px;font-weight:700;color:#1d4ed8;letter-spacing:.6px;margin-bottom:4px;">Multi-Layered</div>
+              <div style="font-size:12px;font-weight:800;color:#1e3a8a;margin-bottom:6px;">다층적 구조</div>
+              <div style="font-size:11px;color:var(--text);line-height:1.55;">
+                <div style="margin-bottom:3px;">• <b>깊이</b> — 기초→역량→전문→고급 수직 확대</div>
+                <div>• <b>폭</b> — 전공/비전공, 학부/대학원 수평 확대</div>
+              </div>
+            </div>
+
+            <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:12px 14px;">
+              <div style="font-size:9.5px;font-weight:700;color:#059669;letter-spacing:.6px;margin-bottom:4px;">Connected Pathways</div>
+              <div style="font-size:12px;font-weight:800;color:#065f46;margin-bottom:6px;">연결된 트랙</div>
+              <div style="font-size:11px;color:var(--text);line-height:1.55;">
+                <div style="margin-bottom:3px;">• 학생 맞춤형 진학 경로 제공</div>
+                <div>• AI 전공자·비전공자 각각의 명확한 진로 구성</div>
+              </div>
+            </div>
+
+            <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:12px 14px;">
+              <div style="font-size:9.5px;font-weight:700;color:#d97706;letter-spacing:.6px;margin-bottom:4px;">Practical Orientation</div>
+              <div style="font-size:12px;font-weight:800;color:#92400e;margin-bottom:6px;">실전 중심</div>
+              <div style="font-size:11px;color:var(--text);line-height:1.55;">
+                <div style="margin-bottom:3px;">• 산업 데이터 기반 문제 해결</div>
+                <div>• 멘토링, 프로젝트 기반 학습(PBL)</div>
+              </div>
+            </div>
+
+            <div style="background:#f0fdfa;border:1px solid #99f6e4;border-radius:10px;padding:12px 14px;">
+              <div style="font-size:9.5px;font-weight:700;color:#0d9488;letter-spacing:.6px;margin-bottom:4px;">Scalability</div>
+              <div style="font-size:12px;font-weight:800;color:#134e4a;margin-bottom:6px;">대규모 운영</div>
+              <div style="font-size:11px;color:var(--text);line-height:1.55;">
+                <div style="margin-bottom:3px;">• 다분반 기반 확장형 운영</div>
+                <div>• 다양한 학생 수용 가능</div>
+              </div>
+            </div>
+
+            <div style="background:#faf5ff;border:1px solid #e9d5ff;border-radius:10px;padding:12px 14px;">
+              <div style="font-size:9.5px;font-weight:700;color:#7c3aed;letter-spacing:.6px;margin-bottom:4px;">Flexible Delivery</div>
+              <div style="font-size:12px;font-weight:800;color:#4c1d95;margin-bottom:6px;">유연한 학습 형식</div>
+              <div style="font-size:11px;color:var(--text);line-height:1.55;">
+                <div style="margin-bottom:3px;">• Flipped Learning, Blended Learning</div>
+                <div>• 집중수업, 온라인 비중 확대</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;margin-top:10px;">
+          <div style="background:linear-gradient(135deg,#1e3a8a,#2563eb);border-radius:12px;padding:18px 20px;color:white;">
+            <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.6);letter-spacing:1px;margin-bottom:12px;">TEACHING AI</div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="background:rgba(255,255,255,.1);border-radius:6px;padding:7px 12px;font-size:12px;">가. AI 기초 교육 <span style="opacity:.6">— Literacy</span></div>
+              <div style="background:rgba(255,255,255,.1);border-radius:6px;padding:7px 12px;font-size:12px;">나. AI 역량 교육 <span style="opacity:.6">— Skills</span></div>
+              <div style="background:rgba(255,255,255,.1);border-radius:6px;padding:7px 12px;font-size:12px;">다. AI 전문 교육 <span style="opacity:.6">— Engineering</span></div>
+              <div style="background:rgba(255,255,255,.1);border-radius:6px;padding:7px 12px;font-size:12px;">라. AI 융합 교육 <span style="opacity:.6">— Convergence</span></div>
+              <div style="background:rgba(255,255,255,.1);border-radius:6px;padding:7px 12px;font-size:12px;">마. AI 실전형 교육 <span style="opacity:.6">— Problem Solving</span></div>
+              <div style="background:rgba(255,255,255,.1);border-radius:6px;padding:7px 12px;font-size:12px;">바. 대학원 AI 교육 <span style="opacity:.6">— Graduate</span></div>
+            </div>
+          </div>
+          <div style="background:linear-gradient(135deg,#065f46,#10b981);border-radius:12px;padding:18px 20px;color:white;">
+            <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.6);letter-spacing:1px;margin-bottom:12px;">BEYOND LEARNING AI</div>
+            <div style="background:rgba(255,255,255,.1);border-radius:6px;padding:7px 12px;font-size:12px;">사. AI 특화 창업 교육<br><span style="opacity:.6">Venture Creation</span></div>
+          </div>
+          <div style="background:linear-gradient(135deg,#4c1d95,#7c3aed);border-radius:12px;padding:18px 20px;color:white;">
+            <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.6);letter-spacing:1px;margin-bottom:12px;">TEACHING WITH AI</div>
+            <div style="background:rgba(255,255,255,.1);border-radius:6px;padding:7px 12px;font-size:12px;">아. AI 활용 교육<br><span style="opacity:.6">AI Enhanced</span></div>
+          </div>
+        </div>
+        <div style="margin-top:16px;">
+          <div style="font-size:12px;font-weight:700;color:var(--sub);margin-bottom:8px;letter-spacing:.5px;">참고 자료 — AI 기반 대학교육 운영방안</div>
+          <div class="grid-2">
+            <div class="img-card" onclick="openImgPopup('image/AI기반대학교육운영방안.png','AI 기반 단계별 대학교육 운영방안(안) - 미래정책실')" style="cursor:zoom-in;">
+              <img src="image/AI기반대학교육운영방안.png"
+                   alt="AI 기반 단계별 대학교육 운영방안" style="max-height:260px;"
+                   onerror="this.parentElement.style.display='none'">
+              <div class="ic-cap">📐 AI 기반 단계별 대학교육 운영방안(안) - 미래정책실 (클릭하여 확대)</div>
+            </div>
+            <div class="img-card" onclick="openImgPopup('image/AI기반대학교육운영방안과거점대학교육과정관계.png','AI거점대학 교육 분류와의 관계')" style="cursor:zoom-in;">
+              <img src="image/AI기반대학교육운영방안과거점대학교육과정관계.png"
+                   alt="AI거점대학 교육 분류와의 관계" style="max-height:260px;"
+                   onerror="this.parentElement.style.display='none'">
+              <div class="ic-cap">📐 AI거점대학 교육 분류와의 관계 (클릭하여 확대)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 학습 트랙 -->
+      <div class="sub-sec" id="edu-track">
+        <div class="sub-sec-title"><span class="badge" style="background:var(--mid);">트랙</span>다양한 AI/AX 학습 트랙 연결 구조</div>
+        <div style="font-size:13px;color:var(--sub);margin-bottom:10px;line-height:1.7;">AI/AX 교육 분류는 개별적이지 않으며, 학생과 산업체의 다양한 수요를 충족할 수 있는 <strong style="color:var(--text);">트랙 구성이 가능한 연결 구조</strong>로 설계됩니다.</div>
+        <div class="track-box">
+          <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,.5);margin-bottom:14px;">AI 전공자 트랙 예시</div>
+          <div class="track-row"><span class="track-node">AI Literacy</span><span class="track-arrow">→</span><span class="track-node">AI Skill</span><span class="track-arrow">→</span><span class="track-node">AI Engineering</span><span class="track-arrow">→</span><span class="track-node">Problem Solving</span><span class="track-arrow">→</span><span class="track-node" style="background:rgba(245,158,11,.3);border-color:rgba(245,158,11,.5);">AI Venture</span></div>
+          <div class="track-row"><span class="track-node">AI Literacy</span><span class="track-arrow">→</span><span class="track-node">AI Skill</span><span class="track-arrow">→</span><span class="track-node">AI Engineering</span><span class="track-arrow">→</span><span class="track-node">Problem Solving</span><span class="track-arrow">→</span><span class="track-node" style="background:rgba(124,58,237,.3);border-color:rgba(124,58,237,.5);">AI Research</span></div>
+          <div class="track-row"><span class="track-node">AI Literacy</span><span class="track-arrow">→</span><span class="track-node">AI Skill</span><span class="track-arrow">→</span><span class="track-node">AI Engineering</span><span class="track-arrow">→</span><span class="track-node" style="background:rgba(16,185,129,.2);border-color:rgba(16,185,129,.4);">AI Convergence</span><span class="track-arrow">→</span><span class="track-node">Problem Solving</span><span class="track-arrow">→</span><span class="track-node" style="background:rgba(124,58,237,.3);border-color:rgba(124,58,237,.5);">AI Research</span></div>
+          <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,.5);margin:16px 0 10px;">AI 비전공자 AX 트랙 예시</div>
+          <div class="track-row"><span class="track-node">AI Literacy</span><span class="track-arrow">→</span><span class="track-node">AI Skill</span><span class="track-arrow">→</span><span class="track-node" style="background:rgba(16,185,129,.2);border-color:rgba(16,185,129,.4);">AI Convergence</span><span class="track-arrow">→</span><span class="track-node">Problem Solving</span><span class="track-arrow">→</span><span class="track-node" style="background:rgba(245,158,11,.3);border-color:rgba(245,158,11,.5);">AI Venture</span></div>
+          <div class="track-row"><span class="track-node">AI Literacy</span><span class="track-arrow">→</span><span class="track-node" style="background:rgba(16,185,129,.2);border-color:rgba(16,185,129,.4);">AI Convergence</span><span class="track-arrow">→</span><span class="track-node">Problem Solving</span><span class="track-arrow">→</span><span class="track-node" style="background:rgba(124,58,237,.3);border-color:rgba(124,58,237,.5);">AI Research</span></div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 가. AI 기초 교육 -->
+      <div class="sub-sec" id="edu-a">
+        <div class="sub-sec-title"><span class="badge" style="background:#1d4ed8;">가</span>AI 기초 교육 — Foundation of AI &amp; Data Literacy</div>
+        <div class="kp-box amber"><strong>전교생 대상 필수 AI 기초 교육</strong> — 기존 컴퓨터/SW 관련 교양 필수를 전면 개편하여 2026년부터 운영 중. <BR>✦ 교과목명: <strong>인공지능과 디지털 사고 (AI Literacy &amp; Digital Thinking)</strong><br>✦교육과 운영의 핵심 주체: <strong>AI융합교육원</strong></div>
+        <div class="grid-3" style="margin-top:12px;">
+          <div class="card blue"><div class="c-icon">🔬</div><div class="c-title" style="color:#1e3a8a;">자연/공학 계열</div><div class="c-body">코딩 기반 과학적 문제 해결 능력 강화. 파이썬 기반 문제 해결 및 간단한 웹 구현, Copilot 활용</div></div>
+          <div class="card amber"><div class="c-icon">📖</div><div class="c-title" style="color:#92400e;">인문/사회/체육 계열</div><div class="c-body">데이터 분석 기반 디지털 리터러시. 사회적 문제에 대한 AI 기술 고찰 + 기초 데이터 분석 실습</div></div>
+          <div class="card purple"><div class="c-icon">🎨</div><div class="c-title" style="color:#4c1d95;">예술 계열</div><div class="c-body">창의적 AI 도구 활용 및 표현력 배양. 이미지 생성·작곡 등 AI 기반 창작 사례 실습</div></div>
+        </div>
+        <div style="background:#f8fafc;border-radius:10px;padding:14px 18px;margin-top:12px;font-size:13px;line-height:1.8;color:var(--text);">
+          <strong>학점 및 운영:</strong> 3학점(3-3-0), 1학기제, Flipped Learning / 양학기 운영, 학기 별 65분반 (총 130분반) / 온라인(1h)+오프라인(2h) Blended 수업 / 학기말 Term Project<br>
+          <strong>주요 구성:</strong> 컴퓨팅 사고력 및 파이썬 기초 코딩, 생성형 AI 도구(ChatGPT·Gemini·구글 AI Studio) 활용, Vibe Coding 기반 웹서비스 제작, AI 윤리 및 디지털 시민성 교육
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 나. AI 역량 교육 -->
+      <div class="sub-sec" id="edu-b">
+        <div class="sub-sec-title"><span class="badge" style="background:#0284c7;">나</span>AI 역량 교육 — AI Tools &amp; Skills Training</div>
+        <div class="kp-box" style="border-left-color:#0284c7;"><strong>AI 도구·활용 역량 강화를 원하는 AI전공 및 비전공 학생 대상 실습 중심 교육.</strong> 
+          <br>✦교육과 운영의 핵심 주체: <strong>AI융합교육원</strong>
+          <br>✦참고 - 부산대학교 2026 AI 첨단산업 인재양성 <strong>부트캠프</strong> <a href="https://www.pusan.ac.kr/news/CMS/Board/Board.do?mCode=MN001&mode=view&board_seq=1507793&temp_data1=952&news_ho=952" target="_blank">사업 선정 ↗</a>  
+          <br>✦부트캠프형 AI역량 교육 강화, 수혜자 확대
+        </div>
+
+        <div class="feature-box">
+          <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:12px;">✦ 교과 설계 주안점</div>
+          <div class="feature-grid">
+            <div class="feature-item" style="background:#eff6ff;border-color:#bfdbfe;">
+              <div class="fi-en" style="color:#3b82f6;">Cross-Major AI Hands-on Education</div>
+              <div class="fi-title" style="color:#1e3a8a;">전공 초월형 AI 실습 교육</div>
+              <div class="fi-desc">전공 무관(Cross-Domain Accessibility) — 어떤 전공이든 참여 가능한 개방형 AI 실습 체계</div>
+            </div>
+            <div class="feature-item" style="background:#f0fdf4;border-color:#bbf7d0;">
+              <div class="fi-en" style="color:#22c55e;">Industry-Aligned, Platform-Driven</div>
+              <div class="fi-title" style="color:#065f46;">도구 중심 AI 역량 강화 교육</div>
+              <div class="fi-desc">산업계와 공동 설계, AWS·Google·Microsoft·NVIDIA·NAVER 플랫폼 기반 운영</div>
+              <div class="fi-tag">외부 전문교육기관 협력</div>
+            </div>
+            <div class="feature-item" style="background:#fef9c3;border-color:#fde68a;">
+              <div class="fi-en" style="color:#ca8a04;">Scalable Multi-Section Delivery</div>
+              <div class="fi-title" style="color:#854d0e;">다수 분반 기반 확장형 운영</div>
+              <div class="fi-desc">표준화된 커리큘럼 기반 다수 분반 운영 → 대규모 학생 수용</div>
+            </div>
+            <div class="feature-item" style="background:#faf5ff;border-color:#e9d5ff;">
+              <div class="fi-en" style="color:#a855f7;">Flipped &amp; Blended Learning</div>
+              <div class="fi-title" style="color:#4c1d95;">플립드·혼합형 학습</div>
+              <div class="fi-desc">온라인 사전 학습 + 오프라인 실습 결합 → 학습 효율성·수강 유연성 확보</div>
+            </div>
+            <div class="feature-item" style="background:#fff7ed;border-color:#fed7aa;">
+              <div class="fi-en" style="color:#f97316;">Immersive Block-Based Intensive Learning</div>
+              <div class="fi-title" style="color:#9a3412;">집중 몰입형 교육</div>
+              <div class="fi-desc">2·4·8주 단위 집중이수제. 단기간 내 실질적 역량 습득 유도</div>
+              <div class="fi-tag">🏕️ 방학 중 부트캠프형 집중 교육 적극 도입</div>
+            </div>
+            <div class="feature-item" style="background:#f0fdfa;border-color:#99f6e4;">
+              <div class="fi-en" style="color:#14b8a6;">Level-Based Tiered Structure</div>
+              <div class="fi-title" style="color:#0f766e;">수준별 단계형 교육 체계</div>
+              <div class="fi-desc">초급–중급–고급 단계형 트랙 구성 → 학생 맞춤형 학습 경로 제공</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Inetguru 추가 이미지 -->
+        <div style="margin-top:10px;background:white;border:1px solid #bfdbfe;border-radius:8px;overflow:hidden;cursor:zoom-in;"
+              onclick="openImgPopup('image/부트캠프_몰입형.png','AI/AX 전문 업체 협력 기반 몰입형 교육')">
+          <img src="image/부트캠프_몰입형.png" alt="AI/AX 전문 업체 협력 기반 몰입형 교육"
+                style="width:100%;display:block;max-height:300px;object-fit:contain;background:#f8faff;"
+                onerror="this.parentElement.style.display='none'">
+          <div style="padding:5px 10px;font-size:10px;color:#1e3a8a;background:#eff6ff;border-top:1px solid #bfdbfe;">
+            📐 참고 자료 - 부산대 부트캠프 사업 제안서 - AI/AX 전문 업체 협력 기반 몰입형 교과목 예
+          </div>
+        </div>
+
+        <div style="font-size:11px;font-weight:700;color:var(--sub);margin:12px 0 6px;letter-spacing:.5px;text-transform:uppercase;">교과목 구성 안의 예 (확정 아님)</div>
+        <div style="border:1px solid var(--bdr);border-radius:10px;overflow:hidden;">
+          <div style="display:grid;grid-template-columns:44px 1fr auto;background:var(--navy);padding:6px 14px;gap:10px;">
+            <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.5);">수준</div>
+            <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.5);">교과목 / 설명</div>
+            <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.5);">주요 도구</div>
+          </div>
+          <div style="display:grid;grid-template-columns:44px 1fr auto;align-items:center;padding:7px 14px;gap:10px;border-top:1px solid var(--bdr);background:white;">
+            <span style="font-size:10px;font-weight:700;background:#d1fae5;color:#065f46;padding:2px 6px;border-radius:4px;text-align:center;">초급</span>
+            <div><div style="font-size:12px;font-weight:700;">AI 프로그래밍</div><div style="font-size:11px;color:var(--sub);">Python 기반 AI 개발 기초</div></div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;max-width:180px;"><span style="font-size:10px;background:#f0fdf4;color:#065f46;padding:1px 6px;border-radius:3px;white-space:nowrap;">Python</span><span style="font-size:10px;background:#f0fdf4;color:#065f46;padding:1px 6px;border-radius:3px;white-space:nowrap;">Jupyter</span><span style="font-size:10px;background:#f0fdf4;color:#065f46;padding:1px 6px;border-radius:3px;white-space:nowrap;">Colab</span><span style="font-size:10px;background:#f0fdf4;color:#065f46;padding:1px 6px;border-radius:3px;white-space:nowrap;">Github</span></div>
+          </div>
+          <div style="display:grid;grid-template-columns:44px 1fr auto;align-items:center;padding:7px 14px;gap:10px;border-top:1px solid var(--bdr);background:#fafafa;">
+            <span style="font-size:10px;font-weight:700;background:#d1fae5;color:#065f46;padding:2px 6px;border-radius:4px;text-align:center;">초급</span>
+            <div><div style="font-size:12px;font-weight:700;">데이터 분석 실습</div><div style="font-size:11px;color:var(--sub);">데이터 처리 및 시각화</div></div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;max-width:180px;"><span style="font-size:10px;background:#f0fdf4;color:#065f46;padding:1px 6px;border-radius:3px;white-space:nowrap;">Python</span><span style="font-size:10px;background:#f0fdf4;color:#065f46;padding:1px 6px;border-radius:3px;white-space:nowrap;">Pandas</span><span style="font-size:10px;background:#f0fdf4;color:#065f46;padding:1px 6px;border-radius:3px;white-space:nowrap;">Matplotlib</span></div>
+          </div>
+          <div style="display:grid;grid-template-columns:44px 1fr auto;align-items:center;padding:7px 14px;gap:10px;border-top:1px solid var(--bdr);background:white;">
+            <span style="font-size:10px;font-weight:700;background:#fef3c7;color:#92400e;padding:2px 6px;border-radius:4px;text-align:center;">중급</span>
+            <div><div style="font-size:12px;font-weight:700;">LLM 활용 프로그래밍</div><div style="font-size:11px;color:var(--sub);">생성형 AI 활용 응용 개발 능력</div></div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;max-width:180px;"><span style="font-size:10px;background:#fef9c3;color:#92400e;padding:1px 6px;border-radius:3px;white-space:nowrap;">Prompt Eng.</span><span style="font-size:10px;background:#fef9c3;color:#92400e;padding:1px 6px;border-radius:3px;white-space:nowrap;">RAG</span><span style="font-size:10px;background:#fef9c3;color:#92400e;padding:1px 6px;border-radius:3px;white-space:nowrap;">LangChain</span><span style="font-size:10px;background:#fef9c3;color:#92400e;padding:1px 6px;border-radius:3px;white-space:nowrap;">OpenAI API</span></div>
+          </div>
+          <div style="display:grid;grid-template-columns:44px 1fr auto;align-items:center;padding:7px 14px;gap:10px;border-top:1px solid var(--bdr);background:#fafafa;">
+            <span style="font-size:10px;font-weight:700;background:#fef3c7;color:#92400e;padding:2px 6px;border-radius:4px;text-align:center;">중급</span>
+            <div><div style="font-size:12px;font-weight:700;">로봇 AI와 시뮬레이션</div><div style="font-size:11px;color:var(--sub);">Physical AI — 제어 중심 로봇팔부터 시작</div></div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;max-width:180px;"><span style="font-size:10px;background:#fef9c3;color:#92400e;padding:1px 6px;border-radius:3px;white-space:nowrap;">ROS</span><span style="font-size:10px;background:#fef9c3;color:#92400e;padding:1px 6px;border-radius:3px;white-space:nowrap;">NVIDIA Isaac</span><span style="font-size:10px;background:#fef9c3;color:#92400e;padding:1px 6px;border-radius:3px;white-space:nowrap;">RL</span><span style="font-size:10px;background:#fef9c3;color:#92400e;padding:1px 6px;border-radius:3px;white-space:nowrap;">VLA 기초</span></div>
+          </div>
+          <div style="display:grid;grid-template-columns:44px 1fr auto;align-items:center;padding:7px 14px;gap:10px;border-top:1px solid var(--bdr);background:white;">
+            <span style="font-size:10px;font-weight:700;background:#fef3c7;color:#92400e;padding:2px 6px;border-radius:4px;text-align:center;">중급</span>
+            <div><div style="font-size:12px;font-weight:700;">AI 콘텐츠와 디지털 트윈</div><div style="font-size:11px;color:var(--sub);">창작 + 산업 융합</div></div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;max-width:180px;"><span style="font-size:10px;background:#fef9c3;color:#92400e;padding:1px 6px;border-radius:3px;white-space:nowrap;">Generative AI</span><span style="font-size:10px;background:#fef9c3;color:#92400e;padding:1px 6px;border-radius:3px;white-space:nowrap;">XR (AR/VR)</span><span style="font-size:10px;background:#fef9c3;color:#92400e;padding:1px 6px;border-radius:3px;white-space:nowrap;">Digital Twin</span></div>
+          </div>
+          <div style="display:grid;grid-template-columns:44px 1fr auto;align-items:center;padding:7px 14px;gap:10px;border-top:1px solid var(--bdr);background:#fafafa;">
+            <span style="font-size:10px;font-weight:700;background:#fee2e2;color:#991b1b;padding:2px 6px;border-radius:4px;text-align:center;">고급</span>
+            <div><div style="font-size:12px;font-weight:700;">클라우드 기반 에이전트 AI 개발</div><div style="font-size:11px;color:var(--sub);">MLOps, 멀티 에이전트, 클라우드 플랫폼</div></div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;max-width:180px;"><span style="font-size:10px;background:#fee2e2;color:#991b1b;padding:1px 6px;border-radius:3px;white-space:nowrap;">MLOps</span><span style="font-size:10px;background:#fee2e2;color:#991b1b;padding:1px 6px;border-radius:3px;white-space:nowrap;">Multi-Agent</span><span style="font-size:10px;background:#fee2e2;color:#991b1b;padding:1px 6px;border-radius:3px;white-space:nowrap;">AWS/GCP</span><span style="font-size:10px;background:#fee2e2;color:#991b1b;padding:1px 6px;border-radius:3px;white-space:nowrap;">Azure</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 다. AI 전문 교육 -->
+      <div class="sub-sec" id="edu-c">
+        <div class="sub-sec-title"><span class="badge" style="background:#0369a1;">다</span>AI 전문 교육 — Advanced AI Engineering Education</div>
+        <div class="kp-box" style="border-left-color:#0369a1;"><strong>AI대학 소속 ADP 전공 학부/학과 및 대학원 교육 전문화.</strong> 
+          <br>✦AI 개발자에 요구되는 역량 변화 (기존 : 코드 생성 능력 → 변화 : 문제 정의 및 설계, 협업 역량, 코드 검증, 위험 관리 등)를 반영한 <strong>교육 과정 재설계</strong>
+          <br>✦전공과목에서 <strong>AI 윤리 교육 통합 설계</strong>추진
+          <br>✦교육과 운영의 핵심 주체: <strong>AI대학 소속 ADP 전공</strong></div>
+
+        <div class="grid-2" style="margin-top:12px;">
+          <div style="background:#f8fafc;border-radius:10px;padding:14px 18px;">
+            <div style="font-size:12px;font-weight:700;color:var(--sub);margin-bottom:8px;">신규·개편 전공 차별화</div>
+            <ul style="font-size:13px;color:var(--text);line-height:1.9;padding-left:16px;">
+              <li>산업공학부 <strong>산업AI전공</strong> ↔ 산업공학전공 차별화</li>
+              <li>데이터사이언스학부 ↔ 의생명공학부 데이터사이언스전공 차별화</li>
+              <li>AI컴퓨터공학부 <strong>인터랙티브 컴퓨팅전공</strong> ↔ 디자인테크놀로지전공 차별화</li>
+            </ul>
+          </div>
+          <div style="background:#f8fafc;border-radius:10px;padding:14px 18px;">
+            <div style="font-size:12px;font-weight:700;color:var(--sub);margin-bottom:8px;">기존 전공 교육과정 개편</div>
+            <ul style="font-size:13px;color:var(--text);line-height:1.9;padding-left:16px;">
+              <li>AI컴퓨터공학부 인공지능전공, 컴퓨터공학전공 AI 전문 교육 개편 방안</li>
+              <li>산업공학부 산업공학전공 AI 전문 교육 개편 방안</li>
+              <li>통계학과 AI 전문 교육 개편 방안</li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="background:linear-gradient(135deg,#0c4a6e,#0369a1);border-radius:12px;padding:18px 22px;color:white;margin:12px 0;">
+          <div style="font-size:13px;font-weight:800;color:var(--gold2);margin-bottom:8px;">🎯 몰입형 교육체계 선도적 도입</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.85);line-height:1.8;">
+            <strong style="color:white;">AI대학 ADP 전공</strong>에서  몰입형 교육체계를 선도적으로 도입
+            → <strong>8주 단위 Half-Semester 제도</strong> 도입 추진 (전반기 8주 + 후반기 8주)
+          </div>
+        </div>
+
+        <div class="wip">✏️ 학부/학과별 세부 교육과정은 집필위원회 작성 결과 반영 예정 → <a href="#edu-dept-a" style="font-weight:800;color:var(--amber);letter-spacing:.5px;text-transform:uppercase;padding-top:6px;" >학과/전공별 교육과정</a></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 라. AI 융합 교육 -->
+      <div class="sub-sec" id="edu-d">
+        <div class="sub-sec-title"><span class="badge" style="background:#f59e0b;color:#1a1a1a;">라</span>AI 융합 교육 — AI Convergence Education</div>
+        <div class="kp-box amber"><strong>AI대학 AX융합학부, 브랜드 대학 AX융합전공 등에서 운영하는 전공/도메인 특화 AI융합 교과목.</strong><br>✦예: 행정학과 "공공데이터분석론"(2025), 의류학과 "패션리테일분석"(2024), 미디어커뮤니케이션학과 "데이터기반스토리텔링"(2022) 등
+          <br>✦교육과 운영의 핵심 주체: <strong>융합전공 주관 학과 + AI융합교육원</strong></div>
+        <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:14px 18px;margin-top:10px;">
+          <div style="font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px;">⚠️ 융합 교육 분야 작성시 고려 사항과 접근법</div>
+          <ul style="font-size:13px;color:#a16207;line-height:1.9;padding-left:16px;">
+            <li><a href="https://con.pusan.ac.kr/con/74187/subview.do" target="_blank" style="color:var(--amber);font-weight:700;">융합교육센터</a> 기준: 19개 융합전공, 10개 연계전공, 35개 마이크로디그리, 21개 트랙 운영 중이며 다수가 AX융합 분류 가능</li>
+            <li>전공·교육과정은 있으나 참여 학생이 거의 없거나 교과목을 개설하지 않는 경우도 다수 → 행정 부하 가중</li>
+            <li>전공+AI융합 신규 교과목 개발을 위한 참여학과 참여율 저조 → 참여를 유도할 추가 유인책 마련 필요</li>
+            <li><strong>AI융합교육원 주도의 계열별 융합교과목</strong> 적극 개발 → 여전히 도메인 전문가와 관련 데이터 확보 필요</li>
+            <li>무분별한 신설 보다는 AI/AX 관련 <strong>기존 융합전공을 재편</strong>하고 가능하면 <strong>AX융합학부로 소속 변경</strong> 검토</li>
+            <li>이공계 분야 융합 교과목 발굴 및 <strong>X-Mobility 분야 융합 교육</strong> 특화 부각</li>
+          </ul>
+        </div>
+        <div class="wip">✏️ 융합교육과정별 세부 교육과정은 집필위원회 작성 결과 반영 예정 → <a href="#edu-dept-a" style="font-weight:800;color:var(--amber);letter-spacing:.5px;text-transform:uppercase;padding-top:6px;" >학과/전공별 교육과정</a></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 마. AI 실전형 교육 -->
+      <div class="sub-sec" id="edu-e">
+        <div class="sub-sec-title"><span class="badge" style="background:#059669;">마</span>AI 실전형 교육 — Real-World AI Problem-Solving (with Industry Data)</div>
+        <div class="kp-box green">가칭<strong> AX-PBL </strong>교과목 
+          <br>✦산업 데이터 기반 AI 문제해결 프로젝트 I &amp; II. 최대 6학점. 
+          <br>✦개별 학과의 전공필수형 캡스톤디자인 교과목을 AX-PBL로 대체 가능하도록 제도 개편
+          <br>✦교육과 운영의 핵심 주체: <strong>장영실AI융합연구원 / AI융합교육원 + 개별 대학원 학과 및 BK21 사업단과 협력</strong></div>
+        <!-- Inetguru 추가 이미지 -->
+        <div style="margin-top:10px;background:white;border:1px solid #bfdbfe;border-radius:8px;overflow:hidden;cursor:zoom-in;"
+              onclick="openImgPopup('image/AX-PBL.jpg','AX-PBL')">
+          <img src="image/AX-PBL.jpg" alt="AX-PBL 교과목 구조"
+                style="width:100%;display:block;max-height:300px;object-fit:contain;background:#f8faff;"
+                onerror="this.parentElement.style.display='none'">
+          <div style="padding:5px 10px;font-size:10px;color:#1e3a8a;background:#eff6ff;border-top:1px solid #bfdbfe;">
+            📐 AX-PBL 교과목 구조 - 실전형 교과 교육
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-top:12px;">
+          <div style="background:#ecfdf5;border-radius:10px;padding:14px 18px;">
+            <div style="font-size:12px;font-weight:700;color:#065f46;margin-bottom:8px;">참여자 구성 (URP 연계)</div>
+            <ul style="font-size:13px;color:var(--text);line-height:1.9;padding-left:16px;">
+              <li>AI/AX 학부 연구생</li>
+              <li>교수, 대학원생</li>
+              <li>산업체 재직자 및 전문가</li>
+            </ul>
+          </div>
+          <div style="background:#ecfdf5;border-radius:10px;padding:14px 18px;">
+            <div style="font-size:12px;font-weight:700;color:#065f46;margin-bottom:8px;">복합 목적</div>
+            <ul style="font-size:13px;color:var(--text);line-height:1.9;padding-left:16px;">
+              <li>교육 + 연구개발 + 지역·산학 협력의 복합체</li>
+              <li>동남권 수요 기반 주제 발굴</li>
+              <li><strong>성장엔진 분야 프로젝트는 X-모빌리티 대학에서 별도 관리</strong></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 바. 대학원 AI 교육 -->
+      <div class="sub-sec" id="edu-f">
+        <div class="sub-sec-title"><span class="badge" style="background:#7c3aed;">바</span>대학원 AI 교육 — Graduate Level AI Education</div>
+        <div class="grid-2" style="margin-top:10px;">
+          <div style="background:#faf5ff;border:1px solid #e9d5ff;border-radius:12px;padding:18px;">
+            <div style="font-size:13px;font-weight:800;color:var(--purple);margin-bottom:10px;">A. 대학원 공통 핵심 교육</div>
+            <div style="font-size:12px;color:var(--sub);margin-bottom:10px;line-height:1.7;">✦모든 대학원 전공에서 활용 가능하도록 교과목 설계 <br>✦대형 강의·다수 분반 확장형 운영 <br>✦교육과 운영의 핵심 주체: <strong>장영실AI융합연구원</strong></div>
+            <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px;">
+              <div style="background:rgba(124,58,237,.1);border-radius:6px;padding:7px 12px;font-size:12px;color:#4c1d95;font-weight:600;">🌟 Research Methods with AI</div>
+              <div style="background:rgba(124,58,237,.1);border-radius:6px;padding:7px 12px;font-size:12px;color:#4c1d95;font-weight:600;">🌟 Advanced Data Analytics</div>
+              <div style="background:rgba(124,58,237,.1);border-radius:6px;padding:7px 12px;font-size:12px;color:#4c1d95;font-weight:600;">🌟 AI for Scientific Discovery</div>
+            </div>
+            <div style="background:rgba(124,58,237,.05);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--sub);line-height:1.7;">
+              <strong style="color:var(--purple);">기대효과:</strong> AI 활용 연구 생산성 개선, 책임 시수 경감에 따른 대학원 전공 강의 축소(?)에 대응<br>
+              <div style="margin-top:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                <span>📊 학기별 강좌 수 변화:</span>
+                <a href="학기별_개설강좌수.html" target="_blank" class="link-chip">학기별_개설강좌수.html ↗</a>
+              </div>
+            </div>
+          </div>
+          <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:18px;">
+            <div style="font-size:13px;font-weight:800;color:#065f46;margin-bottom:10px;">B. 주권형 AI 컴퓨팅·시스템 교육</div>
+            <div style="font-size:12px;color:var(--sub);margin-bottom:10px;line-height:1.7;"><strong>✦Sovereign AI</strong> 개념 기반 특화 교육 프로그램 개발<br>✦핵심 주체: <strong>ADP 대학원 + 장영실AI융합연구원 연계</strong></div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div style="background:rgba(5,150,105,.1);border-radius:7px;padding:10px 12px;">
+                <div style="font-size:11px;font-weight:700;color:#065f46;margin-bottom:4px;">⚙️ 모델</div>
+                <div style="font-size:11px;color:#166534;line-height:1.6;">국내 생성형 AI 모델 개발·활용 생태계 기여 방향 교육 <br> Physical AI 한국형 VLA 및 World Model 개발·활용 생태계 기여</div>
+              </div>
+              <div style="background:rgba(5,150,105,.1);border-radius:7px;padding:10px 12px;">
+                <div style="font-size:11px;font-weight:700;color:#065f46;margin-bottom:4px;">⚙️ 데이터</div>
+                <div style="font-size:11px;color:#166534;line-height:1.6;">성장엔진을 포함 국가 전략 산업·기반 시스템 분야의 데이터 보안 및 Ontology/Context 구축을 위한 관련 이론, 도구, 기술 교육</div>
+              </div>
+              <div style="background:rgba(5,150,105,.1);border-radius:7px;padding:10px 12px;">
+                <div style="font-size:11px;font-weight:700;color:#065f46;margin-bottom:4px;">⚙️ 시스템</div>
+                <div style="font-size:11px;color:#166534;line-height:1.6;">국산 AI 반도체·로봇 기반 AI 시스템 개발·활용 생태계 기여 방향 교육</div>
+              </div>
+              <div style="background:rgba(5,150,105,.15);border-radius:7px;padding:8px 12px;font-size:11px;color:#065f46;">
+                ✦ 서울대·과기원 등 우수 대학원과 협력·공동 교육 체계 구축<br>
+                ✦ 장영실AI융합연구원 Top-Down형 전략 연구와 연계
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 사. AI 특화 창업 교육 -->
+      <div class="sub-sec" id="edu-g">
+        <div class="sub-sec-title"><span class="badge" style="background:#059669;">사</span>AI 특화 창업 교육 — AI Venture Creation Education <span style="font-size:11px;background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:5px;margin-left:4px;">Beyond Learning AI</span></div>
+        <div style="background:linear-gradient(135deg,#064e3b,#065f46);border-radius:12px;padding:18px 22px;color:white;margin-bottom:12px;">
+          <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,.6);margin-bottom:8px;">🏆 창업 역량 — 창업중심대학 기관 평가 최우수</div>
+          <div style="font-size:13px;color:rgba(255,255,255,.9);line-height:1.8;">
+            부산대학교는 창업중심대학 기관 평가에서 <strong style="color:var(--gold2);">"최우수"</strong>를 획득하여 창업 교육·지원 역량을 검증받았습니다.<br>
+            <a href="https://n.news.naver.com/article/025/0003519581?sid=102" target="_blank" style="color:#6ee7b7;font-size:12px;">관련 보도 ↗</a>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div style="background:#ecfdf5;border-radius:10px;padding:14px 18px;">
+            <div style="font-size:12px;font-weight:700;color:#065f46;margin-bottom:8px;">실전형 AI 기술 창업 특화 교육</div>
+            <ul style="font-size:13px;color:var(--text);line-height:1.9;padding-left:16px;">
+              <li>AI/AX 기술 창업가의 교육 참여 및 멘토링 지원</li>
+              <li>자체 AI 인프라 활용 지원</li>
+              <li>AI API 크레딧 및 바우처 제도 운영</li>
+            </ul>
+          </div>
+          <div style="background:#ecfdf5;border-radius:10px;padding:14px 18px;">
+            <div style="font-size:12px;font-weight:700;color:#065f46;margin-bottom:8px;">핵심 주체</div>
+            <div style="font-size:13px;color:var(--text);line-height:1.8;">
+              <a href="https://bi.pusan.ac.kr/" target="_blank" style="color:var(--green);font-weight:800;">창업지원단 ↗</a><br>
+              <span style="font-size:12px;color:var(--sub);">장영실AI융합연구원 연계하여 AI/AX 실전 문제해결 역량 기반 창업 생태계 구축</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 아. AI 활용 교육 -->
+      <div class="sub-sec" id="edu-h">
+        <div class="sub-sec-title"><span class="badge" style="background:var(--purple);">아</span>AI 활용 교육 — AI Enhanced Education <span style="font-size:11px;background:#ede9fe;color:#4c1d95;padding:2px 8px;border-radius:5px;margin-left:4px;">Teaching with AI</span></div>
+        <div class="kp-box purple"><strong>✦AI를 교육의 대상이 아닌 도구로 활용</strong>하여 기존 교과의 학습 효과·교수 효율성·학습 경험을 혁신합니다. <br>✦교육과 운영의 핵심 주체: <strong>교양교육원, AI융합교육원, 에듀테크센터</strong></div>
+
+        <div class="grid-4" style="margin-top:12px;">
+          <div class="card"><div class="c-icon">🎯</div><div class="c-title" style="color:#4c1d95;">학습 개인화</div><div class="c-body">Personalized Learning — AI 기반 개인 맞춤 학습 경로 및 피드백 제공</div></div>
+          <div class="card"><div class="c-icon">⚡</div><div class="c-title" style="color:#4c1d95;">학습 효율 향상</div><div class="c-body">Learning Efficiency — Flipped Learning으로 오프라인 시간 심화 활용</div></div>
+          <div class="card"><div class="c-icon">📈</div><div class="c-title" style="color:#4c1d95;">교수 생산성 증대</div><div class="c-body">Instructor Productivity — 표준화 콘텐츠로 다중 분반 운영 최적화</div></div>
+          <div class="card"><div class="c-icon">✨</div><div class="c-title" style="color:#4c1d95;">학습 경험 혁신</div><div class="c-body">Enhanced Learning Experience — Labster·PhET 등 최신 AI 도구 활용</div></div>
+        </div>
+
+        <div style="margin-top:14px;background:#f8fafc;border-radius:10px;padding:14px 18px;">
+          <div style="font-size:12px;font-weight:700;color:var(--sub);margin-bottom:8px;">우선 적용 후보 교과목</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+            <span style="background:#ede9fe;color:#4c1d95;font-size:12px;font-weight:600;padding:4px 10px;border-radius:6px;">일반물리학개론/실험</span>
+            <span style="background:#ede9fe;color:#4c1d95;font-size:12px;font-weight:600;padding:4px 10px;border-radius:6px;">공학미적분학</span>
+            <span style="background:#ede9fe;color:#4c1d95;font-size:12px;font-weight:600;padding:4px 10px;border-radius:6px;">공학선형대수학</span>
+            <span style="background:#ede9fe;color:#4c1d95;font-size:12px;font-weight:600;padding:4px 10px;border-radius:6px;">고전읽기와 토론</span>
+            <span style="background:#ede9fe;color:#4c1d95;font-size:12px;font-weight:600;padding:4px 10px;border-radius:6px;">열린사고와표현</span>
+            <span style="background:#ede9fe;color:#4c1d95;font-size:12px;font-weight:600;padding:4px 10px;border-radius:6px;">공학작문 및 발표</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--sub);">
+            <span>📊 우리 대학 개설 강좌 현황:</span>
+            <a href="종합분석_개설강좌.html" target="_blank" class="link-chip">종합분석_개설강좌.html ↗</a>
+          </div>
+          <div class="todo" style="margin-top:10px;"><span>💡</span>관련 사례: AI 코스웨어(구 효원 브릿지) — 자연·공학 계열 수학·물리·화학 AI 코스웨어 우선 개발</div>
+        </div>
+
+        <div style="margin-top:12px;background:#f8fafc;border-radius:10px;padding:14px 18px;">
+          <div style="font-size:12px;font-weight:700;color:var(--sub);margin-bottom:8px;">5가지 실행 모델</div>
+          <div style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--text);">
+            <div style="background:#ede9fe;border-radius:5px;padding:6px 12px;">① <strong>중앙 주도형 콘텐츠 개발</strong> — Individual → Institutional 전환, 규모의 경제 확보</div>
+            <div style="background:#ede9fe;border-radius:5px;padding:6px 12px;">② <strong>Flipped &amp; Blended Learning</strong> — "인공지능과 디지털 사고", "대학영어"에서 이미 적용 중인 모델</div>
+            <div style="background:#ede9fe;border-radius:5px;padding:6px 12px;">③ <strong>AI 기반 콘텐츠 개발</strong> — LLM·자동 문제 생성·영상 생성 도구 + Labster·PhET 활용</div>
+            <div style="background:#ede9fe;border-radius:5px;padding:6px 12px;">④ <strong>경쟁 구조 (Competitive Model)</strong> — 복수 콘텐츠 개발팀 지정, 학생 선택권 확대, 품질 향상</div>
+            <div style="background:#ede9fe;border-radius:5px;padding:6px 12px;">⑤ <strong>평가·공개 기반 환류 체계</strong> — 강의 평가·성과 데이터 공개, 우수 콘텐츠 지속 확산</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 3. 학과/전공별 교육과정 -->
+      <div class="sub-sec" id="edu-dept">
+        <div class="sub-sec-title"><span class="badge" style="background:var(--amber);">3</span>학과/전공별 교육과정 <span style="font-size:11px;font-weight:400;color:var(--sub);">— AI대학 소속 학부/학과별 세부 교육과정</span></div>
+        <div class="wip" style="margin-bottom:16px;">✏️ 이 섹션은 집필위원회 작성 결과를 바탕으로 추후 기입 예정입니다.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div id="edu-dept-a" style="background:#f0f7ff;border-radius:10px;padding:16px 18px;scroll-margin-top:80px;">
+            <div style="font-size:13px;font-weight:800;color:#1e3a8a;margin-bottom:8px;">🤖 AI컴퓨터공학부</div>
+            <div style="font-size:12px;color:var(--sub);line-height:1.7;">인공지능전공 / 컴퓨터공학전공 / 인터랙티브컴퓨팅전공</div>
+            <div class="wip" style="margin-top:10px;font-size:11px;">✏️ 세부 교육과정 작성 예정</div>
+          </div>
+          <div id="edu-dept-b" style="background:#f0fdf4;border-radius:10px;padding:16px 18px;scroll-margin-top:80px;">
+            <div style="font-size:13px;font-weight:800;color:#065f46;margin-bottom:8px;">📊 데이터사이언스학부</div>
+            <div style="font-size:12px;color:var(--sub);line-height:1.7;">데이터사이언스전공</div>
+            <div class="wip" style="margin-top:10px;font-size:11px;">✏️ 세부 교육과정 작성 예정</div>
+          </div>
+          <div id="edu-dept-c" style="background:#fff7ed;border-radius:10px;padding:16px 18px;scroll-margin-top:80px;">
+            <div style="font-size:13px;font-weight:800;color:#9a3412;margin-bottom:8px;">⚙️ 산업공학부</div>
+            <div style="font-size:12px;color:var(--sub);line-height:1.7;">산업공학전공 / 산업AI전공</div>
+            <div class="wip" style="margin-top:10px;font-size:11px;">✏️ 세부 교육과정 작성 예정</div>
+          </div>
+          <div id="edu-dept-d" style="background:#faf5ff;border-radius:10px;padding:16px 18px;scroll-margin-top:80px;">
+            <div style="font-size:13px;font-weight:800;color:#4c1d95;margin-bottom:8px;">📈 통계학과</div>
+            <div style="font-size:12px;color:var(--sub);line-height:1.7;">통계학과 AI 전문 교육과정</div>
+            <div class="wip" style="margin-top:10px;font-size:11px;">✏️ 세부 교육과정 작성 예정</div>
+          </div>
+          <div id="edu-dept-e" style="background:#fffbeb;border-radius:10px;padding:16px 18px;grid-column:1/-1;scroll-margin-top:80px;">
+            <div style="font-size:13px;font-weight:800;color:#92400e;margin-bottom:8px;">🔗 AX융합학부</div>
+            <div style="font-size:12px;color:var(--sub);line-height:1.7;">9개 분야 18개 AX 융합전공 (지역 성장엔진 분야 포함)</div>
+            <div class="wip" style="margin-top:10px;font-size:11px;">✏️ 융합전공별 세부 교육과정 작성 예정</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- KPI -->
+      <div class="sub-sec" id="edu-kpi">
+        <div class="sub-sec-title"><span class="badge" style="background:var(--green);">KPI</span>교육과정 KPI</div>
+        <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:14px 18px;margin-bottom:14px;font-size:13px;color:#92400e;">
+          🎯 교육부 문건 기준: <strong>"연 1,500명 내외"</strong> 성과 목표치 제시 (배출 인원 기준, 교당 500명 예상). 가능한 많은 학생이 수혜·배출되도록 극대화 추진.
+        </div>
+        <div class="grid-2">
+          <div class="img-card" onclick="openImgPopup('image/SW중심대학 성과지표1.jpg','SW중심대학 성과지표 1')" style="cursor:zoom-in;">
+            <img src="image/SW중심대학 성과지표1.jpg" alt="SW중심대학 성과지표1" style="max-height:260px;"
+                 onerror="this.parentElement.style.display='none'">
+            <div class="ic-cap">참고: SW중심대학 성과지표 1 (클릭하여 확대)</div>
+          </div>
+          <div class="img-card" onclick="openImgPopup('image/SW중심대학 성과지표2.jpg','SW중심대학 성과지표 2')" style="cursor:zoom-in;">
+            <img src="image/SW중심대학 성과지표2.jpg" alt="SW중심대학 성과지표2" style="max-height:260px;"
+                 onerror="this.parentElement.style.display='none'">
+            <div class="ic-cap">참고: SW중심대학 성과지표 2 (클릭하여 확대)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Implementation -->
+      <div class="sub-sec" id="edu-implementation">
+        <div class="sub-sec-title"><span class="badge" style="background:var(--red);">Implementation</span>융합교육 실현의 어려움</div>
+        <div class="notice red">
+          <div>
+          ⚠️다양한 AI/SW 융합교육과정을 설계하였으나 실제 참여율은 저조 <br>
+            ✦참여 학과/교수의 융합전공 교과 개발 참여율 저조<br>
+            ✦학생의 융합전공 선택 동기 높지 않음 : 직접적 인센티브의 부재<br>
+            ✦융합형 교과목 이수의 어려움 : 전공 불인정 + 수강의 어려움 (수강 인원이 적어 단일 또는 소수 분반, 수업 시간표 문제)<br>
+          🎯AI융합교육원 주도의 융합교과목 개발 + 학생 수강 동인을 높이고 이수를 쉽게하는 방안 모색 
+          </div>
+        </div>
+        <!-- Inetguru 추가 이미지 -->
+        <div style="margin-top:10px;background:white;border:1px solid #bfdbfe;border-radius:8px;overflow:hidden;cursor:zoom-in;"
+              onclick="openImgPopup('image/AX교과이수구조와활성화방안.png','AI/AX 교과 분류 구조')">
+          <img src="image/AX교과이수구조와활성화방안.png" alt="AI/AX 교과 분류 구조"
+                style="width:100%;display:block;max-height:350px;object-fit:contain;background:#f8faff;"
+                onerror="this.parentElement.style.display='none'">
+          <div style="padding:5px 10px;font-size:10px;color:#1e3a8a;background:#eff6ff;border-top:1px solid #bfdbfe;">
+            📐 AI융합 교육 활성화를 위한 AI/AX 교과 분류 검토 
+          </div>
+        </div>
+        
+      </div>      
+    </div>
+
+    <!-- 4. 교육기반 인프라 -->
+    <div class="block" id="infra">
+      <div class="block-num">Section 4</div>
+      <div class="block-title"><span class="icon">🖥️</span>교육기반 — 인프라·플랫폼</div>
+      <div class="block-desc">AI/AX 교육연구에 필요한 GPU 인프라, 클라우드 플랫폼, 실습 환경 구축 계획</div>
+      <div class="embed-note">
+        <span style="font-size:20px;flex-shrink:0">🔗</span>
+        <span>인프라 상세 계획은 <a href="part1.html#infra">Part I. Section 5 — AI 인프라 확충·집적화 ↗</a>를 참조하세요.</span>
+      </div>
+    </div>
+
+    <!-- 5. 교육기반 조직/제도 -->
+    <div class="block" id="org">
+      <div class="block-num">Section 5</div>
+      <div class="block-title"><span class="icon">⚙️</span>교육기반 — 조직·제도·프로그램</div>
+      <div class="block-desc">AI/AX 교육 활성화를 위한 교원 평가 제도 개선, 인센티브, 수업 운영 혁신 방안</div>
+
+      <!-- S5.1 교원 업적평가 제도 개선 -->
+      <div class="sub-sec" id="eval">
+        <div class="sub-sec-title"><span class="badge" style="background:var(--blue);">1</span>교원 업적평가 제도 개선</div>
+        <div class="kp-box"><strong>✦ 교육 영역에 AI/AX 교육 실적 기여도 항목 신설. <br>📌Top-Tier AI Conference 임용·승진 실적 인정</strong></div>
+
+        <div style="margin-top:14px;">
+          <div style="font-size:12px;font-weight:700;color:var(--sub);margin-bottom:8px;letter-spacing:.5px;">📋 업적평가 신설 항목 (AI/AX 교육 기여도)</div>
+          <div class="grid-2">
+            <div>
+              <div class="kp-box" style="margin-bottom:8px;background:#eff6ff;border-left-color:var(--mid);">
+                <strong>AI 융합교과목 개발·운영</strong> — 전공 특화 AI 융합교과 신설·운영 실적
+              </div>
+              <div class="kp-box" style="margin-bottom:8px;background:#eff6ff;border-left-color:var(--mid);">
+                <strong>융합교과목 팀 강의 운영</strong> — AI 전공-비전공 교원 공동 팀티칭 실적
+              </div>
+              <div class="kp-box" style="background:#eff6ff;border-left-color:var(--mid);">
+                <strong>AI 융합교과목 개발 우수사례 수상</strong> — 교내외 교육 혁신상 수상 가점
+              </div>
+            </div>
+            <div>
+              <div class="kp-box" style="margin-bottom:8px;background:#f0fdf4;border-left-color:var(--green);">
+                <strong>타 전공 교원 대상 AI 교육</strong> — CTL 기반 AI 연수 강사 활동 인정
+              </div>
+              <div class="kp-box" style="background:#f0fdf4;border-left-color:var(--green);">
+                <strong>Top-Tier AI 컨퍼런스 논문실적</strong> — 임용·승진 시 SCI 저널 동급 이상 인정
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="topconf" style="margin-top:16px;scroll-margin-top:80px;">
+          <div style="font-size:12px;font-weight:700;color:var(--sub);margin-bottom:8px;">Top-Tier AI 학회 (인정 범위)</div>
+          <div class="grid-2">
+            <div>
+              <div class="conf-item"><div class="ci-cat">Machine Learning (Core AI) — 최상위 3대 학회</div><div class="ci-list">NeurIPS · ICML · ICLR — BK21에서 SCI 상위 저널과 동급 이상 취급</div></div>
+              <div class="conf-item"><div class="ci-cat">Computer Vision</div><div class="ci-list">CVPR · ICCV · ECCV — 산업 영향력 매우 큼 (자율주행, 제조, 의료 영상)</div></div>
+            </div>
+            <div>
+              <div class="conf-item"><div class="ci-cat">NLP — LLM 시대 이후 중요도 급상승</div><div class="ci-list">ACL · EMNLP · NAACL</div></div>
+              <div class="conf-item"><div class="ci-cat">그 외 Top-Tier / 상위 A급</div><div class="ci-list">AAAI · KDD · WWW (The Web Conference) · IJCAI</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- S5.2 인센티브 + 조교 제도 -->
+      <div class="sub-sec" id="incentive">
+        <div class="sub-sec-title"><span class="badge" style="background:var(--green);">2</span>AI/AX 교육 기여 교원 인센티브</div>
+        <div class="kp-box amber">대형 강의 운영 시 수강생 수에 비례한 <strong>조교 등 강의보조인력 지원</strong> 및 수당 지급으로 교원의 교육 참여 부담 경감</div>
+
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin:14px 0 8px;">A. 📌 조교 제도 개편</div>
+        <div style="background:#f8fafc;border-radius:10px;padding:14px 18px;margin-bottom:12px;">
+          <div style="font-size:12px;color:var(--sub);margin-bottom:10px;">현황: 학기 당 1,100여 명, 18억 5천만원 규모 조교비 지출 / <strong>🎯장학조교+연구조교 → 수업조교+연구조교</strong></div>
+          <div class="grid-2">
+            <div style="background:#dbeafe;border-radius:8px;padding:12px 14px;"><div style="font-size:12px;font-weight:700;color:#1e3a8a;margin-bottom:6px;">수업조교</div><div style="font-size:12px;color:#1e40af;line-height:1.7;">✦수업에 직접 기여. 매칭 수업 필요<br>✦역할 수준에 따라 조교비 차등 지급.</div></div>
+            <div style="background:#dcfce7;border-radius:8px;padding:12px 14px;"><div style="font-size:12px;font-weight:700;color:#14532d;margin-bottom:6px;">연구조교</div><div style="font-size:12px;color:#166534;line-height:1.7;">✦AI/AX 교육 활성 기여 교수 포함 우수 교수의 연구활동 보조<br>✦교수 <strong>인센티브</strong>로 활용.</div></div>
+          </div>
+          <div class="kp-box" style="margin-top:10px;border-left-color:var(--amber);">
+            <strong>📌배정 방식 변경</strong> — 학과·기관 단위 배정 → 본부 관련 기관에서 수요(→수업조교)·성과(→연구조교) 기반 직접 배정·관리
+          </div>
+        </div>
+
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin:12px 0 8px;">B. 다분반 강의·집중수업 활성화 (교원 연구 몰입 시간 확보)</div>
+        <div class="grid-2">
+          <div style="background:#f8fafc;border-radius:10px;padding:14px 18px;">
+            <div style="font-size:12px;font-weight:700;color:var(--sub);margin-bottom:8px;">집중수업 방식</div>
+            <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--text);">
+              <div style="background:#e0f2fe;border-radius:6px;padding:7px 12px;"><strong>8주 Block Course (학기 중)</strong> — 전반기(8주)+후반기(8주)</div>
+              <div style="background:#e0f2fe;border-radius:6px;padding:7px 12px;"><strong>2~4주 Boot Camp (방학)</strong> — 단기 집중 이수</div>
+            </div>
+          </div>
+          <div style="background:#f8fafc;border-radius:10px;padding:14px 18px;">
+            <div style="font-size:12px;font-weight:700;color:var(--sub);margin-bottom:8px;">교원 혜택</div>
+            <ul style="font-size:13px;color:var(--text);line-height:1.9;padding-left:16px;">
+              <li>다분반 기여 교원 → 인정 책임 시수 확대</li>
+              <li>학기 중 <strong>1~2개월, 최대 1학기</strong>까지 연구 몰입 가능</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- S5.3 비전공 교원 AI 연수 (CTL) -->
+      <div class="sub-sec" id="ctl">
+        <div class="sub-sec-title"><span class="badge" style="background:var(--amber);">3</span>비전공 교원 AI 기본·심화 연수 체계 (CTL)</div>
+        <div class="kp-box amber">비전공 교원이 전공 특화 AI 융합교과를 <strong>직접 개발·강의</strong>할 수 있도록 교수학습센터(CTL) 중심의 단계별 AI 연수 운영</div>
+        <div class="grid-2" style="margin-top:12px;">
+          <div style="background:#fff7ed;border-radius:10px;padding:16px 18px;">
+            <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:10px;">🎓 기본 연수 (AI Literacy for Faculty)</div>
+            <div style="font-size:12px;color:var(--text);line-height:1.9;">
+              ✦ AI 개념·도구 기초 이해<br>
+              ✦ 교과 활용 사례 기반 실습<br>
+              ✦ AI 윤리·저작권 교육<br>
+              ✦ <strong>대상:</strong> AI 비전공 전체 교원
+            </div>
+          </div>
+          <div style="background:#fef9c3;border-radius:10px;padding:16px 18px;">
+            <div style="font-size:12px;font-weight:700;color:#b45309;margin-bottom:10px;">🔬 심화 연수 (AI Integration for Faculty)</div>
+            <div style="font-size:12px;color:var(--text);line-height:1.9;">
+              ✦ 전공 특화 AI 융합교과 설계·개발<br>
+              ✦ AI 전공 교원과 공동 개발 워크숍<br>
+              ✦ 우수 사례 공유 및 교과목 인증<br>
+              ✦ <strong>대상:</strong> 기본 연수 이수 교원 중 희망자
+            </div>
+          </div>
+        </div>
+        <div class="kp-box" style="margin-top:12px;border-left-color:var(--teal);">
+          <strong>점검 체계</strong> — 연수 이수율·교과 개발 실적·학생 만족도를 정기 점검하여 연수 프로그램 환류에 반영
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- S5.4 교육과정위원회 + 환류체계 -->
+      <div class="sub-sec" id="feedback">
+        <div class="sub-sec-title"><span class="badge" style="background:var(--purple);">4</span>교육과정위원회 운영 및 AI 역량 측정 환류체계</div>
+        <div class="grid-2" style="margin-top:10px;">
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--purple);margin-bottom:8px;">🏛️ 산업계 전문가 참여 교육과정위원회</div>
+            <div class="kp-box purple"><strong>산업계 전문가가 정기적으로 참여</strong>하는 교육과정위원회를 통해 현장 수요를 반영한 교육과정 지속 개선</div>
+            <div style="font-size:12px;color:var(--text);line-height:1.9;margin-top:10px;padding-left:8px;">
+              ✦ AI/AX 교육자·설계자(Instructor/Architect) 포함<br>
+              ✦ 분야별 산업 전문가 · 정부·연구소 인사 참여<br>
+              ✦ 연 2회 이상 정기 개최 + 수시 자문
+            </div>
+          </div>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--purple);margin-bottom:8px;">📊 학생 AI 역량 측정 및 환류</div>
+            <div class="kp-box purple"><strong>AI 거점대학 공동 개발</strong>한 역량 측정 도구로 학생 AI 역량을 측정하고, 결과를 교육 프로그램에 환류</div>
+ 
+
+<!-- ── 이미지 라이트박스 팝업 ── -->
+<div id="imgPopupOverlay" onclick="closeImgPopup()"
+     style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);
+            z-index:9999;align-items:center;justify-content:center;cursor:zoom-out;">
+  <div style="position:relative;max-width:92vw;max-height:92vh;
+               display:flex;flex-direction:column;align-items:center" onclick="event.stopPropagation()">
+    <button onclick="closeImgPopup()"
+            style="position:absolute;top:-38px;right:0;background:rgba(255,255,255,.15);
+                   border:none;color:white;font-size:22px;width:36px;height:36px;
+                   border-radius:50%;cursor:pointer;line-height:1">&#10005;</button>
+    <img id="imgPopupImg" src="" alt=""
+         style="max-width:90vw;max-height:85vh;object-fit:contain;
+                border-radius:8px;box-shadow:0 8px 48px rgba(0,0,0,.6)">
+    <div id="imgPopupCap"
+         style="color:rgba(255,255,255,.7);font-size:12px;margin-top:10px;text-align:center"></div>
+    <button id="imgPopupPrev" onclick="stepImgPopup(-1)"
+            style="position:absolute;top:50%;left:-52px;transform:translateY(-50%);
+                   background:rgba(255,255,255,.15);border:none;color:white;
+                   font-size:24px;width:40px;height:40px;border-radius:50%;cursor:pointer">&#8249;</button>
+    <button id="imgPopupNext" onclick="stepImgPopup(1)"
+            style="position:absolute;top:50%;right:-52px;transform:translateY(-50%);
+                   background:rgba(255,255,255,.15);border:none;color:white;
+                   font-size:24px;width:40px;height:40px;border-radius:50%;cursor:pointer">&#8250;</button>
+  </div>
+</div>
+
+<script>
+/* ── 이미지 라이트박스 ── */
+var _popupSrcs = [];
+var _popupIdx  = 0;
+
+function openImgPopup(src, caption) {
+  var allCards = Array.from(document.querySelectorAll('.img-card'));
+  var srcFile  = src.split('/').pop();
+  var clicked  = allCards.find(function(el) {
+    var img = el.querySelector('img');
+    return img && (img.src.includes(srcFile) || img.getAttribute('src') === src);
+  });
+
+  if (clicked) {
+    var parent   = clicked.closest('.info-card') || clicked.closest('.section') || document.body;
+    var siblings = Array.from(parent.querySelectorAll('.img-card')).filter(function(el){ return el.querySelector('img'); });
+    _popupSrcs = siblings.map(function(el) {
+      return {
+        src: el.querySelector('img').src,
+        cap: el.querySelector('.ic-cap') ? el.querySelector('.ic-cap').textContent.trim() : ''
+      };
+    });
+    _popupIdx = siblings.indexOf(clicked);
+    if (_popupIdx < 0) _popupIdx = 0;
+  } else {
+    _popupSrcs = [{ src: src, cap: caption || '' }];
+    _popupIdx  = 0;
+  }
+  _renderPopup();
+  document.getElementById('imgPopupOverlay').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function _renderPopup() {
+  var item = _popupSrcs[_popupIdx];
+  document.getElementById('imgPopupImg').src = item.src;
+  document.getElementById('imgPopupCap').textContent = item.cap;
+  var show = _popupSrcs.length > 1;
+  document.getElementById('imgPopupPrev').style.display = show ? '' : 'none';
+  document.getElementById('imgPopupNext').style.display = show ? '' : 'none';
+}
+
+function stepImgPopup(dir) {
+  _popupIdx = (_popupIdx + dir + _popupSrcs.length) % _popupSrcs.length;
+  _renderPopup();
+}
+
+function closeImgPopup() {
+  document.getElementById('imgPopupOverlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', function(e) {
+  var overlay = document.getElementById('imgPopupOverlay');
+  if (!overlay || overlay.style.display === 'none') return;
+  if (e.key === 'Escape')     closeImgPopup();
+  if (e.key === 'ArrowLeft')  stepImgPopup(-1);
+  if (e.key === 'ArrowRight') stepImgPopup(1);
+});
+</script>
+</body>
+</html>

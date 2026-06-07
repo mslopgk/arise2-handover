@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2027학년도 대학 학생정원 조정</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --ai-blue: #1a4fa0;
+      --ai-light: #3b82f6;
+      --ai-pale: #dbeafe;
+      --eng-green: #166534;
+      --eng-light: #22c55e;
+      --eng-pale: #dcfce7;
+      --old-gray: #475569;
+      --old-pale: #f1f5f9;
+      --accent: #f59e0b;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #1e293b;
+      --subtext: #64748b;
+      --border: #e2e8f0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #0f2d6e 0%, #1a4fa0 50%, #2563eb 100%);
+      color: white;
+      padding: 56px 40px 48px;
+      text-align: center;
+    }
+    .hero .badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: 13px;
+      margin-bottom: 16px;
+      letter-spacing: 0.5px;
+    }
+    .hero h1 {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .hero p {
+      font-size: 15px;
+      opacity: 0.8;
+      margin-bottom: 40px;
+    }
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .hero-stat {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 16px;
+      padding: 20px 32px;
+      min-width: 160px;
+    }
+    .hero-stat .label { font-size: 13px; opacity: 0.75; margin-bottom: 6px; }
+    .hero-stat .value { font-size: 36px; font-weight: 800; }
+    .hero-stat .sub { font-size: 12px; opacity: 0.65; margin-top: 4px; }
+    .hero-arrow {
+      font-size: 28px;
+      display: flex;
+      align-items: center;
+      opacity: 0.5;
+    }
+
+    /* ── CONTAINER ── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── SECTION HEADER ── */
+    .section { padding: 60px 0 40px; }
+    .section-title {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-title .dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .section-desc { color: var(--subtext); font-size: 14px; margin-bottom: 32px; }
+
+    /* ── BEFORE/AFTER CARDS ── */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 60px 1fr;
+      gap: 0;
+      align-items: start;
+    }
+    .compare-arrow-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding-top: 80px;
+    }
+    .compare-arrow-col .arr {
+      font-size: 32px;
+      color: var(--accent);
+    }
+    .compare-arrow-col .arr-label {
+      font-size: 11px;
+      color: var(--subtext);
+      margin-top: 4px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .compare-side { }
+    .compare-side h3 {
+      font-size: 14px;
+      font-weight: 700;
+      padding: 10px 16px;
+      border-radius: 10px 10px 0 0;
+      margin-bottom: 2px;
+    }
+    .before-label { background: var(--old-gray); color: white; }
+    .after-label { background: var(--ai-blue); color: white; }
+
+    .univ-block {
+      border: 1px solid var(--border);
+      border-radius: 0 0 12px 12px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .univ-header {
+      padding: 12px 16px;
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .dept-row {
+      padding: 8px 16px 8px 24px;
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid rgba(0,0,0,0.05);
+      color: var(--text);
+    }
+    .dept-row .major {
+      font-size: 12px;
+      color: var(--subtext);
+      padding: 5px 16px 5px 36px;
+      border-top: 1px solid rgba(0,0,0,0.04);
+      display: flex;
+      justify-content: space-between;
+    }
+    .quota {
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--ai-blue);
+      background: var(--ai-pale);
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+    .quota-gray {
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--old-gray);
+      background: var(--old-pale);
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+    .quota-green {
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--eng-green);
+      background: var(--eng-pale);
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    /* ── FLOW DIAGRAM ── */
+    .flow-wrap {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      overflow-x: auto;
+    }
+    .flow-diagram { min-width: 760px; }
+
+    /* ── AI대학 ORG CHART ── */
+    .orgchart-wrap {
+      background: linear-gradient(135deg, #0f2d6e, #1a4fa0);
+      border-radius: 20px;
+      padding: 40px 32px;
+      color: white;
+    }
+    .org-root {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .org-root-box {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 2px solid rgba(255,255,255,0.4);
+      border-radius: 16px;
+      padding: 16px 48px;
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+    .org-root-sub {
+      font-size: 12px;
+      opacity: 0.7;
+      margin-top: 4px;
+    }
+    .org-connector {
+      width: 2px;
+      height: 28px;
+      background: rgba(255,255,255,0.3);
+      margin: 0 auto;
+    }
+    .org-horiz {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .org-dept {
+      flex: 1;
+      min-width: 170px;
+      max-width: 220px;
+    }
+    .org-dept-box {
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      position: relative;
+    }
+    .org-dept-name {
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+    .org-dept-quota {
+      font-size: 26px;
+      font-weight: 900;
+    }
+    .org-dept-quota span {
+      font-size: 13px;
+      font-weight: 500;
+      opacity: 0.8;
+    }
+    .org-majors {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .org-major {
+      background: rgba(255,255,255,0.08);
+      border-radius: 8px;
+      padding: 7px 12px;
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .org-major-n {
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    /* Color themes for dept boxes */
+    .dept-blue   { background: rgba(59,130,246,0.25); border: 1px solid rgba(59,130,246,0.5); }
+    .dept-violet { background: rgba(124,58,237,0.25); border: 1px solid rgba(124,58,237,0.5); }
+    .dept-cyan   { background: rgba(6,182,212,0.25);  border: 1px solid rgba(6,182,212,0.5); }
+    .dept-teal   { background: rgba(20,184,166,0.25); border: 1px solid rgba(20,184,166,0.5); }
+    .dept-amber  { background: rgba(245,158,11,0.25); border: 1px solid rgba(245,158,11,0.5); }
+
+    /* ── SIZE CHART SECTION ── */
+    .size-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .chart-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+    }
+    .chart-card h4 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+    .chart-card p {
+      font-size: 13px;
+      color: var(--subtext);
+      margin-bottom: 20px;
+    }
+
+    /* ── KPI CARDS ── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .kpi-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+    }
+    .kpi-card .kpi-label {
+      font-size: 12px;
+      color: var(--subtext);
+      margin-bottom: 8px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .kpi-card .kpi-value {
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--ai-blue);
+    }
+    .kpi-card .kpi-sub {
+      font-size: 12px;
+      color: var(--subtext);
+      margin-top: 4px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 32px;
+      color: var(--subtext);
+      font-size: 12px;
+      border-top: 1px solid var(--border);
+      margin-top: 60px;
+    }
+
+    /* ── LEGEND ── */
+    .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+    .legend-item { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+    .legend-dot { width: 12px; height: 12px; border-radius: 3px; }
+
+    @media (max-width: 768px) {
+      .compare-grid { grid-template-columns: 1fr; }
+      .compare-arrow-col { padding-top: 0; transform: rotate(90deg); margin: 8px 0; }
+      .size-grid { grid-template-columns: 1fr; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero h1 { font-size: 22px; }
+      .hero-stats { gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════ HERO ══════════════ -->
+<div class="hero">
+  <div class="badge">□ 2027학년도 대학 학생정원 조정</div>
+  <h1>AI 중심 대학 구조 개편</h1>
+  <p>기존 3개 대학을 <strong>AI대학</strong> + <strong>공과대학</strong>으로 재편 — 미래 AI 인재 양성 체계 구축</p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="label">기존 (개편 전)</div>
+      <div class="value">527</div>
+      <div class="sub">3개 대학 · 7개 학부/학과</div>
+    </div>
+    <div class="hero-arrow">→</div>
+    <div class="hero-stat">
+      <div class="label">개편 후 AI대학</div>
+      <div class="value" style="color:#93c5fd;">424</div>
+      <div class="sub">4개 학부 + 1개 학과</div>
+    </div>
+    <div class="hero-stat">
+      <div class="label">개편 후 공과대학</div>
+      <div class="value" style="color:#86efac;">140</div>
+      <div class="sub">2개 학부/학과</div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ══════════════ SECTION 1: BEFORE / AFTER ══════════════ -->
+  <div class="section">
+    <div class="section-title">
+      <span class="dot" style="background:var(--accent)"></span>
+      정원 조정 전후 구성 비교
+    </div>
+    <div class="section-desc">기존 학부·학과 구성과 개편 후 새로운 구성을 나란히 비교합니다.</div>
+
+    <div class="compare-grid">
+      <!-- ─── BEFORE ─── -->
+      <div class="compare-side">
+        <h3 class="before-label">기존 (2026학년도 이전)</h3>
+
+        <!-- 정보의생명공학대학 -->
+        <div class="univ-block">
+          <div class="univ-header" style="background:#e2e8f0;">
+            <span>🏛️ 정보의생명공학대학</span>
+            <span class="quota-gray">269명</span>
+          </div>
+          <div class="dept-row">
+            <span>정보컴퓨터공학부</span>
+            <span class="quota-gray">161명</span>
+          </div>
+          <div class="dept-row">
+            <span>의생명융합정보학부</span>
+            <span class="quota-gray">108명</span>
+          </div>
+        </div>
+
+        <!-- 공과대학 -->
+        <div class="univ-block">
+          <div class="univ-header" style="background:#e2e8f0;">
+            <span>🔧 공과대학</span>
+            <span class="quota-gray">223명</span>
+          </div>
+          <div class="dept-row">
+            <span>전자제어공학부</span>
+            <span class="quota-gray">101명</span>
+          </div>
+          <div class="dept-row">
+            <span>산업공학과</span>
+            <span class="quota-gray">45명</span>
+          </div>
+          <div class="dept-row">
+            <span>첨단모빌리티자유전공</span>
+            <span class="quota-gray">50명</span>
+          </div>
+          <div class="dept-row">
+            <span>스마트시티전공</span>
+            <span class="quota-gray">27명</span>
+          </div>
+        </div>
+
+        <!-- 자연과학대학 -->
+        <div class="univ-block">
+          <div class="univ-header" style="background:#e2e8f0;">
+            <span>🔬 자연과학대학</span>
+            <span class="quota-gray">35명</span>
+          </div>
+          <div class="dept-row">
+            <span>통계학과</span>
+            <span class="quota-gray">35명</span>
+          </div>
+        </div>
+
+        <div style="text-align:right; font-weight:800; font-size:15px; color:var(--old-gray); padding:8px 4px;">
+          합계: 527명
+        </div>
+      </div>
+
+      <!-- ─── ARROW ─── -->
+      <div class="compare-arrow-col">
+        <div class="arr">⟹</div>
+        <div class="arr-label">개편</div>
+      </div>
+
+      <!-- ─── AFTER ─── -->
+      <div class="compare-side">
+        <h3 class="after-label">개편 후 (2027학년도)</h3>
+
+        <!-- AI대학 -->
+        <div class="univ-block">
+          <div class="univ-header" style="background:#1a4fa0; color:white;">
+            <span>🤖 AI대학 <span style="font-weight:400; font-size:12px; opacity:0.8;">(신설)</span></span>
+            <span style="background:rgba(255,255,255,0.25); padding:2px 8px; border-radius:6px; font-size:13px;">424명</span>
+          </div>
+
+          <!-- AI컴퓨터공학부 -->
+          <div class="dept-row" style="font-weight:700; background:#eff6ff;">
+            <span>AI컴퓨터공학부</span>
+            <span class="quota">214명</span>
+          </div>
+          <div class="dept-row major">
+            <span>컴퓨터공학전공</span><span>84명</span>
+          </div>
+          <div class="dept-row major">
+            <span>인공지능전공</span><span>60명</span>
+          </div>
+          <div class="dept-row major">
+            <span>인터랙티브콘텐츠전공</span><span>17명</span>
+          </div>
+          <div class="dept-row major">
+            <span>AI컴퓨팅자유전공</span><span>53명</span>
+          </div>
+
+          <!-- 산업공학부 -->
+          <div class="dept-row" style="font-weight:700; background:#f5f3ff;">
+            <span>산업공학부</span>
+            <span class="quota">69명</span>
+          </div>
+          <div class="dept-row major">
+            <span>산업공학전공</span><span>40명</span>
+          </div>
+          <div class="dept-row major">
+            <span>산업AI전공</span><span>29명</span>
+          </div>
+
+          <!-- 데이터사이언스부 -->
+          <div class="dept-row" style="font-weight:700; background:#ecfeff;">
+            <span>데이터사이언스부</span>
+            <span class="quota">79명</span>
+          </div>
+          <div class="dept-row major">
+            <span>데이터사이언스전공</span><span>59명</span>
+          </div>
+          <div class="dept-row major">
+            <span>첨단바이오공학전공</span><span>20명</span>
+          </div>
+
+          <!-- 통계학과 -->
+          <div class="dept-row" style="font-weight:700; background:#f0fdf4;">
+            <span>통계학과</span>
+            <span class="quota">35명</span>
+          </div>
+
+          <!-- AX융합학부 -->
+          <div class="dept-row" style="font-weight:700; background:#fffbeb;">
+            <span>AX융합학부</span>
+            <span class="quota">27명</span>
+          </div>
+          <div class="dept-row major">
+            <span>스마트시티전공</span><span>27명</span>
+          </div>
+        </div>
+
+        <!-- 공과대학 -->
+        <div class="univ-block">
+          <div class="univ-header" style="background:#166534; color:white;">
+            <span>🔧 공과대학 <span style="font-weight:400; font-size:12px; opacity:0.8;">(재편)</span></span>
+            <span style="background:rgba(255,255,255,0.25); padding:2px 8px; border-radius:6px; font-size:13px;">140명</span>
+          </div>
+          <div class="dept-row">
+            <span>X-모빌리티융합학부</span>
+            <span class="quota-green">96명</span>
+          </div>
+          <div class="dept-row">
+            <span>바이오메디컬공학과</span>
+            <span class="quota-green">44명</span>
+          </div>
+        </div>
+
+        <div style="text-align:right; font-weight:800; font-size:15px; color:var(--ai-blue); padding:8px 4px;">
+          합계: 564명
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ SECTION 2: FLOW DIAGRAM ══════════════ -->
+  <div class="section">
+    <div class="section-title">
+      <span class="dot" style="background:var(--ai-light)"></span>
+      학부·학과 재편 흐름도
+    </div>
+    <div class="section-desc">기존 학부·학과가 어떻게 새로운 구조로 이동·통합·신설되었는지 보여줍니다.</div>
+    <div class="flow-wrap">
+      <svg class="flow-diagram" viewBox="0 0 820 480" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8"/>
+          </marker>
+          <marker id="arrow-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#3b82f6"/>
+          </marker>
+          <marker id="arrow-green" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#22c55e"/>
+          </marker>
+        </defs>
+
+        <!-- ── LEFT COLUMN: 기존 ── -->
+        <!-- Header: 기존 -->
+        <rect x="20" y="16" width="240" height="32" rx="8" fill="#475569"/>
+        <text x="140" y="37" text-anchor="middle" fill="white" font-size="13" font-weight="700">기 존</text>
+
+        <!-- 정보의생명공학대학 -->
+        <rect x="20" y="60" width="240" height="24" rx="4" fill="#64748b"/>
+        <text x="140" y="77" text-anchor="middle" fill="white" font-size="11" font-weight="600">정보의생명공학대학</text>
+
+        <rect x="30" y="90" width="220" height="36" rx="6" fill="#e2e8f0" stroke="#cbd5e1"/>
+        <text x="130" y="107" text-anchor="middle" fill="#1e293b" font-size="11.5" font-weight="600">정보컴퓨터공학부</text>
+        <text x="220" y="114" text-anchor="middle" fill="#1a4fa0" font-size="11" font-weight="700">161명</text>
+
+        <rect x="30" y="132" width="220" height="36" rx="6" fill="#e2e8f0" stroke="#cbd5e1"/>
+        <text x="125" y="149" text-anchor="middle" fill="#1e293b" font-size="11.5" font-weight="600">의생명융합정보학부</text>
+        <text x="220" y="156" text-anchor="middle" fill="#1a4fa0" font-size="11" font-weight="700">108명</text>
+
+        <!-- 공과대학 -->
+        <rect x="20" y="182" width="240" height="24" rx="4" fill="#64748b"/>
+        <text x="140" y="199" text-anchor="middle" fill="white" font-size="11" font-weight="600">공과대학</text>
+
+        <rect x="30" y="212" width="220" height="36" rx="6" fill="#e2e8f0" stroke="#cbd5e1"/>
+        <text x="120" y="229" text-anchor="middle" fill="#1e293b" font-size="11.5" font-weight="600">전자제어공학부</text>
+        <text x="220" y="236" text-anchor="middle" fill="#1a4fa0" font-size="11" font-weight="700">101명</text>
+
+        <rect x="30" y="254" width="220" height="36" rx="6" fill="#e2e8f0" stroke="#cbd5e1"/>
+        <text x="112" y="271" text-anchor="middle" fill="#1e293b" font-size="11.5" font-weight="600">산업공학과</text>
+        <text x="220" y="278" text-anchor="middle" fill="#1a4fa0" font-size="11" font-weight="700">45명</text>
+
+        <rect x="30" y="296" width="220" height="36" rx="6" fill="#e2e8f0" stroke="#cbd5e1"/>
+        <text x="125" y="313" text-anchor="middle" fill="#1e293b" font-size="11.5" font-weight="600">첨단모빌리티자유전공</text>
+        <text x="220" y="320" text-anchor="middle" fill="#1a4fa0" font-size="11" font-weight="700">50명</text>
+
+        <rect x="30" y="338" width="220" height="36" rx="6" fill="#e2e8f0" stroke="#cbd5e1"/>
+        <text x="112" y="355" text-anchor="middle" fill="#1e293b" font-size="11.5" font-weight="600">스마트시티전공</text>
+        <text x="220" y="362" text-anchor="middle" fill="#1a4fa0" font-size="11" font-weight="700">27명</text>
+
+        <!-- 자연과학대학 -->
+        <rect x="20" y="388" width="240" height="24" rx="4" fill="#64748b"/>
+        <text x="140" y="405" text-anchor="middle" fill="white" font-size="11" font-weight="600">자연과학대학</text>
+
+        <rect x="30" y="418" width="220" height="36" rx="6" fill="#e2e8f0" stroke="#cbd5e1"/>
+        <text x="112" y="435" text-anchor="middle" fill="#1e293b" font-size="11.5" font-weight="600">통계학과</text>
+        <text x="220" y="442" text-anchor="middle" fill="#1a4fa0" font-size="11" font-weight="700">35명</text>
+
+        <!-- ── RIGHT COLUMN: 개편 ── -->
+        <!-- Header: 개편 -->
+        <rect x="560" y="16" width="240" height="32" rx="8" fill="#1a4fa0"/>
+        <text x="680" y="37" text-anchor="middle" fill="white" font-size="13" font-weight="700">개 편 (AI대학 + 공과대학)</text>
+
+        <!-- AI대학 label -->
+        <rect x="560" y="60" width="240" height="24" rx="4" fill="#2563eb"/>
+        <text x="680" y="77" text-anchor="middle" fill="white" font-size="11" font-weight="700">🤖 AI대학 (신설)</text>
+
+        <!-- AI컴퓨터공학부 -->
+        <rect x="570" y="90" width="220" height="36" rx="6" fill="#dbeafe" stroke="#93c5fd"/>
+        <text x="672" y="107" text-anchor="middle" fill="#1e40af" font-size="11.5" font-weight="700">AI컴퓨터공학부</text>
+        <text x="760" y="114" text-anchor="middle" fill="#1a4fa0" font-size="11" font-weight="700">214명</text>
+
+        <!-- 산업공학부 -->
+        <rect x="570" y="134" width="220" height="36" rx="6" fill="#ede9fe" stroke="#c4b5fd"/>
+        <text x="660" y="151" text-anchor="middle" fill="#4c1d95" font-size="11.5" font-weight="700">산업공학부</text>
+        <text x="760" y="158" text-anchor="middle" fill="#4c1d95" font-size="11" font-weight="700">69명</text>
+
+        <!-- 데이터사이언스부 -->
+        <rect x="570" y="178" width="220" height="36" rx="6" fill="#cffafe" stroke="#67e8f9"/>
+        <text x="662" y="195" text-anchor="middle" fill="#164e63" font-size="11.5" font-weight="700">데이터사이언스부</text>
+        <text x="760" y="202" text-anchor="middle" fill="#164e63" font-size="11" font-weight="700">79명</text>
+
+        <!-- 통계학과 -->
+        <rect x="570" y="222" width="220" height="36" rx="6" fill="#dcfce7" stroke="#86efac"/>
+        <text x="655" y="239" text-anchor="middle" fill="#14532d" font-size="11.5" font-weight="700">통계학과</text>
+        <text x="760" y="246" text-anchor="middle" fill="#14532d" font-size="11" font-weight="700">35명</text>
+
+        <!-- AX융합학부 -->
+        <rect x="570" y="266" width="220" height="36" rx="6" fill="#fef9c3" stroke="#fde047"/>
+        <text x="655" y="283" text-anchor="middle" fill="#713f12" font-size="11.5" font-weight="700">AX융합학부</text>
+        <text x="760" y="290" text-anchor="middle" fill="#713f12" font-size="11" font-weight="700">27명</text>
+
+        <!-- 공과대학 -->
+        <rect x="560" y="320" width="240" height="24" rx="4" fill="#166534"/>
+        <text x="680" y="337" text-anchor="middle" fill="white" font-size="11" font-weight="700">🔧 공과대학 (재편)</text>
+
+        <!-- X-모빌리티 -->
+        <rect x="570" y="350" width="220" height="36" rx="6" fill="#dcfce7" stroke="#4ade80"/>
+        <text x="660" y="367" text-anchor="middle" fill="#14532d" font-size="11.5" font-weight="700">X-모빌리티융합학부</text>
+        <text x="760" y="374" text-anchor="middle" fill="#14532d" font-size="11" font-weight="700">96명</text>
+
+        <!-- 바이오메디컬 -->
+        <rect x="570" y="394" width="220" height="36" rx="6" fill="#dcfce7" stroke="#4ade80"/>
+        <text x="660" y="411" text-anchor="middle" fill="#14532d" font-size="11.5" font-weight="700">바이오메디컬공학과</text>
+        <text x="760" y="418" text-anchor="middle" fill="#14532d" font-size="11" font-weight="700">44명</text>
+
+        <!-- ── FLOW ARROWS ── -->
+        <!-- 정보컴퓨터공학부 → AI컴퓨터공학부 -->
+        <path d="M252,108 C 400,108 420,108 568,108" stroke="#3b82f6" stroke-width="3" fill="none" opacity="0.7" marker-end="url(#arrow-blue)"/>
+        <!-- 의생명융합정보 → AI컴퓨터공학부 일부 -->
+        <path d="M252,150 C 380,150 400,115 568,113" stroke="#3b82f6" stroke-width="1.5" fill="none" stroke-dasharray="5,3" opacity="0.5" marker-end="url(#arrow-blue)"/>
+        <!-- 의생명융합정보 → 데이터사이언스부 -->
+        <path d="M252,150 C 400,150 420,196 568,196" stroke="#06b6d4" stroke-width="2" fill="none" opacity="0.6" marker-end="url(#arrow-blue)"/>
+        <!-- 전자제어공학부 → X-모빌리티 -->
+        <path d="M252,230 C 400,230 400,368 568,368" stroke="#22c55e" stroke-width="2.5" fill="none" opacity="0.6" marker-end="url(#arrow-green)"/>
+        <!-- 전자제어공학부 → 산업공학부 일부 -->
+        <path d="M252,230 C 380,230 400,152 568,152" stroke="#8b5cf6" stroke-width="1.5" fill="none" stroke-dasharray="4,3" opacity="0.4" marker-end="url(#arrow-blue)"/>
+        <!-- 산업공학과 → 산업공학부 -->
+        <path d="M252,272 C 400,272 420,152 568,152" stroke="#8b5cf6" stroke-width="2.5" fill="none" opacity="0.7" marker-end="url(#arrow-blue)"/>
+        <!-- 첨단모빌리티자유전공 → X-모빌리티 -->
+        <path d="M252,314 C 400,314 420,368 568,368" stroke="#22c55e" stroke-width="2.5" fill="none" opacity="0.7" marker-end="url(#arrow-green)"/>
+        <!-- 스마트시티전공 → AX융합학부 -->
+        <path d="M252,356 C 400,356 420,284 568,284" stroke="#f59e0b" stroke-width="2.5" fill="none" opacity="0.7" marker-end="url(#arrow-blue)"/>
+        <!-- 통계학과 → 통계학과 -->
+        <path d="M252,436 C 400,436 420,240 568,240" stroke="#4ade80" stroke-width="2" fill="none" opacity="0.7" marker-end="url(#arrow-blue)"/>
+        <!-- 의생명융합정보 → 바이오메디컬 -->
+        <path d="M252,150 C 380,150 400,412 568,412" stroke="#22c55e" stroke-width="1.5" fill="none" stroke-dasharray="5,3" opacity="0.4" marker-end="url(#arrow-green)"/>
+
+        <!-- ── MIDDLE LABEL ── -->
+        <rect x="340" y="220" width="140" height="40" rx="10" fill="#f59e0b" opacity="0.15" stroke="#f59e0b" stroke-width="1"/>
+        <text x="410" y="236" text-anchor="middle" fill="#92400e" font-size="10" font-weight="700">학과 통합·신설·재편</text>
+        <text x="410" y="252" text-anchor="middle" fill="#92400e" font-size="10">2027학년도 적용</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ══════════════ SECTION 3: AI대학 조직도 ══════════════ -->
+  <div class="section">
+    <div class="section-title">
+      <span class="dot" style="background:#3b82f6"></span>
+      AI대학 조직 구성 (신설)
+    </div>
+    <div class="section-desc">2027학년도 신설되는 AI대학의 학부·학과 조직도와 각 전공별 정원을 표시합니다.</div>
+
+    <div class="orgchart-wrap">
+      <div class="org-root">
+        <div class="org-root-box">🤖 AI 대학</div>
+        <div class="org-root-sub">총 정원 424명 · 4개 학부 + 1개 학과</div>
+      </div>
+      <div class="org-connector"></div>
+
+      <div class="org-horiz">
+
+        <!-- AI컴퓨터공학부 -->
+        <div class="org-dept">
+          <div class="org-dept-box dept-blue">
+            <div class="org-dept-name">AI컴퓨터공학부</div>
+            <div class="org-dept-quota">214<span>명</span></div>
+          </div>
+          <div class="org-majors">
+            <div class="org-major">
+              <span>컴퓨터공학전공</span>
+              <span class="org-major-n">84</span>
+            </div>
+            <div class="org-major">
+              <span>인공지능전공</span>
+              <span class="org-major-n">60</span>
+            </div>
+            <div class="org-major">
+              <span>인터랙티브콘텐츠전공</span>
+              <span class="org-major-n">17</span>
+            </div>
+            <div class="org-major">
+              <span>AI컴퓨팅자유전공</span>
+              <span class="org-major-n">53</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 산업공학부 -->
+        <div class="org-dept">
+          <div class="org-dept-box dept-violet">
+            <div class="org-dept-name">산업공학부</div>
+            <div class="org-dept-quota">69<span>명</span></div>
+          </div>
+          <div class="org-majors">
+            <div class="org-major">
+              <span>산업공학전공</span>
+              <span class="org-major-n">40</span>
+            </div>
+            <div class="org-major">
+              <span>산업AI전공</span>
+              <span class="org-major-n">29</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 데이터사이언스부 -->
+        <div class="org-dept">
+          <div class="org-dept-box dept-cyan">
+            <div class="org-dept-name">데이터사이언스부</div>
+            <div class="org-dept-quota">79<span>명</span></div>
+          </div>
+          <div class="org-majors">
+            <div class="org-major">
+              <span>데이터사이언스전공</span>
+              <span class="org-major-n">59</span>
+            </div>
+            <div class="org-major">
+              <span>첨단바이오공학전공</span>
+              <span class="org-major-n">20</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 통계학과 -->
+        <div class="org-dept">
+          <div class="org-dept-box dept-teal">
+            <div class="org-dept-name">통계학과</div>
+            <div class="org-dept-quota">35<span>명</span></div>
+          </div>
+          <div class="org-majors">
+            <div class="org-major">
+              <span>통계학과 (단일학과)</span>
+              <span class="org-major-n">35</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- AX융합학부 -->
+        <div class="org-dept">
+          <div class="org-dept-box dept-amber">
+            <div class="org-dept-name">AX융합학부</div>
+            <div class="org-dept-quota">27<span>명</span></div>
+          </div>
+          <div class="org-majors">
+            <div class="org-major">
+              <span>스마트시티전공</span>
+              <span class="org-major-n">27</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Summary bar -->
+      <div style="margin-top:32px; background:rgba(255,255,255,0.08); border-radius:12px; padding:16px 24px; display:flex; justify-content:space-around; flex-wrap:wrap; gap:12px;">
+        <div style="text-align:center;">
+          <div style="font-size:11px; opacity:0.65;">총 학부 수</div>
+          <div style="font-size:24px; font-weight:900;">4개 학부</div>
+          <div style="font-size:11px; opacity:0.65;">+ 1개 학과</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:11px; opacity:0.65;">총 전공 수</div>
+          <div style="font-size:24px; font-weight:900;">10개 전공</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:11px; opacity:0.65;">총 입학 정원</div>
+          <div style="font-size:24px; font-weight:900; color:#93c5fd;">424명</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:11px; opacity:0.65;">최대 학부 (AI컴퓨터)</div>
+          <div style="font-size:24px; font-weight:900;">214명</div>
+          <div style="font-size:11px; opacity:0.65;">전체의 50.5%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ SECTION 4: AI대학 규모 ══════════════ -->
+  <div class="section">
+    <div class="section-title">
+      <span class="dot" style="background:#22c55e"></span>
+      AI대학 규모 시각화
+    </div>
+    <div class="section-desc">AI대학 내 학부별 정원 분포와 개편 전후 규모 변화를 비교합니다.</div>
+
+    <!-- KPI cards -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">AI대학 총 정원</div>
+        <div class="kpi-value">424명</div>
+        <div class="kpi-sub">4개 학부 + 1개 학과</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">최대 학부</div>
+        <div class="kpi-value" style="font-size:22px; padding-top:4px;">AI컴퓨터공학부</div>
+        <div class="kpi-sub">214명 (전체의 50.5%)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">공과대학 정원</div>
+        <div class="kpi-value" style="color:#166534;">140명</div>
+        <div class="kpi-sub">X-모빌리티 + 바이오메디컬</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">개편 후 전체 정원</div>
+        <div class="kpi-value" style="color:#0f172a; font-size:28px;">564명</div>
+        <div class="kpi-sub">기존 대비 +37명 (↑7%)</div>
+      </div>
+    </div>
+
+    <div class="size-grid">
+      <!-- 학부별 정원 가로 바 차트 -->
+      <div class="chart-card" style="grid-column: 1 / -1;">
+        <h4>AI대학 학부·학과별 정원 분포</h4>
+        <p>각 학부 및 전공별 입학 정원 (2027학년도 기준)</p>
+        <canvas id="barChart" height="160"></canvas>
+      </div>
+
+      <!-- 도넛 차트 -->
+      <div class="chart-card">
+        <h4>AI대학 내 학부별 비중</h4>
+        <p>AI대학 424명 기준 각 학부 비율</p>
+        <canvas id="doughnutChart" height="240"></canvas>
+      </div>
+
+      <!-- 기존 vs 개편 비교 -->
+      <div class="chart-card">
+        <h4>개편 전후 대학별 정원 비교</h4>
+        <p>기존 3개 대학 → 개편 후 2개 대학 정원 변화</p>
+        <canvas id="compareChart" height="240"></canvas>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>📋 2027학년도 대학 학생정원 조정 시각화 | AI 거점대학 준비</p>
+  <p style="margin-top:4px; font-size:11px;">본 자료는 정원조정.png 원본 이미지를 기반으로 재구성된 시각화 자료입니다.</p>
+</footer>
+
+<script>
+  // ── BAR CHART: 전공별 정원 ──
+  const barCtx = document.getElementById('barChart').getContext('2d');
+  new Chart(barCtx, {
+    type: 'bar',
+    data: {
+      labels: [
+        '컴퓨터공학전공', '인공지능전공', 'AI컴퓨팅자유전공',
+        '데이터사이언스전공', '산업공학전공', '통계학과',
+        '산업AI전공', 'AX스마트시티전공', '첨단바이오공학전공', '인터랙티브콘텐츠전공'
+      ],
+      datasets: [{
+        label: '입학 정원 (명)',
+        data: [84, 60, 53, 59, 40, 35, 29, 27, 20, 17],
+        backgroundColor: [
+          '#3b82f6','#60a5fa','#93c5fd',
+          '#06b6d4','#8b5cf6','#14b8a6',
+          '#a78bfa','#f59e0b','#22c55e','#818cf8'
+        ],
+        borderRadius: 6,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true,
+      indexAxis: 'y',
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => ` ${ctx.raw}명`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: '#f1f5f9' },
+          ticks: { font: { size: 12 } }
+        },
+        y: {
+          grid: { display: false },
+          ticks: { font: { size: 12 } }
+        }
+      }
+    }
+  });
+
+  // ── DOUGHNUT CHART: 학부별 비중 ──
+  const dCtx = document.getElementById('doughnutChart').getContext('2d');
+  new Chart(dCtx, {
+    type: 'doughnut',
+    data: {
+      labels: ['AI컴퓨터공학부', '데이터사이언스부', '산업공학부', '통계학과', 'AX융합학부'],
+      datasets: [{
+        data: [214, 79, 69, 35, 27],
+        backgroundColor: ['#3b82f6','#06b6d4','#8b5cf6','#14b8a6','#f59e0b'],
+        borderWidth: 3,
+        borderColor: '#fff',
+        hoverOffset: 8,
+      }]
+    },
+    options: {
+      responsive: true,
+      cutout: '60%',
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: { size: 12 }, padding: 12, boxWidth: 14 }
+        },
+        tooltip: {
+          callbacks: {
+            label: ctx => ` ${ctx.label}: ${ctx.raw}명 (${((ctx.raw/424)*100).toFixed(1)}%)`
+          }
+        }
+      }
+    }
+  });
+
+  // ── COMPARE CHART: 기존 vs 개편 ──
+  const cCtx = document.getElementById('compareChart').getContext('2d');
+  new Chart(cCtx, {
+    type: 'bar',
+    data: {
+      labels: ['정보의생명\n공학대학', '공과대학', '자연과학대학', '', 'AI대학', '공과대학\n(재편)'],
+      datasets: [
+        {
+          label: '기존',
+          data: [269, 223, 35, null, null, null],
+          backgroundColor: '#94a3b8',
+          borderRadius: 6,
+          borderSkipped: false,
+        },
+        {
+          label: '개편 후',
+          data: [null, null, null, null, 424, 140],
+          backgroundColor: ['#3b82f6','#3b82f6','#3b82f6','','#3b82f6','#22c55e'],
+          borderRadius: 6,
+          borderSkipped: false,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: { size: 12 }, padding: 12, boxWidth: 14 }
+        },
+        tooltip: {
+          callbacks: {
+            label: ctx => ctx.raw !== null ? ` ${ctx.raw}명` : ''
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { font: { size: 11 } }
+        },
+        y: {
+          grid: { color: '#f1f5f9' },
+          ticks: { font: { size: 12 } }
+        }
+      }
+    }
+  });
+</script>
+
+</body>
+</html>

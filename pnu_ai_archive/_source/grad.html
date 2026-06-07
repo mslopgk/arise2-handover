@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>대학원 육성 — ARISE PNU AI</title>
+<style>
+:root {
+  --navy:#0a2463;--blue:#1a4fa0;--mid:#2563eb;--light:#60a5fa;--pale:#dbeafe;
+  --gold:#f59e0b;--gold2:#fbbf24;--green:#10b981;--teal:#0ea5e9;
+  --bg:#f0f4f8;--card:#ffffff;--text:#1e293b;--sub:#64748b;--bdr:#e2e8f0;
+  /* 콘텐츠 컴포넌트 호환 별칭 (표준 변수로 매핑) */
+  --pnu-navy:var(--navy);--pnu-navy-dark:#040d1a;--pnu-navy-mid:var(--blue);
+  --pnu-gold:var(--gold);--pnu-gold-lt:var(--gold2);
+  --ai-blue:var(--mid);--ai-cyan:var(--teal);--ax-teal:var(--green);
+  --text-1:var(--text);--text-2:#3A4F72;--text-3:var(--sub);
+  --border:var(--bdr);
+  --shadow-sm:0 2px 8px rgba(0,0,0,.08);
+  --shadow-md:0 4px 16px rgba(0,0,0,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif;
+     background:var(--bg);color:var(--text-1);line-height:1.75;
+     display:flex;flex-direction:column;min-height:100vh;}
+
+/* ── NAV (표준 part1 스타일) ── */
+nav{background:var(--navy);padding:0 32px;height:60px;display:flex;align-items:center;
+    justify-content:space-between;position:sticky;top:0;z-index:200;
+    box-shadow:0 2px 12px rgba(0,0,0,.3);}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-brand .lb{background:linear-gradient(135deg,var(--gold),#d97706);width:30px;height:30px;
+               border-radius:7px;display:flex;align-items:center;justify-content:center;
+               font-weight:900;font-size:12px;color:white;}
+.nav-brand .bt{color:white;font-weight:800;font-size:14px;}
+.nav-links{display:flex;gap:4px;}
+.nav-links a{color:rgba(255,255,255,.65);font-size:12px;font-weight:600;padding:6px 12px;
+             border-radius:6px;text-decoration:none;transition:all .2s;white-space:nowrap;}
+.nav-links a:hover{background:rgba(255,255,255,.1);color:white;}
+.nav-links a.active{background:rgba(37,99,235,.5);color:white;}
+.nav-badge{background:var(--gold);color:var(--navy);font-size:9px;font-weight:800;
+           padding:2px 5px;border-radius:3px;margin-left:4px;}
+.nav-qr{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2) !important;
+        color:rgba(255,255,255,.7) !important;}
+.nav-qr:hover{background:rgba(255,255,255,.2) !important;color:white !important;}
+@media(max-width:800px){.nav-qr{display:none;}}
+
+/* ── PAGE HEADER ── */
+.page-header{background:linear-gradient(135deg,var(--navy),#0f766e);padding:44px 40px 36px;color:white}
+.page-header-inner{max-width:1060px;margin:0 auto}
+.breadcrumb{font-size:12px;color:rgba(255,255,255,.5);margin-bottom:12px}
+.breadcrumb a{color:rgba(255,255,255,.6);text-decoration:none}
+.breadcrumb a:hover{color:white}
+.part-badge{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:4px 14px;font-size:12px;font-weight:700;color:var(--gold2);margin-bottom:12px}
+.page-header h1{font-size:26px;font-weight:900;margin-bottom:8px;line-height:1.3}
+.page-header p{font-size:14px;color:rgba(255,255,255,.65);max-width:700px;line-height:1.7}
+.task-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.task-pill{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:5px 14px;font-size:12px;color:rgba(255,255,255,.85);font-weight:600}
+
+/* ── LAYOUT ── */
+.layout{display:flex;max-width:1060px;margin:32px auto;padding:0 24px;gap:28px;align-items:flex-start;flex:1}
+.sidebar{width:220px;flex-shrink:0;position:sticky;top:76px;background:#fff;border-radius:12px;padding:16px 8px;box-shadow:0 1px 8px rgba(0,0,0,.07);align-self:flex-start}
+.side-title{font-size:11px;font-weight:700;color:var(--sub);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;padding:0 8px}
+.side-link{display:block;font-size:13px;padding:8px 12px;border-radius:8px;color:var(--sub);text-decoration:none;transition:all .2s;border-left:3px solid transparent;margin-bottom:2px}
+.side-link:hover{background:rgba(37,99,235,.06);color:var(--blue)}
+.side-link.active{background:var(--pale);color:var(--blue);border-left-color:var(--mid);font-weight:700}
+.side-link .arrow{float:right;opacity:.4;font-size:11px}
+.main{flex:1;min-width:0}
+
+/* ── SECTION BLOCKS ── */
+.block{background:var(--card);border:1px solid var(--bdr);border-radius:16px;padding:32px;margin-bottom:24px;scroll-margin-top:80px}
+.block-num{font-size:11px;font-weight:700;color:var(--sub);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.block-title{font-size:19px;font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.block-title .icon{font-size:22px}
+.block-desc{font-size:14px;color:var(--sub);margin-bottom:22px;line-height:1.7}
+.block-divider{height:1px;background:var(--bdr);margin:28px 0}
+
+/* Chapter intro */
+.ch-intro-card{border-radius:16px;padding:28px 32px;margin-bottom:40px;color:#fff;}
+.ch-intro-card.s1{background:linear-gradient(135deg,#1a4fa0 0%,#2563eb 55%,#0ea5e9 100%);}
+.ch-intro-card.s2{background:linear-gradient(135deg,#0F2B5B 0%,#1565C0 60%,#0284C7 100%);}
+.ch-intro-card.s3{background:linear-gradient(135deg,#1a1a3e 0%,#0d3a7a 60%,#1565C0 100%);}
+.ch-intro-badge{display:inline-block;font-size:.7rem;font-weight:800;letter-spacing:1.2px;
+                text-transform:uppercase;background:rgba(255,255,255,.15);padding:3px 12px;
+                border-radius:8px;margin-bottom:12px;}
+.ch-intro-title{font-size:1.7rem;font-weight:900;letter-spacing:-.5px;margin-bottom:10px;}
+.ch-intro-desc{font-size:.93rem;color:rgba(255,255,255,.82);line-height:1.7;}
+.ch-intro-pts{margin-top:16px;display:flex;flex-direction:column;gap:6px;}
+.ch-intro-pt{display:flex;align-items:flex-start;gap:10px;font-size:.87rem;color:rgba(255,255,255,.88);}
+.ch-intro-pt::before{content:'✦';color:var(--pnu-gold);font-size:.8rem;margin-top:2px;flex-shrink:0;}
+
+/* Overview grid */
+.overview-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px;}
+.ov-card{border-radius:12px;padding:18px;}
+.ov-card .ov-icon{font-size:26px;margin-bottom:10px;}
+.ov-card .ov-name{font-size:.84rem;font-weight:800;margin-bottom:7px;line-height:1.3;}
+.ov-card .ov-desc{font-size:.77rem;line-height:1.65;}
+
+/* Section/Sub headers */
+.sec-hdr{margin:48px 0 20px;padding-top:24px;border-top:2px solid var(--border);}
+.sec-hdr:first-child{border-top:none;padding-top:0;margin-top:0;}
+.sec-eyebrow{font-size:.72rem;font-weight:800;color:var(--pnu-gold);letter-spacing:1.2px;
+             text-transform:uppercase;margin-bottom:6px;}
+.sec-title{font-size:1.35rem;font-weight:900;color:var(--text-1);letter-spacing:-.3px;}
+.sec-desc{font-size:.9rem;color:var(--text-2);margin-top:6px;line-height:1.7;}
+.sub-hdr{display:flex;align-items:center;gap:12px;margin:40px 0 16px;}
+.sub-circle{width:30px;height:30px;border-radius:50%;background:var(--pnu-navy);color:#fff;
+            font-size:.78rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sub-title{font-size:1.12rem;font-weight:800;color:var(--pnu-navy);}
+
+/* Key points */
+.kp-list{display:flex;flex-direction:column;gap:10px;margin:18px 0;}
+.kp{display:flex;gap:14px;background:#fff;border-radius:12px;padding:14px 18px;
+    box-shadow:var(--shadow-sm);border-left:4px solid var(--pnu-navy);}
+.kp.gold{border-left-color:var(--pnu-gold);}
+.kp.red{border-left-color:#DC2626;}
+.kp.teal{border-left-color:var(--ax-teal);}
+.kp-body{font-size:.88rem;color:var(--text-2);line-height:1.7;}
+.kp-body strong{color:var(--text-1);font-weight:700;}
+.kp-body .hi-r{color:#DC2626;font-weight:700;}
+.kp-body .hi-g{color:#059669;font-weight:700;}
+.kp-body .hi-b{color:var(--pnu-navy);font-weight:700;}
+
+/* Stat banner */
+.stat-banner{background:linear-gradient(90deg,#0F2B5B,#1565C0);border-radius:14px;
+             padding:22px 28px;margin:22px 0;display:flex;align-items:center;
+             gap:20px;flex-wrap:wrap;}
+.stat-banner-text{flex:1;min-width:220px;}
+.stat-banner-text h4{font-size:1rem;font-weight:800;color:var(--pnu-gold-lt);margin-bottom:4px;}
+.stat-banner-text p{font-size:.85rem;color:rgba(255,255,255,.78);}
+.stat-banner-nums{display:flex;gap:16px;flex-wrap:wrap;}
+.sbn{text-align:center;background:rgba(255,255,255,.1);border-radius:10px;padding:12px 20px;}
+.sbn-v{font-size:1.8rem;font-weight:900;line-height:1;}
+.sbn-v.red{color:#FCA5A5;}
+.sbn-v.green{color:#6EE7B7;}
+.sbn-v.gold{color:var(--pnu-gold-lt);}
+.sbn-l{font-size:.7rem;color:rgba(255,255,255,.6);margin-top:4px;font-weight:600;}
+
+/* Bar chart */
+.bar-comp{margin:24px 0;display:flex;flex-direction:column;gap:14px;}
+.bar-row{display:flex;align-items:center;gap:12px;}
+.bar-lbl{width:70px;font-size:.8rem;font-weight:700;text-align:right;color:var(--text-2);flex-shrink:0;}
+.bar-track{flex:1;height:30px;background:#EEF2FA;border-radius:7px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:7px;display:flex;align-items:center;
+          padding-left:10px;font-size:.78rem;font-weight:800;color:#fff;}
+.bar-fill.korea{background:linear-gradient(90deg,#003087,#1565C0);}
+.bar-fill.eu{background:linear-gradient(90deg,#059669,#10B981);}
+.bar-fill.oecd{background:linear-gradient(90deg,#D97706,#F59E0B);}
+.bar-note{width:56px;font-size:.8rem;font-weight:800;color:var(--text-2);flex-shrink:0;}
+
+/* Compare bars */
+.compare-wrap{margin:16px 0;}
+.compare-row{margin-bottom:12px;}
+.compare-label{font-size:.8rem;font-weight:700;color:var(--text-2);margin-bottom:4px;
+               display:flex;justify-content:space-between;}
+.cbar-track{background:var(--border);border-radius:20px;height:22px;overflow:hidden;}
+.cbar-fill{height:100%;border-radius:20px;display:flex;align-items:center;
+           padding:0 10px;font-size:.75rem;font-weight:800;color:#fff;}
+.cbar-fill.teal{background:linear-gradient(90deg,#003087,#0284C7);}
+.cbar-fill.red{background:linear-gradient(90deg,#991b1b,#ef4444);}
+.cbar-fill.gold{background:linear-gradient(90deg,#b45309,#F59E0B);}
+.cbar-fill.gray{background:linear-gradient(90deg,#475569,#94a3b8);}
+
+/* Tables */
+.tbl-card{background:#fff;border-radius:16px;box-shadow:var(--shadow-md);
+          overflow:hidden;margin:20px 0;}
+.tbl-hdr{background:var(--pnu-navy);padding:14px 20px;
+         display:flex;justify-content:space-between;align-items:center;}
+.tbl-hdr h4{font-size:.9rem;font-weight:700;color:#fff;}
+.tbl-hdr span{font-size:.73rem;color:rgba(255,255,255,.6);}
+.tbl-scroll{overflow-x:auto;}
+table.dt{width:100%;border-collapse:collapse;font-size:.84rem;}
+.dt thead tr{background:#EFF4FF;}
+.dt th{padding:9px 13px;text-align:center;font-weight:700;font-size:.77rem;
+       color:var(--pnu-navy);border-bottom:2px solid var(--border);white-space:nowrap;}
+.dt th.lft{text-align:left;}
+.dt td{padding:12px 13px;text-align:center;border-bottom:1px solid var(--border);}
+.dt td.ctry{text-align:left;font-weight:700;white-space:nowrap;}
+.dt tr:last-child td{border-bottom:none;}
+.dt tr:hover td{background:#F8FAFF;}
+.cell-hi{font-weight:800;padding:3px 9px;border-radius:5px;display:inline-block;}
+.c-red{background:#FEE2E2;color:#DC2626;}
+.c-grn{background:#D1FAE5;color:#065F46;}
+.c-ylw{background:#FEF3C7;color:#92400E;}
+.dt .row-korea td{background:#FAFBFF;}
+
+/* Notices */
+.notice{display:flex;gap:11px;padding:14px 16px;border-radius:10px;margin:14px 0;font-size:.87rem;}
+.notice.blue{background:#EFF6FF;border:1px solid #BFDBFE;color:#1D4ED8;}
+.notice.amber{background:#FFFBEB;border:1px solid #FDE68A;color:#92400E;}
+.notice.red{background:#FEF2F2;border:1px solid #FECACA;color:#991B1B;}
+.notice.green{background:#F0FDF4;border:1px solid #A7F3D0;color:#065F46;}
+.notice-ico{flex-shrink:0;font-size:1rem;margin-top:2px;}
+
+/* Bullets */
+.blist{list-style:none;margin:14px 0;display:flex;flex-direction:column;gap:7px;}
+.blist li{display:flex;gap:10px;font-size:.9rem;color:var(--text-2);line-height:1.65;}
+.blist li::before{content:'▸';color:var(--pnu-gold);flex-shrink:0;margin-top:3px;}
+.blist li strong{color:var(--text-1);}
+.blist li .em{color:#DC2626;font-weight:700;}
+.blist li .eg{color:#059669;font-weight:700;}
+
+/* iFrame embed */
+.embed-card{background:#fff;border-radius:16px;box-shadow:var(--shadow-md);
+            overflow:hidden;margin:22px 0;}
+.embed-hdr{background:linear-gradient(90deg,var(--pnu-navy),#1565C0);
+           padding:13px 18px;display:flex;justify-content:space-between;align-items:center;}
+.embed-hdr h4{font-size:.88rem;font-weight:700;color:#fff;}
+.open-btn{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);
+          border:1px solid rgba(255,255,255,.3);color:#fff;padding:4px 13px;border-radius:7px;
+          font-size:.76rem;font-weight:700;cursor:pointer;text-decoration:none;transition:background .15s;}
+.open-btn:hover{background:rgba(255,255,255,.25);}
+iframe.embed{width:100%;border:none;display:block;}
+
+/* KPI */
+.kpi-row{display:flex;gap:14px;flex-wrap:wrap;margin:20px 0;}
+.kpi{flex:1;min-width:130px;background:#fff;border-radius:12px;padding:16px 18px;
+     box-shadow:var(--shadow-sm);border-top:3px solid var(--pnu-navy);}
+.kpi.gold{border-top-color:var(--pnu-gold);}
+.kpi.red{border-top-color:#EF4444;}
+.kpi.teal{border-top-color:var(--ax-teal);}
+.kpi-lbl{font-size:.68rem;font-weight:700;color:var(--text-3);text-transform:uppercase;
+         letter-spacing:.5px;margin-bottom:6px;}
+.kpi-val{font-size:1.55rem;font-weight:900;color:var(--text-1);line-height:1;}
+.kpi-sub{font-size:.73rem;color:var(--text-3);margin-top:4px;}
+
+/* Section separator */
+.sep{height:2px;background:var(--border);margin:48px 0;}
+
+/* Source */
+.src{font-size:.74rem;color:var(--text-3);margin-top:8px;}
+.src a{color:var(--ai-blue);}
+
+/* Footer */
+footer{background:var(--navy);color:rgba(255,255,255,.4);text-align:center;
+       padding:24px;font-size:12px;margin-top:auto;}
+
+@media(max-width:800px){
+  .sidebar{display:none;}
+  .main-content{padding:24px 20px;}
+  .page-header{padding:24px 20px 20px;}
+  .ph-title{font-size:1.25rem;}
+  .overview-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV (표준) ── -->
+<nav>
+  <a class="nav-brand" href="index.html">
+    <div class="lb">AI</div>
+    <div class="bt">ARISE PNU AI</div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">홈</a>
+    <a href="grad.html" class="active">대학원 육성</a>
+    <a href="part1.html">I. 구심점 확립</a>
+    <a href="part2.html">II. 교육과정</a>
+    <a href="part3.html">III. 생태계</a>
+    <a href="actions.html">실행 항목</a>
+    <a href="QRCode.html" class="nav-qr">📱 QR</a>
+  </div>
+</nav>
+
+<!-- ── PAGE HEADER ── -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="breadcrumb"><a href="index.html">ARISE PNU AI</a> / 대학원 육성</div>
+    <div class="part-badge">대학원 육성 전략</div>
+    <h1>대학원 육성 전략 - Strategic Plan for the Expansion of Graduate Education</h1>
+    <p>왜 지금 "대학원 육성"을 강조해야 하는가?<br>✦ 대학원 육성은 부산대학교 <strong style="color:var(--gold2);">생존과 Level-UP</strong>을 위한 <strong style="color:var(--gold2);">필수 조건</strong><br>✦ 정부 거점 대학 지원 사업에서 부산대학교의 <strong style="color:var(--gold2);">우수성과 지원의 필요성</strong>을 드러내는 것이 필요한 시점.</p>
+    <div class="task-pills">
+      <span class="task-pill">📚 한국 고등교육의 현실</span>
+      <span class="task-pill">🏛️ 부산대 &amp; 타대 비교</span>
+      <span class="task-pill">🚀 부산대 발전 계획</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── LAYOUT ── -->
+<div class="layout">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="side-title">목차</div>
+    <a class="side-link" href="#s1">1. 한국 고등교육의 현실</a>
+    <a class="side-link" href="#s1-1" style="padding-left:22px;font-size:12px">— 학부 중심 대중교육</a>
+    <a class="side-link" href="#s1-2" style="padding-left:22px;font-size:12px">— AI와 노동시장 전환</a>
+    <a class="side-link" href="#s1-3" style="padding-left:22px;font-size:12px">— 지역별 현황 비교</a>
+    <a class="side-link" href="#s2">2. PNU &amp; 타대 대학원 비교</a>
+    <a class="side-link" href="#s2-1" style="padding-left:22px;font-size:12px">— 지역 거점 국립대</a>
+    <a class="side-link" href="#s2-2" style="padding-left:22px;font-size:12px">— 서울대·KAIST·사립대</a>
+    <a class="side-link" href="#s3">3. PNU 대학원 발전 계획</a>
+    <a class="side-link" href="#s3-1" style="padding-left:22px;font-size:12px">— 개요 · 목표</a>
+    <a class="side-link" href="#s3-2" style="padding-left:22px;font-size:12px">— 현황 분석</a>
+    <a class="side-link" href="#s3-3" style="padding-left:22px;font-size:12px">— 주요 발전 계획</a>
+
+    <div style="height:1px;background:var(--bdr);margin:18px 8px 14px"></div>
+    <div class="side-title">참고 자료</div>
+
+    <a href="grad_s1_3_regional.html" target="_blank"
+       style="display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border-radius:8px;text-decoration:none;color:var(--sub);font-size:12px;line-height:1.5;transition:all .2s;margin-bottom:4px"
+       onmouseover="this.style.background='rgba(37,99,235,.06)';this.style.color='var(--blue)'"
+       onmouseout="this.style.background='';this.style.color='var(--sub)'">
+      <span style="font-size:14px;flex-shrink:0;margin-top:1px">📈</span>
+      <span>동남권 학부·대학원 비교<br><span style="font-size:10px;opacity:.6">인터랙티브 차트</span></span>
+    </a>
+    <a href="grad_s2_2_comparison.html" target="_blank"
+       style="display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border-radius:8px;text-decoration:none;color:var(--sub);font-size:12px;line-height:1.5;transition:all .2s;margin-bottom:4px"
+       onmouseover="this.style.background='rgba(37,99,235,.06)';this.style.color='var(--blue)'"
+       onmouseout="this.style.background='';this.style.color='var(--sub)'">
+      <span style="font-size:14px;flex-shrink:0;margin-top:1px">📊</span>
+      <span>주요대학 대학원생 10년<br><span style="font-size:10px;opacity:.6">재학생 현황 비교</span></span>
+    </a>
+    <a href="grad_s3_2_faculty.html" target="_blank"
+       style="display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border-radius:8px;text-decoration:none;color:var(--sub);font-size:12px;line-height:1.5;transition:all .2s;margin-bottom:4px"
+       onmouseover="this.style.background='rgba(37,99,235,.06)';this.style.color='var(--blue)'"
+       onmouseout="this.style.background='';this.style.color='var(--sub)'">
+      <span style="font-size:14px;flex-shrink:0;margin-top:1px">👨‍🏫</span>
+      <span>전임교원 대학원생 비교<br><span style="font-size:10px;opacity:.6">8개 대학 10년 추이</span></span>
+    </a>
+    <a href="grad_s3_3_uglink_dashboard.html" target="_blank"
+       style="display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border-radius:8px;text-decoration:none;color:var(--sub);font-size:12px;line-height:1.5;transition:all .2s;margin-bottom:4px"
+       onmouseover="this.style.background='rgba(37,99,235,.06)';this.style.color='var(--blue)'"
+       onmouseout="this.style.background='';this.style.color='var(--sub)'">
+      <span style="font-size:14px;flex-shrink:0;margin-top:1px">🔗</span>
+      <span>학석사 연계 현황<br><span style="font-size:10px;opacity:.6">UGLink 대시보드</span></span>
+    </a>
+    <a href="grad_s3_3_uglink_guide.html" target="_blank"
+       style="display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border-radius:8px;text-decoration:none;color:var(--sub);font-size:12px;line-height:1.5;transition:all .2s;margin-bottom:4px"
+       onmouseover="this.style.background='rgba(37,99,235,.06)';this.style.color='var(--blue)'"
+       onmouseout="this.style.background='';this.style.color='var(--sub)'">
+      <span style="font-size:14px;flex-shrink:0;margin-top:1px">📋</span>
+      <span>UGLink 홍보 가이드<br><span style="font-size:10px;opacity:.6">학석사 연계 안내자료</span></span>
+    </a>
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <main class="main">
+
+    <!-- ─── Section 1 ─── -->
+    <div class="block" id="s1">
+      <div class="block-num">Section 1</div>
+      <div class="block-title"><span class="icon">📋</span>한국 고등교육의 현실</div>
+      <div class="block-desc">한국 고등교육의 구조적 문제와 지역 불균형을 객관적 데이터로 진단한다</div>
+      <!-- S1.1 -->
+      <div id="s1-1">
+        <div class="sub-hdr">
+          <div class="sub-circle">1</div>
+          <div class="sub-title">학부 중심의 대중/대량 교육</div>
+          <a style="font-size:.78rem;color:var(--ai-blue);text-decoration:none;font-weight:600;margin-left:auto;" href="https://www.oecd.org/en/publications/education-at-a-glance-2025_1a3543e2-en/korea_252c9ed2-en.html" target="_blank">OECD 원문 ↗</a>
+        </div>
+
+        <div class="notice amber">
+          <span class="notice-ico">⚠</span>
+          <div>한국은 스스로 세계 최고 수준의 고등교육 국가라고 자랑 하지만, 실상은 <strong>학부 중심(Undergraduate-focused)의 대중/대량(Mass) 교육</strong>에 머물러 있다.</div>
+        </div>
+
+
+        <div class="kpi-row">
+          <div class="kpi"><div class="kpi-lbl">한국 고등교육 이수율</div><div class="kpi-val" style="color:#059669;">70.6%</div><div class="kpi-sub">OECD 최고 수준 (1위권)</div></div>
+          <div class="kpi red"><div class="kpi-lbl">한국 석사 이상 비율</div><div class="kpi-val" style="color:#DC2626;">3.1%</div><div class="kpi-sub">EU 평균의 <strong>1/7</strong> · OECD의 <strong>1/5</strong></div></div>
+          <div class="kpi gold"><div class="kpi-lbl">EU 석사 이상 비율</div><div class="kpi-val" style="color:#D97706;">20.8%</div><div class="kpi-sub">Bologna Process 기반 석사 중심 구조</div></div>
+        </div>
+
+        <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:16px 20px;margin:16px 0;">
+          <div style="font-size:13px;font-weight:800;color:#92400e;margin-bottom:10px;">🏆 교육의 양은 세계 1위, 깊이는 OECD 최저</div>
+          <div style="font-size:13px;color:#92400e;line-height:1.9;">
+            ✦ 고등교육 이수율 <strong>70.6%</strong>로 압도적 세계 1위<br>
+            ✦ 석사 이상 비율 <strong>3.1%</strong>로 OECD 평균(16.7%)의 1/5 수준<br>
+            ✦ 학부는 "최종 학위"로 기능하며 대학원은 선택적 경로에 머물러 있다.
+          </div>
+        </div>
+
+        <div class="tbl-card">
+          <div class="tbl-hdr"><h4>📊 OECD Education at a Glance 2025 — 25~34세 학력 분포 (2024 기준)</h4><span>단위: %</span></div>
+          <div class="tbl-scroll">
+            <table class="dt">
+              <thead>
+                <tr><th class="lft" rowspan="2" style="vertical-align:middle;">구분</th><th colspan="2">고등교육 미만</th><th colspan="4">고등교육 (Tertiary)</th></tr>
+                <tr><th>고등교육<br>미만</th><th>고등학교<br>이하</th><th>전체</th><th>단기<br>전문학위</th><th>학사 이상</th><th style="background:#FFF8E1;color:#92400E;">석사 이상 ★</th></tr>
+              </thead>
+              <tbody>
+                <tr class="row-korea"><td class="ctry">🇰🇷 한국</td><td>1.4%</td><td>28.1%</td><td><span class="cell-hi c-grn">70.6%</span></td><td>19.6%</td><td>50.9%</td><td><span class="cell-hi c-red">3.1%</span></td></tr>
+                <tr><td class="ctry">🇪🇺 EU (25개국)</td><td>11.4%</td><td>43.3%</td><td>45.4%</td><td>4.7%</td><td>42.1%</td><td><span class="cell-hi c-grn">20.8%</span></td></tr>
+                <tr><td class="ctry">🌐 OECD 평균</td><td>12.8%</td><td>39.1%</td><td>48.7%</td><td>7.7%</td><td>42.9%</td><td><span class="cell-hi c-ylw">16.7%</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="kp-list">
+          <div class="kp gold"><div class="kp-body"><strong>유럽·미국·일본에서 석사는 "선택"이 아닌 "기본"</strong> — Bologna Process(유럽), 전문직 자격 제도(프랑스 RNCP, 독일 공학), 교원·사회복지사 석사 필수(핀란드·스웨덴) 등 제도적으로 <span class="hi-b">"석사를 해야 자격이 생기는 구조"</span>가 확립되어 있다.</div></div>
+          <div class="kp red"><div class="kp-body"><strong>한국의 역설 — "교육의 양은 세계 1위, 깊이는 OECD 최저"</strong> — 고등교육 이수율 <span class="hi-g">70.6%</span>로 압도적 세계 1위이나, 석사 이상 비율 <span class="hi-r">3.1%</span>로 OECD 평균(16.7%)의 1/5 수준. 학부는 "최종 학위"로 기능하며 대학원은 선택적 경로에 머물러 있다.</div></div>
+          <div class="kp teal"><div class="kp-body"><strong>한국 AI·첨단산업 고도화의 구조적 병목</strong> — 석사급 전문 인력의 부족은 단순한 교육 문제가 아닌 산업 고도화와 연구 경쟁력의 근본적 제약이다. AI 시대에 더욱 심화될 전망이다.</div></div>
+        </div>
+
+        <div class="tbl-card">
+          <div class="tbl-hdr" style="background:#374151;"><h4>🌍 국제 고등교육 구조 비교</h4><span>학부-대학원 역할 비교</span></div>
+          <div class="tbl-scroll">
+            <table class="dt">
+              <thead><tr><th class="lft">구분</th><th>석사의 역할</th><th>학부의 역할</th><th>구조 특징</th><th>대표 제도</th></tr></thead>
+              <tbody>
+                <tr><td class="ctry">🇪🇺 유럽</td><td><span class="cell-hi c-grn">기본 학위</span></td><td>중간 단계</td><td>석사 중심</td><td style="font-size:.78rem;">Bologna Process · RNCP · Bac+5</td></tr>
+                <tr><td class="ctry">🇺🇸 미국</td><td><span class="cell-hi c-ylw">직무별 필수</span></td><td>취업 가능</td><td>직무 중심</td><td style="font-size:.78rem;">MBA · Data Science · 전문직 석사</td></tr>
+                <tr><td class="ctry">🇯🇵 일본</td><td><span class="cell-hi c-ylw">공학 기본</span></td><td>일부 중간</td><td>분야 중심</td><td style="font-size:.78rem;">이공계 학부→대학원 진학 일반화</td></tr>
+                <tr class="row-korea"><td class="ctry">🇰🇷 <strong>한국</strong></td><td><span class="cell-hi c-red">선택</span></td><td><strong>최종 학위</strong></td><td>학부 중심</td><td style="font-size:.78rem;">학부 대량 공급 · 조기취업 선호</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="src">출처: OECD Education at a Glance 2025, Korea Country Note (2024 기준 데이터)</div>
+      </div><!-- /s1-1 -->
+
+      <div class="block-divider"></div>
+
+      <!-- S1.2 -->
+      <div id="s1-2">
+        <div class="sub-hdr">
+          <div class="sub-circle" style="background:linear-gradient(135deg,#0284C7,#06B6D4);">2</div>
+          <div class="sub-title" style="color:var(--ai-cyan);">AI와 노동시장 전환 — 산업 연계형 대학원의 필요성</div>
+        </div>
+
+        <div class="notice" style="background:linear-gradient(135deg,rgba(2,132,199,.10),rgba(6,182,212,.07));border-left:4px solid var(--ai-cyan);border-radius:10px;padding:16px 20px;margin-bottom:18px;display:flex;gap:12px;align-items:flex-start;">
+          <span style="font-size:1.4rem;flex-shrink:0;">🤖</span>
+          <div>
+            <div style="font-size:.9rem;font-weight:800;color:var(--pnu-navy);margin-bottom:6px;">AI로 인해 신입 채용이 감소하는 환경</div>
+            <div style="font-size:.84rem;color:var(--text-2);line-height:1.75;">단순 취업 준비보다 <strong>기업 데이터 기반 문제 해결 경험</strong>을 제공하는 <span class="hi-b">산업 연계형 대학원 교육</span>이 보다 생산적이고 효과적인 인재 양성 경로다.</div>
+          </div>
+        </div>
+
+        <div class="kpi-row" style="margin-bottom:18px;">
+          <div class="kpi red"><div class="kpi-lbl">기업의 변화</div><div class="kpi-val" style="font-size:1.3rem;color:#DC2626;line-height:1.2;">신입 채용 큰 폭 감소</div><div class="kpi-sub">즉시 투입 가능한 인재·<br>문제 해결 경험자 선호</div></div>
+          <div class="kpi" style="border-top-color:#D97706;"><div class="kpi-lbl">청년 고용 현실</div><div class="kpi-val" style="font-size:1.3rem;color:#D97706;line-height:1.2;">체감실업률 20%</div><div class="kpi-sub">졸업 유예 증가 · "쉬었음"<br>청년 지속 확대</div></div>
+          <div class="kpi" style="border-top-color:#0284C7;"><div class="kpi-lbl">대학원의 전환</div><div class="kpi-val" style="font-size:1.3rem;color:#0284C7;line-height:1.2;">문제해결 경험</div><div class="kpi-sub">연구자 양성 → 산업 문제<br>해결 경험 획득 과정</div></div>
+        </div>
+
+        <div style="background:linear-gradient(135deg,#0F172A,#1E3A5F);border-radius:12px;padding:20px 24px;margin-bottom:18px;text-align:center;">
+          <div style="font-family:'Montserrat',sans-serif;font-size:.95rem;font-weight:700;color:#93C5FD;letter-spacing:.5px;line-height:1.6;">
+            "AI-driven labor market shifts demand a transition<br>from undergraduate mass education to <span style="color:#34D399;">problem-driven graduate education.</span>"
+          </div>
+        </div>
+
+        <div class="tbl-card">
+          <div class="tbl-hdr" style="background:linear-gradient(90deg,#0284C7,#0D9488);"><h4>🔄 산업 연계형 대학원 vs 학부 스펙 취업 준비 비교</h4></div>
+          <div class="tbl-scroll">
+            <table class="dt">
+              <thead><tr><th class="lft" style="width:28%">구분</th><th style="background:#FFF8E1;color:#92400E;">학부 스펙 위주 취업 준비</th><th style="background:#E0F2FE;color:#0369A1;">산업 연계형 대학원 교육</th></tr></thead>
+              <tbody>
+                <tr><td class="ctry">활동 형태</td><td>자격증·공모전·어학 점수 축적</td><td><span class="cell-hi c-grn">기업 데이터 기반 프로젝트</span></td></tr>
+                <tr><td class="ctry">연구 방식</td><td>개인 역량 증명 중심</td><td><span class="cell-hi c-grn">산학 협력 연구</span></td></tr>
+                <tr><td class="ctry">기술 적용</td><td>이론·모의 실습</td><td><span class="cell-hi c-grn">AI 모델 실제 적용 경험</span></td></tr>
+                <tr><td class="ctry">기업 수요 부합</td><td><span class="cell-hi c-red">낮음 — AI로 대체 가능 업무</span></td><td><span class="cell-hi c-grn">높음 — 즉시 투입 가능 전문인력</span></td></tr>
+                <tr class="row-korea"><td class="ctry">생산성</td><td><span class="cell-hi c-red">취준 기간 경제적 비생산</span></td><td><span class="cell-hi c-grn">연구·프로젝트로 가치 창출</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="kp-list">
+          <div class="kp" style="border-left-color:#0284C7;background:#EFF6FF;"><div class="kp-body"><strong>대학원을 "연구자 양성"에서 "산업 문제 해결 경험 획득 과정"으로 재정의</strong> — 기업 데이터 기반 프로젝트, 산학 협력 연구, AI 모델 실제 적용 경험은 현재 학부 고학년의 스펙 위주 단순 취업 준비와 <span class="hi-b">본질적으로 다르며 보다 생산적인 구조</span>이다.</div></div>
+          <div class="kp red"><div class="kp-body"><strong>AI 시대 채용 변화</strong> — 기업은 신입 공채를 줄이는 대신 <span class="hi-r">즉시 투입 가능하고 문제 해결 경험이 있는 인재</span>를 원한다. 대졸 취업률 악화·졸업 유예 증가·"쉬었음" 청년 확대는 이 구조적 변화의 결과다.</div></div>
+          <div class="kp teal"><div class="kp-body"><strong>부산대학교 전략적 기회</strong> — 산업 연계형 대학원 교육 확대는 단순한 대학원생 수 증가를 넘어, 동남권 기업과의 공동 문제 해결 생태계를 구축하고 지역 AX 전환을 선도하는 <span class="hi-b">부산대의 핵심 차별화 전략</span>이다.</div></div>
+        </div>
+      </div>
+        <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:16px 20px;margin:16px 0;">
+          <div style="font-size:13px;font-weight:800;color:#92400e;margin-bottom:10px;">🔴 대학원 계약학과를 통한 차별화 전략</div>
+          <div style="font-size:13px;color:#92400e;line-height:1.9;">
+            ✦ <strong>채용 연계형 학부 계약학과</strong>유치의 현실적 난관<br>
+            ✦ 대학원 계약학과가 지역 성장엔진 분야 기업과 취업난을 겪고 있는 학생들을 위한 보다 실효적인 접근임을 부각<br>
+            ✦ 대학원 계약학과를 경쟁 대학 대비 우월성을 가질 수 있도록 노력
+          </div>
+        </div>
+      <!-- /s1-2 -->
+
+      <div class="block-divider"></div>
+
+      <!-- S1.3 -->
+      <div id="s1-3">
+        <div class="sub-hdr">
+          <div class="sub-circle">3</div>
+          <div class="sub-title">지역별 고등교육 현황 (2016~2025)</div>
+        </div>
+
+        <div class="notice red">
+          <span class="notice-ico">🔴</span>
+          <div><strong>수도권 편중 심화 + 동남권 이중 위기</strong> — 학부생은 감소, 대학원생은 성장하지 못하는 구조. 동남권은 인구 대비 대학원생 수에서 <strong>전국 최하위</strong>를 기록 중이다.</div>
+        </div>
+
+        <div class="kpi-row">
+          <div class="kpi red"><div class="kpi-lbl">동남권 학부생 감소</div><div class="kpi-val" style="color:#DC2626;">−22.4%</div><div class="kpi-sub">31.3만 → 24.3만 (2016→2025) · 5극 중 최대 감소</div></div>
+          <div class="kpi" style="border-top-color:#059669;"><div class="kpi-lbl">수도권 학부생</div><div class="kpi-val" style="color:#059669;">+0.4%</div><div class="kpi-sub">78.6만 → 78.9만 · 5극 중 유일하게 성장</div></div>
+          <div class="kpi red"><div class="kpi-lbl">동남권 대학원생</div><div class="kpi-val" style="color:#DC2626;">−2.8%</div><div class="kpi-sub">3.4만 → 3.3만 · 수도권 +10.0%와 대비</div></div>
+          <div class="kpi gold"><div class="kpi-lbl">동남권 인구 1000명당</div><div class="kpi-val" style="color:#D97706;">4.37명</div><div class="kpi-sub">수도권 7.79명의 56.1% · 중부권 10.24명의 42.7%</div></div>
+        </div>
+
+        <ul class="blist">
+          <li>수도권은 학부 재적 학생 수 기준 5극 중 <span class="eg">유일하게 성장</span>하여 전국 편중 심화. 전국 평균은 208.5만→183.8만으로 <span class="em">−11.9%</span>.</li>
+          <li>대학원 재적 학생은 전국 기준 33.3만→35.2만으로 <span class="eg">+5.7% 증가</span>했으나, 동남권은 오히려 <span class="em">−2.8% 감소</span>. 수도권 +10.0%, 중부권 +6.7%와 뚜렷한 대조.</li>
+          <li>인구 1000명당 대학원생 수: 수도권 7.79명, 중부권 10.24명에 비해 동남권은 <span class="em">4.37명</span>으로 수도권의 56%, 중부권의 43%에 불과. <strong>전문 인재 양성 기반이 구조적으로 취약</strong>하다.</li>
+        </ul>
+
+        <div class="embed-card">
+          <div class="embed-hdr">
+            <h4>📈 동남권 학부·대학원 통합 비교 (인터랙티브 차트)</h4>
+            <a class="open-btn" href="grad_s1_3_regional.html" target="_blank">↗ 별도 창에서 열기</a>
+          </div>
+          <iframe class="embed" src="grad_s1_3_regional.html" height="700" loading="lazy" title="동남권 학부 대학원 통합비교"></iframe>
+        </div>
+        <div class="src">출처: 대학알리미 연도별 학교별 재적학생 현황 (2016~2025)</div>
+      </div><!-- /s1-3 -->
+    </div><!-- /s1 / .block -->
+
+    <!-- ─── Section 2 ─── -->
+    <div class="block" id="s2">
+      <div class="block-num">Section 2</div>
+      <div class="block-title"><span class="icon">🏛️</span>부산대학교와 타대 대학원 비교</div>
+      <div class="block-desc">부산대 대학원의 우수성을 확인하고, 동시에 격차를 냉정하게 진단한다.</div>
+      <div class="ch-intro-card s2">
+        <div class="ch-intro-badge">Section 2 Overview</div>
+        <div class="ch-intro-pts">
+          <div class="ch-intro-pt">거점 국립대 중 규모 1위(5,525명), BK4 전국 2위 — 부산대 대학원의 <strong>객관적 우수성</strong></div>
+          <div class="ch-intro-pt">서울대·KAIST·주요 사립대와의 격차가 10년간 <strong>지속적으로 확대</strong>되고 있다</div>
+        </div>
+      </div>
+
+      <!-- S2.1 -->
+      <div id="s2-1">
+        <div class="sub-hdr">
+          <div class="sub-circle">1</div>
+          <div class="sub-title">지역 거점 국립대 비교 — 부산대의 우수성</div>
+        </div>
+
+        <div class="kpi-row">
+          <div class="kpi"><div class="kpi-lbl">① 규모 — 거점국립대 1위</div><div class="kpi-val">5,525명</div><div class="kpi-sub">2위 경북대(4,224명)보다 <strong>1,301명</strong> 많음 (2025)</div></div>
+          <div class="kpi gold"><div class="kpi-lbl">② 연구 수월성 — BK4 사업</div><div class="kpi-val" style="color:var(--pnu-gold);">전국 2위</div><div class="kpi-sub">서울대에 이어 2위 · 연구 역량 공인</div></div>
+          <div class="kpi teal"><div class="kpi-lbl">③ 외국인 비율 — 거점대 최저</div><div class="kpi-val" style="color:var(--ax-teal);">7.67%</div><div class="kpi-sub">거점국립대 중 가장 낮은 외국인 비율</div></div>
+        </div>
+
+        <div class="kp-list">
+          <div class="kp"><div class="kp-body"><strong>① 거점 국립대 최대 규모</strong> — 2025년 기준 일반대학원+전문대학원 재적학생 <span class="hi-b">5,525명</span>으로 거점국립대 1위. 2위 경북대(4,224명)와의 격차 1,301명. 동남권 고급 인재 양성의 중추 역할을 담당한다.</div></div>
+          <div class="kp gold"><div class="kp-body"><strong>② BK4(BK21 4단계) 사업 전국 2위 — 연구 수월성의 증거</strong> — 교육부·한국연구재단 선정 BK21 4단계 사업에서 <span class="hi-b">서울대에 이어 전국 2위</span>로 선정. 단순 규모를 넘어 질적 연구 수월성을 공인받고 있다.</div></div>
+          <div class="kp teal"><div class="kp-body"><strong>③ 국내 전문 인력 양성 — 외국인 비율 7.67%로 거점대 최저</strong> — 거점국립대 중 외국인 대학원생 비율이 과도하게 높아 국내 전문 인력 양성 기능이 왜곡된다는 우려가 제기됨. 부산대는 <span class="hi-g">거점대 중 가장 건전한 구조</span>를 유지하고 있어 AI 거점대학 사업 목표에 가장 잘 부합한다.</div></div>
+        </div>
+
+        <div class="notice blue">
+          <span class="notice-ico">📄</span>
+          <div>거점 국립대 외국인 대학원생 비중 현황 —
+          <a href="https://v.daum.net/v/20260415130149836" target="_blank">관련 기사 (2026.04.15) ↗</a></div>
+        </div>
+      </div><!-- /s2-1 -->
+
+      <div class="block-divider"></div>
+
+      <!-- S2.2 -->
+      <div id="s2-2">
+        <div class="sub-hdr">
+          <div class="sub-circle" style="background:#DC2626;">2</div>
+          <div class="sub-title" style="color:#991B1B;">서울대·KAIST·사립대와의 격차 확대</div>
+        </div>
+
+        <div class="notice red" style="margin-bottom:16px;">
+          <span class="notice-ico">📉</span>
+          <div>부산대 대학원은 거점국립대 1위이지만, 서울대·KAIST 및 주요 사립대와의 격차가 <strong>10년간 지속적으로 확대</strong>되고 있다. 전임교원 대비 대학원생 비율도 감소 추세가 뚜렷하다.</div>
+        </div>
+
+        <div class="kpi-row">
+          <div class="kpi red"><div class="kpi-lbl">부산대 10년 변화</div><div class="kpi-val" style="color:#DC2626;">−10.7%</div><div class="kpi-sub">6,191명(2016) → 5,525명(2025)</div></div>
+          <div class="kpi" style="border-top-color:#059669;"><div class="kpi-lbl">KAIST 10년 변화</div><div class="kpi-val" style="color:#059669;">+25.2%</div><div class="kpi-sub">6,701명 → 8,388명 (역전 후 격차 확대)</div></div>
+          <div class="kpi" style="border-top-color:#7C3AED;"><div class="kpi-lbl">연세대와 격차</div><div class="kpi-val" style="color:#7C3AED;">2→4천명</div><div class="kpi-sub">2,012명(2016) → 4,088명(2025) 확대</div></div>
+          <div class="kpi red"><div class="kpi-lbl">성균관대 역전</div><div class="kpi-val" style="color:#DC2626;">−2,208명</div><div class="kpi-sub">2016년 +363명 우위 → 2025년 역전</div></div>
+        </div>
+
+        <ul class="blist">
+          <li>서울대 12,119명→13,044명, KAIST 6,701명→8,388명으로 증가. 부산대의 <strong>서울대 대비 비율이 51.1%→42.4%</strong>로, KAIST 대비 91.2%→<span class="em">66.3%</span>로 하락.</li>
+          <li>연세대(주요 사립 1위) 8,203명→9,613명 증가. 부산대와의 격차가 <span class="em">2,012명→4,088명</span>으로 10년 만에 2배 이상 확대.</li>
+          <li>성균관대 5,828명→7,733명 증가. <span class="em">2016년에는 부산대보다 363명 적었으나 2025년에는 2,208명 역전</span>됨.</li>
+          <li>전임교원 1인당 대학원생 수는 비교 대학 중 절대적으로 낮을 뿐 아니라 <strong>감소 추세가 뚜렷</strong>하다.</li>
+        </ul>
+
+        <div class="embed-card">
+          <div class="embed-hdr">
+            <h4>📊 주요 대학 대학원 재학생 현황 비교 — 최근 10년 (인터랙티브 차트)</h4>
+            <a class="open-btn" href="grad_s2_2_comparison.html" target="_blank">↗ 별도 창에서 열기</a>
+          </div>
+          <iframe class="embed" src="grad_s2_2_comparison.html" height="700" loading="lazy" title="주요 대학 대학원 재학생 현황 10년 비교"></iframe>
+        </div>
+        <div class="src">출처: 대학알리미 연도별 재적학생 현황 (2016~2025) · BK21 4단계 사업단 선정 현황</div>
+      </div><!-- /s2-2 -->
+    </div><!-- /s2 / .block -->
+
+    <!-- ─── Section 3 ─── -->
+    <div class="block" id="s3">
+      <div class="block-num">Section 3</div>
+      <div class="block-title"><span class="icon">🚀</span>부산대학교 대학원 발전 계획</div>
+      <div class="block-desc">자기 성찰에 기반한 데이터 중심의 Top-Down · Bottom-Up 발전 계획</div>
+      <div class="ch-intro-card s3">
+        <div class="ch-intro-badge">Section 3 Overview</div>
+        <div class="ch-intro-pts">
+          <div class="ch-intro-pt">단기(2년) <strong>+1,000명</strong>, 중기(5년) <strong>+2,000명</strong>, BK4 성과 기반 <strong>BK5 도전</strong></div>
+          <div class="ch-intro-pt">학교 차원 정책(Top-Down)과 학과·사업단 자발적 계획(Bottom-Up) <strong>이중 전략</strong> 동시 추진</div>
+          <div class="ch-intro-pt"><strong>PNU 1000 AX Talent</strong> 프로그램 · 학석사 연계과정 요건 완화 · 지역 국립대 통합 검토</div>
+        </div>
+      </div>
+
+      <!-- S3.1 -->
+      <div id="s3-1">
+        <div class="sub-hdr">
+          <div class="sub-circle" style="background:var(--pnu-gold);color:#1a1a1a;">1</div>
+          <div class="sub-title" style="color:var(--pnu-gold);">개요 — 목표와 전략 방향</div>
+        </div>
+
+        <div style="background:linear-gradient(135deg,#1a1a3e 0%,#0d3a7a 60%,#1565C0 100%);border-radius:16px;padding:26px 30px;margin:0 0 20px;">
+          <div style="font-size:.78rem;font-weight:800;color:var(--pnu-gold-lt);letter-spacing:1px;text-transform:uppercase;margin-bottom:14px;">▶ 핵심 목표</div>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;">
+            <div style="flex:1;min-width:130px;background:rgba(255,255,255,.1);border-radius:10px;padding:14px 18px;text-align:center;"><div style="font-size:1.6rem;font-weight:900;color:#93C5FD;line-height:1;">+1,000명</div><div style="font-size:.72rem;color:rgba(255,255,255,.7);margin-top:5px;font-weight:600;">대학원생 확대 (2년 내)</div></div>
+            <div style="flex:1;min-width:130px;background:rgba(255,255,255,.1);border-radius:10px;padding:14px 18px;text-align:center;"><div style="font-size:1.6rem;font-weight:900;color:#6EE7B7;line-height:1;">+2,000명</div><div style="font-size:.72rem;color:rgba(255,255,255,.7);margin-top:5px;font-weight:600;">대학원생 확대 (5년 내)</div></div>
+            <div style="flex:1;min-width:130px;background:rgba(255,255,255,.1);border-radius:10px;padding:14px 18px;text-align:center;"><div style="font-size:1.6rem;font-weight:900;color:var(--pnu-gold-lt);line-height:1;">BK5</div><div style="font-size:.72rem;color:rgba(255,255,255,.7);margin-top:5px;font-weight:600;">BK4 이상 성과 달성</div></div>
+            <div style="flex:1;min-width:130px;background:rgba(255,255,255,.1);border-radius:10px;padding:14px 18px;text-align:center;"><div style="font-size:1.4rem;font-weight:900;color:#F9A8D4;line-height:1;letter-spacing:-1px;">진학 붐</div><div style="font-size:.72rem;color:rgba(255,255,255,.7);margin-top:5px;font-weight:600;">대학원 진학 문화 조성</div></div>
+          </div>
+        </div>
+
+        <div class="kp-list">
+          <div class="kp"><div class="kp-body"><strong>현 총장 재임 중 구체적 발전 방향과 성과 목표 제시</strong> — 단기(2년) 대학원생 수 1,000명 확대, 중기(5년) 2,000명 확대. BK4에서 검증된 연구 수월성을 기반으로 <span class="hi-b">BK5 준비 작업을 조기 개시</span>한다. 초기 대학원생 수는 지원금 규모에 큰 영향을 미치므로 사전 증원이 중요하다.</div></div>
+          <div class="kp gold"><div class="kp-body"><strong>데이터 및 자기 성찰에 기반한 Top-Down · Bottom-Up 이중 전략</strong> — 학교 차원의 정책·프로그램(Top-Down)과 학과·사업단 단위의 자발적 계획(Bottom-Up)을 동시에 추진하여 대학원 진학 붐을 조성한다.</div></div>
+        </div>
+      </div><!-- /s3-1 -->
+
+      <div class="block-divider"></div>
+
+      <!-- S3.2 -->
+      <div id="s3-2">
+        <div class="sub-hdr">
+          <div class="sub-circle" style="background:var(--ai-blue);">2</div>
+          <div class="sub-title" style="color:var(--ai-blue);">부산대학교 대학원 현황 분석</div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+          <div style="font-size:.8rem;font-weight:800;color:#fff;background:var(--text-3);padding:2px 10px;border-radius:6px;">가</div>
+          <div style="font-size:.97rem;font-weight:800;color:var(--text-1);">전임교원 1인당 대학원생 수</div>
+        </div>
+
+        <div class="notice red" style="margin-bottom:14px;">
+          <span class="notice-ico">📉</span>
+          <div>비교 대학에 비해 <strong>절대적으로 낮을 뿐 아니라 감소 추세</strong>가 뚜렷하다. 전임교원 1인당 대학원생 수는 대학원 연구 생산성과 지도 역량의 핵심 지표다.</div>
+        </div>
+
+        <div class="tbl-card" style="padding:18px 22px;margin-bottom:14px;">
+          <div style="font-size:.8rem;font-weight:700;color:var(--pnu-navy);margin-bottom:12px;">📋 진단 요약</div>
+          <table style="width:100%;border-collapse:collapse;font-size:.82rem;">
+            <thead><tr style="background:#EFF4FF;">
+              <th style="padding:8px 12px;text-align:left;font-weight:700;color:var(--pnu-navy);border-bottom:2px solid var(--border);">평가 항목</th>
+              <th style="padding:8px 12px;text-align:left;font-weight:700;color:var(--pnu-navy);border-bottom:2px solid var(--border);">진단</th>
+              <th style="padding:8px 12px;text-align:left;font-weight:700;color:var(--pnu-navy);border-bottom:2px solid var(--border);">의미</th>
+            </tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--border);"><td style="padding:8px 12px;font-weight:700;color:var(--text-2);">절대 수준</td><td style="padding:8px 12px;"><span class="cell-hi c-red">비교 대학 대비 낮음</span></td><td style="padding:8px 12px;color:var(--text-3);">연구 지도 역량 미활용 신호</td></tr>
+              <tr style="border-bottom:1px solid var(--border);"><td style="padding:8px 12px;font-weight:700;color:var(--text-2);">추세</td><td style="padding:8px 12px;"><span class="cell-hi c-red">감소 추세 뚜렷</span></td><td style="padding:8px 12px;color:var(--text-3);">대학원 침체 경고 신호</td></tr>
+              <tr><td style="padding:8px 12px;font-weight:700;color:var(--text-2);">BK 영향</td><td style="padding:8px 12px;"><span class="cell-hi c-ylw">주요 평가 항목</span></td><td style="padding:8px 12px;color:var(--text-3);">BK5 도전 시 개선 필수</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="kp gold" style="margin-bottom:18px;">
+          <div class="kp-body">💡 <strong>대학원생 증원이 교원 역량을 극대화하는 직접 해법이다</strong> — 이 지표가 낮고 감소 중이라는 것은 교원의 연구 역량이 미활용되고 있다는 신호이자 대학원 규모 부실의 핵심 지표다. 대학원생 수 확대는 단순한 목표가 아니라 교원 연구력을 실질적으로 작동시키는 구조적 해법이다.</div>
+        </div>
+
+        <div class="embed-card">
+          <div class="embed-hdr">
+            <h4>📊 전임교원 1인당 대학원생 수 비교 — 주요 8개 대학 (2016~2025)</h4>
+            <a class="open-btn" href="grad_s3_2_faculty.html" target="_blank">↗ 별도 창에서 열기</a>
+          </div>
+          <iframe class="embed" src="grad_s3_2_faculty.html" height="680" loading="lazy" title="전임교원 대학원재학생 비교"></iframe>
+        </div>
+        <div class="src">출처: 대학알리미 전임교원 현황 · 대학원 재적학생 현황 (2016~2025)</div>
+
+        <div style="display:flex;align-items:center;gap:8px;margin:28px 0 12px;">
+          <div style="font-size:.8rem;font-weight:800;color:#fff;background:var(--text-3);padding:2px 10px;border-radius:6px;">나</div>
+          <div style="font-size:.97rem;font-weight:800;color:var(--text-1);">주요 학과의 대학원생 수 변화</div>
+        </div>
+
+        <div class="notice amber" style="margin-bottom:14px;">
+          <span class="notice-ico">🔍</span>
+          <div>영향력이 큰 주요 학과의 현황 파악 및 <strong>학과별 맞춤 확대 전략</strong> 마련이 필요하다. 성장 가능성이 높은 학과를 집중 지원한다.</div>
+        </div>
+
+        <div class="tbl-card">
+          <div class="tbl-hdr"><h4>📋 부산대 일반대학원 학과별 재적학생 상위 15개 비교 (2017 · 2021 · 2026년 3월 기준)</h4><span>단위: 명</span></div>
+          <div class="tbl-scroll">
+            <table class="dt" style="min-width:620px;">
+              <thead>
+                <tr><th style="width:38px;">순위</th><th class="lft">2017년 3월</th><th style="width:52px;">인원</th><th class="lft">2021년 3월</th><th style="width:52px;">인원</th><th class="lft">2026년 3월</th><th style="width:52px;">인원</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>1</td><td class="ctry">기계공학부</td><td>305</td><td class="ctry">기계공학부</td><td>258</td><td class="ctry">기계공학부</td><td><span class="cell-hi c-ylw">287</span></td></tr>
+                <tr class="row-korea"><td>2</td><td class="ctry">경영학과</td><td>181</td><td class="ctry">재료공학과</td><td>159</td><td class="ctry">정보융합공학과</td><td><span class="cell-hi c-grn">216</span></td></tr>
+                <tr><td>3</td><td class="ctry">전기전자공학부</td><td>170</td><td class="ctry">응용화학공학부</td><td>159</td><td class="ctry">전기전자공학과</td><td><span class="cell-hi c-grn">203</span></td></tr>
+                <tr class="row-korea"><td>4</td><td class="ctry">의학과</td><td>149</td><td class="ctry">정보융합공학과</td><td>148</td><td class="ctry">재료공학과</td><td>187</td></tr>
+                <tr><td>5</td><td class="ctry">교육학과</td><td>130</td><td class="ctry">경영학과</td><td>148</td><td class="ctry">응용화학공학부</td><td>185</td></tr>
+                <tr class="row-korea"><td>6</td><td class="ctry">간호학과</td><td>118</td><td class="ctry">전기전자공학과</td><td>134</td><td class="ctry">의학과</td><td>138</td></tr>
+                <tr><td>7</td><td class="ctry">재료공학과</td><td>116</td><td class="ctry">간호학과</td><td>125</td><td class="ctry">교육학과</td><td>100</td></tr>
+                <tr class="row-korea"><td>8</td><td class="ctry">조선·해양공학과</td><td>109</td><td class="ctry">교육학과</td><td>124</td><td class="ctry">융합학부</td><td><span class="cell-hi c-grn">98</span></td></tr>
+                <tr><td>9</td><td class="ctry">화학공학·고분자공학과</td><td>104</td><td class="ctry">조선·해양공학과</td><td>112</td><td class="ctry">조선·해양공학과</td><td>89</td></tr>
+                <tr class="row-korea"><td>10</td><td class="ctry">사회환경시스템공학과</td><td>102</td><td class="ctry">사회환경시스템공학과</td><td>111</td><td class="ctry">화학과</td><td>87</td></tr>
+                <tr><td>11</td><td class="ctry">생명시스템학과</td><td>86</td><td class="ctry">의학과</td><td>96</td><td class="ctry">사회환경시스템공학과</td><td>83</td></tr>
+                <tr class="row-korea"><td>12</td><td class="ctry">치의학과</td><td>85</td><td class="ctry">화학과</td><td>88</td><td class="ctry">경영학과</td><td>83</td></tr>
+                <tr><td>13</td><td class="ctry">정보컴퓨터공학부</td><td>84</td><td class="ctry">음악학과</td><td>80</td><td class="ctry">음악학과</td><td>80</td></tr>
+                <tr class="row-korea"><td>14</td><td class="ctry">영어영문학과</td><td>84</td><td class="ctry">생명시스템학과</td><td>71</td><td class="ctry">외국어로서의한국어교육전공</td><td>69</td></tr>
+                <tr><td>15</td><td class="ctry">지구환경시스템학부</td><td>82</td><td class="ctry">치의학과</td><td>69</td><td class="ctry">생명시스템학과</td><td>69</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="padding:10px 20px;font-size:.73rem;color:var(--text-3);background:#F8FAFF;border-top:1px solid var(--border);">※ 일반대학원 기준 · ★ 2026년 순위 상승 주목 학과</div>
+        </div>
+        <div class="src">출처: 부산대학교 대학원 재적학생 현황 DB (2017 · 2021 · 2026년 3월 기준)</div>
+
+        <div style="background:#F8FAFF;border-radius:14px;padding:20px 24px;border:1px solid var(--border);margin-top:16px;">
+          <div style="font-size:.78rem;font-weight:800;color:var(--pnu-navy);letter-spacing:.8px;text-transform:uppercase;margin-bottom:14px;">▶ 패턴 분석</div>
+          <div class="kp-list" style="margin:0;">
+            <div class="kp" style="border-left-color:var(--pnu-gold);">
+              <div class="kp-body">
+                <strong>⚠️ 기계공학부 — 1위 유지이나 소폭 감소 및 정체</strong><br>
+                <span style="font-size:.82rem;">305명(2017) → 258명(2021) → <strong>287명(2026)</strong>으로 다소 회복했으나, 10년 전 대비 6% 감소. 규모 1위를 유지 중이나 장기 추세 모니터링이 필요하다.</span>
+              </div>
+            </div>
+            <div class="kp red">
+              <div class="kp-body">
+                <strong>🔴 경영학과 — 대폭 감소 경고</strong><br>
+                <span style="font-size:.82rem;">2위(181명) → 5위(148명) → <strong>12위(83명)</strong>으로 급락. 10년간 절반 이하로 감소. 학과 차원의 원인 분석과 Bottom-Up 대응 계획이 필요</span>
+              </div>
+            </div>
+            <div class="kp" style="border-left-color:#059669;background:#F0FDF4;">
+              <div class="kp-body">
+                <strong style="color:#065F46;">⭐ 정보융합공학과 — AI·데이터 수요 반영의 성공 사례</strong><br>
+                <span style="font-size:.82rem;">2017년 순위권 밖 → 2021년 4위(148명) → <strong>2026년 2위(216명)</strong>. 산업 변화에 민감한 AI·데이터 중심 학과의 가능성을 증명한다.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /s3-2 -->
+
+      <div class="block-divider"></div>
+
+      <!-- S3.3 -->
+      <div id="s3-3">
+        <div class="sub-hdr">
+          <div class="sub-circle" style="background:#7C3AED;">3</div>
+          <div class="sub-title" style="color:#7C3AED;">주요 발전 계획</div>
+        </div>
+
+        <!-- 가. Top-Down -->
+        <div id="dev-topdown">
+          <div style="display:flex;align-items:center;gap:8px;margin:0 0 16px;">
+            <div style="font-size:.8rem;font-weight:800;color:#fff;background:#7C3AED;padding:2px 10px;border-radius:6px;">가</div>
+            <div style="font-size:.97rem;font-weight:800;color:#5B21B6;">Top-Down &mdash; 학교 차원의 정책 &middot; 프로그램</div>
+          </div>
+          <div class="kp" style="border-left-color:#7C3AED;margin-bottom:14px;">
+            <div class="kp-body">
+              <strong>⚠️ 정책 기조 : 대학원 성과를 대학 자원 배분의 핵심 척도로</strong> &mdash; 대학원생 수, BK 사업 선정 여부 등을 <span class="hi-b">교수 TO &middot; 공간 &middot; 예산 배분의 중요 지표</span>로 공식화하여, 대학원 역량 강화에 투자하는 학과&#183;교수에게 실질적 인센티브를 부여한다.
+            </div>
+          </div>
+
+          <!-- PNU 1000 AX Talent -->
+          <div style="background:#fff;border-radius:14px;box-shadow:var(--shadow-md);overflow:hidden;margin:18px 0;">
+            <div style="background:linear-gradient(90deg,#4C1D95,#7C3AED);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;">
+              <div style="font-size:.9rem;font-weight:800;color:#fff;">&#128640; PNU 1000 AX 인재 양성 프로그램</div>
+              <div style="font-size:.72rem;color:rgba(255,255,255,.75);background:rgba(255,255,255,.15);padding:3px 10px;border-radius:6px;">Top-Down 핵심 프로그램</div>
+            </div>
+            <div style="display:flex;gap:0;align-items:stretch;flex-wrap:wrap;">
+              <div style="flex:0 0 auto;width:320px;max-width:100%;background:#F5F3FF;display:flex;align-items:center;justify-content:center;padding:16px;">
+                <img src="./image/AX-PBL.jpg" alt="PNU AX 1000 프로그램 개념도" style="width:100%;border-radius:8px;box-shadow:0 2px 12px rgba(0,0,0,.14);display:block;cursor:zoom-in;" onclick="openImgPopup('./image/AX-PBL.jpg','PNU AX 1000 프로그램 개념도')" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                <div style="display:none;width:100%;min-height:140px;border-radius:8px;background:#EDE9FE;border:2px dashed #A78BFA;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px;text-align:center;">
+                  <div style="font-size:1.6rem;">&#128444;</div>
+                  <div style="font-size:.75rem;color:#5B21B6;font-weight:600;">AX-PBL.jpg</div>
+                </div>
+              </div>
+              <div style="flex:1;min-width:240px;padding:20px 22px;display:flex;flex-direction:column;gap:10px;">
+                <div style="font-size:.82rem;color:var(--text-2);line-height:1.7;"><strong style="color:#5B21B6;">대상</strong> &mdash; 학부 3&#183;4학년 중 대학원 진학 의지가 있는 <span style="color:#7C3AED;font-weight:700;">최대 1,000명</span>을 학부연구생으로 지원 (3학년 2학기&#183;4학년 1&#183;2학기 각 300여명)</div>
+                <div class="kp" style="margin:0;padding:10px 14px;border-left-color:#7C3AED;background:#F5F3FF;">
+                  <div class="kp-body"><strong>지원 규모</strong> &mdash; 1인당 <span class="hi-b">월 25만원 / 학기 150만원 / 연 300만원</span>, 최대 <span style="color:#7C3AED;font-weight:800;">연 30억원</span> 특별 장학금 지원</div>
+                </div>
+                <div style="font-size:.82rem;color:var(--text-2);line-height:1.7;"><strong style="color:#5B21B6;">운영 방식</strong> &mdash; 연구소&#183;대학원&#183;학부&#183;산업체 연계 URP/패스트트랙 AX 전문 인재 양성. 학부생 1,000명 + 대학원생&#183;기업체&#183;연구원&#183;교수 등 수천 명이 동남권 AX 프로젝트를 공동 수행하는 <strong>생태계형 프로그램</strong></div>
+                <div style="font-size:.78rem;color:var(--text-3);background:#EDE9FE;padding:8px 12px;border-radius:7px;line-height:1.6;">&#10022; 진로를 고민하는 3&#183;4학년 수천 명이 직접 수혜&#183;참여하는 <strong>학생 체감도가 높은 프로그램</strong></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 학석사 연계 -->
+          <div style="background:#fff;border-radius:14px;box-shadow:var(--shadow-md);overflow:hidden;margin:18px 0;">
+            <div style="background:linear-gradient(90deg,#1E3A5F,#0284C7);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;">
+              <div style="font-size:.9rem;font-weight:800;color:#fff;">&#128101; 학석사 연계과정 요건 완화 &amp; 홍보 강화</div>
+              <div style="font-size:.72rem;color:rgba(255,255,255,.75);background:rgba(255,255,255,.15);padding:3px 10px;border-radius:6px;">Top-Down 제도 개선</div>
+            </div>
+            <div style="padding:18px 22px;display:flex;flex-direction:column;gap:10px;">
+              <div style="font-size:.82rem;color:var(--text-2);line-height:1.7;">
+                학부 우수 학생의 대학원 진학을 촉진하기 위해 <strong style="color:var(--ai-blue);">학석사 연계과정 신청 요건을 완화</strong>하고,
+                재학생 대상 홍보를 체계화한다. 진학 문화 조성의 핵심 제도적 기반이다.
+              </div>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                <a href="grad_s3_3_uglink_dashboard.html" target="_blank"
+                   style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:#EFF6FF;border-radius:8px;font-size:.8rem;font-weight:700;color:var(--ai-blue);text-decoration:none;border:1px solid #BFDBFE;">
+                  &#128202; 학석사 연계 현황 대시보드
+                </a>
+                <a href="https://math.pusan.ac.kr/math/11240/subview.do" target="_blank"
+                   style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:#F0FDF4;border-radius:8px;font-size:.8rem;font-weight:700;color:#DC2626;text-decoration:none;border:1px solid #A7F3D0;">
+                  &#128218; 연계 프로그램 홍보 (기존 예)
+                </a>
+                <a href="grad_s3_3_uglink_guide.html" target="_blank"
+                   style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:#F0FDF4;border-radius:8px;font-size:.8rem;font-weight:700;color:#059669;text-decoration:none;border:1px solid #A7F3D0;">
+                  &#128218; 연계 프로그램 홍보 (신규 예)
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Idea 수준 -->
+          <div style="margin-top:18px;">
+            <div style="font-size:.78rem;font-weight:800;color:var(--text-3);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">&#128161; Idea 수준 (검토 중)</div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div class="kp" style="border-left-color:#0284C7;">
+                <div class="kp-body">
+                  <strong>학부 입시에서 &ldquo;학석사통합과정&rdquo; 도입</strong>
+                  <br>✦ 학석사통합과정을 위한 별도 모집단 구성은 현실적 어려움이 있을 거로 보임. 
+                  <br>✦ 통합과정 신청자에 <span class="hi-b">가산점 부여</span> 방식으로 유인책 마련 가능.
+                </div>
+              </div>
+              <div class="kp" style="border-left-color:#0D9488;">
+                <div class="kp-body">
+                  <strong>지역 국립대와의 대학원 통합</strong>;
+                  <br>✦<strong>BK5를 앞두고 통합 이익이 큰 일부 학과부터</strong> 단계적 추진.              
+                  <a style="font-size:.78rem;color:var(--ai-blue);text-decoration:none;font-weight:600;" href="./pdf/부산대부경대-부산과학기술원.pdf" target="_blank">관련 활동 : 부산대-부경대 부산과학기술원 ↗</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><!-- /dev-topdown -->
+
+        <!-- 나. Bottom-Up -->
+        <div id="dev-bottomup" style="margin-top:32px;">
+          <div style="display:flex;align-items:center;gap:8px;margin:0 0 16px;">
+            <div style="font-size:.8rem;font-weight:800;color:#fff;background:#059669;padding:2px 10px;border-radius:6px;">나</div>
+            <div style="font-size:.97rem;font-weight:800;color:#065F46;">Bottom-Up &mdash; 학과·BK 사업단 단위의 자발적 계획</div>
+          </div>
+          <div class="kp" style="border-left-color:#059669;margin-bottom:14px;">
+            <div class="kp-body">
+              <strong>대학원 학과 / BK 연구사업단에 협조 공문 발송</strong> &mdash;
+              현황 파악(대학원생 수 변화, 전임교원 1인당 대학원생 수), 대학원생 미지도 교원 현황 파악·원인 분석,
+              그리고 <span class="hi-b">BK5·AI/AX 시대에 대응한 대학원 발전 계획 제출</span>을 요청한다.
+            </div>
+          </div>
+          <div style="background:linear-gradient(135deg,#ECFDF5,#D1FAE5);border-radius:12px;padding:18px 22px;border:1px solid #A7F3D0;">
+            <div style="font-size:.78rem;font-weight:800;color:#065F46;letter-spacing:.8px;text-transform:uppercase;margin-bottom:12px;">&#9654; Bottom-Up 3단계 프로세스</div>
+            <div style="display:flex;gap:0;flex-wrap:wrap;">
+              <div style="flex:1;min-width:160px;display:flex;gap:10px;align-items:flex-start;padding:10px 14px;background:rgba(255,255,255,.6);border-radius:8px;margin:4px;">
+                <div style="font-family:Montserrat,sans-serif;font-size:1.4rem;font-weight:900;color:#059669;line-height:1;flex-shrink:0;">01</div>
+                <div>
+                  <div style="font-size:.82rem;font-weight:800;color:#065F46;margin-bottom:3px;">현황 진단</div>
+                  <div style="font-size:.75rem;color:var(--text-3);line-height:1.5;">대학원생 수·전임교원 지도 비율·미지도 교원 현황 파악</div>
+                </div>
+              </div>
+              <div style="flex:1;min-width:160px;display:flex;gap:10px;align-items:flex-start;padding:10px 14px;background:rgba(255,255,255,.6);border-radius:8px;margin:4px;">
+                <div style="font-family:Montserrat,sans-serif;font-size:1.4rem;font-weight:900;color:#059669;line-height:1;flex-shrink:0;">02</div>
+                <div>
+                  <div style="font-size:.82rem;font-weight:800;color:#065F46;margin-bottom:3px;">원인 분석</div>
+                  <div style="font-size:.75rem;color:var(--text-3);line-height:1.5;">감소 원인 규명·성장 가능 학과 발굴·장애 요인 도출</div>
+                </div>
+              </div>
+              <div style="flex:1;min-width:160px;display:flex;gap:10px;align-items:flex-start;padding:10px 14px;background:rgba(255,255,255,.6);border-radius:8px;margin:4px;">
+                <div style="font-family:Montserrat,sans-serif;font-size:1.4rem;font-weight:900;color:#059669;line-height:1;flex-shrink:0;">03</div>
+                <div>
+                  <div style="font-size:.82rem;font-weight:800;color:#065F46;margin-bottom:3px;">발전 계획 제출</div>
+                  <div style="font-size:.75rem;color:var(--text-3);line-height:1.5;">BK5·AX 시대 대응 학과별 맞춤 대학원 발전 계획 수립</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><!-- /dev-bottomup -->
+
+      </div><!-- /s3-3 -->
+    </div><!-- /s3 / .block -->
+    
+ 
+
+  </main>
+</div><!-- /layout -->
+
+<footer>
+  ARISE PNU AI — 대학원 육성 전략 · Strategic Plan for the Expansion of Graduate Education<br>
+  <span style="display:block;margin-top:4px;">Pusan National University · 부산대학교 AI 거점대학 사업</span>
+</footer>
+
+<script>
+  // 사이드바 활성 링크 (part1.html 표준 방식)
+  const sideLinks = document.querySelectorAll('.side-link');
+  const targets = document.querySelectorAll('#s1,#s1-1,#s1-2,#s1-3,#s2,#s2-1,#s2-2,#s3,#s3-1,#s3-2,#s3-3');
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        sideLinks.forEach(l => l.classList.remove('active'));
+        const a = document.querySelector(`.side-link[href="#${e.target.id}"]`);
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { threshold: 0.3, rootMargin: '-70px 0px -60% 0px' });
+
+  targets.forEach(t => obs.observe(t));
+
+  // 이미지 팝업 (lightbox)
+  function openImgPopup(src, alt) {
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:zoom-out;padding:24px;';
+    overlay.onclick = () => overlay.remove();
+    const img = document.createElement('img');
+    img.src = src; img.alt = alt;
+    img.style.cssText = 'max-width:92vw;max-height:86vh;border-radius:10px;box-shadow:0 8px 48px rgba(0,0,0,.6);object-fit:contain;';
+    img.onclick = e => e.stopPropagation();
+    const caption = document.createElement('div');
+    caption.textContent = alt;
+    caption.style.cssText = 'color:rgba(255,255,255,.75);font-size:.8rem;margin-top:12px;letter-spacing:.3px;';
+    const closeBtn = document.createElement('div');
+    closeBtn.textContent = '✕ 닫기';
+    closeBtn.style.cssText = 'position:absolute;top:18px;right:24px;color:#fff;font-size:.85rem;font-weight:700;cursor:pointer;background:rgba(255,255,255,.15);padding:4px 14px;border-radius:6px;';
+    closeBtn.onclick = () => overlay.remove();
+    overlay.appendChild(img);
+    overlay.appendChild(caption);
+    overlay.appendChild(closeBtn);
+    document.body.appendChild(overlay);
+    document.addEventListener('keydown', function escHandler(e) {
+      if (e.key === 'Escape') { overlay.remove(); document.removeEventListener('keydown', escHandler); }
+    });
+  }
+</script>
+</body>
+</html>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       

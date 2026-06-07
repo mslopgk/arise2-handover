@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>주요 대학 대학원 재학생 비교 (2016~2025) — ARISE PNU AI</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Malgun Gothic','Apple SD Gothic Neo',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e}
+header{background:linear-gradient(135deg,#1F3864,#2E5FAC);padding:16px 24px;color:#fff}
+header h1{font-size:1.2rem;font-weight:700}
+header p{font-size:.78rem;opacity:.8;margin-top:3px}
+
+.controls{background:#fff;padding:12px 24px;display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;
+  border-bottom:1px solid #dde;box-shadow:0 2px 6px rgba(0,0,0,.06)}
+.cg{display:flex;flex-direction:column;gap:5px}
+.cg label{font-size:.7rem;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.05em}
+.btns{display:flex;gap:3px;flex-wrap:wrap}
+.btn{padding:6px 13px;border:1.5px solid #2E5FAC;border-radius:5px;background:#fff;
+  color:#2E5FAC;cursor:pointer;font-size:.82rem;font-weight:600;transition:.15s;white-space:nowrap}
+.btn:hover{background:#EEF3FF}
+.btn.on{background:#2E5FAC;color:#fff}
+select{padding:6px 11px;border:1.5px solid #2E5FAC;border-radius:5px;font-size:.82rem;
+  color:#2E5FAC;font-weight:600;cursor:pointer;background:#fff;min-width:130px}
+#sw{display:none}
+
+.chart-wrap{position:relative;padding:16px 20px 4px;background:#fff;margin:14px 16px 0;border-radius:8px;
+  box-shadow:0 1px 4px rgba(0,0,0,.08)}
+canvas{display:block;width:100%;cursor:crosshair}
+
+#tip{position:fixed;display:none;background:rgba(20,20,40,.92);color:#fff;padding:9px 12px;
+  border-radius:7px;font-size:.8rem;pointer-events:none;z-index:999;min-width:160px;max-width:240px;line-height:1.6}
+.tt-title{font-weight:700;font-size:.85rem;border-bottom:1px solid rgba(255,255,255,.25);margin-bottom:5px;padding-bottom:4px}
+.tt-row{display:flex;align-items:center;gap:6px;margin:2px 0}
+.tt-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.tt-val{margin-left:auto;font-weight:600;font-variant-numeric:tabular-nums}
+.tt-total{border-top:1px solid rgba(255,255,255,.25);margin-top:5px;padding-top:4px;font-weight:700}
+
+.legend{padding:10px 24px 6px;display:flex;flex-wrap:wrap;gap:14px}
+.ls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ls-title{font-size:.72rem;font-weight:700;color:#555;text-transform:uppercase}
+.li{display:flex;align-items:center;gap:4px;font-size:.78rem;cursor:default}
+.lsw{width:13px;height:13px;border-radius:3px;flex-shrink:0}
+.lsw.hatch{background-image:repeating-linear-gradient(45deg,currentColor 0,currentColor 1px,transparent 0,transparent 50%);background-size:5px 5px}
+
+.note{font-size:.75rem;color:#666;margin:6px 16px 14px;padding:8px 12px;
+  background:#fffbe6;border-left:3px solid #faad14;border-radius:4px}
+
+@media(max-width:640px){
+  .controls{padding:10px 12px;gap:10px}
+  .chart-wrap{margin:10px 8px 0;padding:10px 8px 4px}
+  .legend{padding:8px 12px}
+}
+</style>
+</head>
+<body>
+<!-- ARISE PNU Site Nav -->
+<nav style="background:#0a2463;padding:0 32px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,.35);font-family:'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif;">
+  <a style="display:flex;align-items:center;gap:10px;text-decoration:none;" href="index.html">
+    <div style="background:linear-gradient(135deg,#f59e0b,#d97706);width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;color:white;">AI</div>
+    <div><div style="color:white;font-weight:800;font-size:13px;">ARISE PNU AI</div><div style="color:rgba(255,255,255,.5);font-size:10px;">부산대학교 AI 거점대학</div></div>
+  </a>
+  <div style="display:flex;gap:4px;">
+    <a style="color:rgba(255,255,255,.7);font-size:11px;font-weight:600;padding:5px 11px;border-radius:5px;text-decoration:none;" href="index.html">홈</a>
+    <a style="color:white;font-size:11px;font-weight:700;padding:5px 13px;border-radius:5px;text-decoration:none;background:rgba(255,255,255,.12);" href="grad.html">← 대학원 육성</a>
+  </div>
+</nav>
+<header style="background:linear-gradient(135deg,#001540,#003087,#1565C0);">
+  <h1>주요 대학 대학원 재학생 현황 비교 (2016~2025)</h1>
+  <p>대학알리미 공시자료 | 일반대학원 + 전문대학원 재적학생 기준 | ARISE PNU AI — 부산대학교 AI 거점대학</p>
+</header>
+
+<div class="controls">
+  <div class="cg">
+    <label>📊 지표</label>
+    <div class="btns">
+      <button class="btn on" id="bE" onclick="setM('enroll')">재학생</button>
+      <button class="btn"    id="bG" onclick="setM('grad')">대학원재학생</button>
+    </div>
+  </div>
+  <div class="cg">
+    <label>🏫 비교 대상</label>
+    <div class="btns">
+      <button class="btn on" id="b1" onclick="setG('거점국립대')">거점국립대</button>
+      <button class="btn"    id="b2" onclick="setG('서울대+과학원')">서울대+과학원</button>
+      <button class="btn"    id="b3" onclick="setG('주요 사립대')">주요 사립대</button>
+      <button class="btn"    id="b4" onclick="setG('개별대학')">개별 대학 ▾</button>
+    </div>
+  </div>
+  <div class="cg" id="sw">
+    <label>개별 대학 선택</label>
+    <select id="ssel" onchange="setSch(this.value)"></select>
+  </div>
+</div>
+
+<div class="chart-wrap">
+  <canvas id="cv"></canvas>
+</div>
+<div id="tip"></div>
+<div class="legend" id="leg"></div>
+<div class="note" id="note"></div>
+
+<!-- 데이터 파일 (같은 폴더의 chart_data_10years.js) -->
+<script src="chart_data_10years.js"></script>
+
+<script>
+const PAL = {
+  '부산대학교':    ['#FFCDD2','#EF5350','#B71C1C'],
+  '경북대학교':    ['#BBDEFB','#1E88E5','#0D47A1'],
+  '전남대학교':    ['#C8E6C9','#43A047','#1B5E20'],
+  '충남대학교':    ['#FFE0B2','#FB8C00','#E65100'],
+  '충북대학교':    ['#EDE7F6','#7E57C2','#311B92'],
+  '전북대학교':    ['#B2DFDB','#26A69A','#004D40'],
+  '경상국립대학교':['#D7CCC8','#8D6E63','#3E2723'],
+  '강원대학교':    ['#F9FBE7','#C0CA33','#827717'],
+  '제주대학교':    ['#FCE4EC','#EC407A','#880E4F'],
+  '서울대학교':    ['#E1F5FE','#039BE5','#01579B'],
+  '한국과학기술원':['#ECEFF1','#78909C','#263238'],
+  '광주과학기술원':['#E0F7FA','#00ACC1','#006064'],
+  '울산과학기술원':['#FBE9E7','#F4511E','#BF360C'],
+  '포항공과대학교':['#F5F5F5','#9E9E9E','#424242'],
+  '연세대학교':    ['#E8EAF6','#5C6BC0','#283593'],
+  '고려대학교':    ['#EFEBE9','#8D6E63','#4E342E'],
+  '성균관대학교':  ['#E0F2F1','#00897B','#004D40'],
+  '한양대학교':    ['#FFF8E1','#FFB300','#E65100'],
+};
+
+const ALIAS = {};
+Object.keys(CHART_DATA.schools).forEach(k => { ALIAS[k] = CHART_DATA.schools[k].alias || k; });
+
+let ST = { metric:'enroll', group:'거점국립대', school:'' };
+
+const ENROLL_STACKS = [
+  {cat:'학부',       fld:'정원내', ci:0, lbl:'학부 정원내',       hat:false},
+  {cat:'학부',       fld:'정원외', ci:0, lbl:'학부 정원외',       hat:true},
+  {cat:'일반대학원', fld:'정원내', ci:1, lbl:'일반대학원 정원내', hat:false},
+  {cat:'일반대학원', fld:'정원외', ci:1, lbl:'일반대학원 정원외', hat:true},
+  {cat:'전문대학원', fld:'정원내', ci:2, lbl:'전문대학원 정원내', hat:false},
+  {cat:'전문대학원', fld:'정원외', ci:2, lbl:'전문대학원 정원외', hat:true},
+];
+const GRAD_ENROLL_STACKS = [
+  {cat:'일반대학원', fld:'정원내', ci:1, lbl:'일반대학원 정원내', hat:false},
+  {cat:'일반대학원', fld:'정원외', ci:1, lbl:'일반대학원 정원외', hat:true},
+  {cat:'전문대학원', fld:'정원내', ci:2, lbl:'전문대학원 정원내', hat:false},
+  {cat:'전문대학원', fld:'정원외', ci:2, lbl:'전문대학원 정원외', hat:true},
+];
+
+function getVal(sch, yr, cat, fld) {
+  return CHART_DATA.schools[sch]?.years?.[yr]?.[cat]?.[fld] || 0;
+}
+function getEnrollTotal(sch, yr) {
+  const d = CHART_DATA.schools[sch]?.years?.[yr]?.['합계'] || {};
+  return (d['정원내'] || 0) + (d['정원외'] || 0);
+}
+
+// 거점국립대 비교 대상 (지표별 고정)
+const COMP_거점 = {
+  enroll: ['경북대학교','전남대학교','강원대학교','충남대학교','전북대학교'],
+  grad:   ['경북대학교','전남대학교','충남대학교','전북대학교','강원대학교'],
+};
+function compSchools() {
+  const all = CHART_DATA.schools;
+  if (ST.group === '개별대학') return ST.school ? [ST.school] : [];
+  if (ST.group === '거점국립대') return COMP_거점[ST.metric] || COMP_거점.enroll;
+  return Object.keys(all).filter(k => all[k].group === ST.group);
+}
+function niceMax(v) {
+  if (!v) return 10000;
+  const mag = Math.pow(10, Math.floor(Math.log10(v)));
+  const n = v / mag;
+  const nice = n<1.2?1.2:n<1.5?1.5:n<2?2:n<3?3:n<5?5:n<7?7:10;
+  return nice * mag;
+}
+function niceStep(max, target=5) {
+  const rough = max / target;
+  const mag = Math.pow(10, Math.floor(Math.log10(rough)));
+  const n = rough / mag;
+  const s = n<1.5?1:n<3?2:n<7?5:10;
+  return s * mag;
+}
+function darken(hex, t) {
+  const r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
+  return `rgb(${Math.round(r*(1-t))},${Math.round(g*(1-t))},${Math.round(b*(1-t))})`;
+}
+
+const cv  = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+let HITS  = [];
+
+function drawHatch(x, y, w, h, color) {
+  if (h <= 0 || w <= 0) return;
+  ctx.save();
+  ctx.beginPath(); ctx.rect(x,y,w,h); ctx.clip();
+  ctx.strokeStyle = darken(color, 0.15);
+  ctx.lineWidth = 1.5;
+  for (let i = -(h+w); i < w+h+10; i += 5) {
+    ctx.beginPath(); ctx.moveTo(x+i, y); ctx.lineTo(x+i+h, y+h); ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function render() {
+  const years   = CHART_DATA.years;
+  const comps   = compSchools();
+  const schools = ['부산대학교', ...comps];
+  const stacks  = ST.metric === 'grad' ? GRAD_ENROLL_STACKS : ENROLL_STACKS;
+
+  const wrap = cv.parentElement;
+  const CW = Math.max(600, wrap.clientWidth - 32);
+  const nY = years.length, nS = schools.length;
+  // 10년 데이터 → 가로 충분히 확보
+  const CH = Math.max(360, Math.min(540, CW * 0.46));
+  cv.width  = CW * devicePixelRatio;
+  cv.height = CH * devicePixelRatio;
+  cv.style.width  = CW + 'px';
+  cv.style.height = CH + 'px';
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+  ctx.clearRect(0, 0, CW, CH);
+
+  const M = {t:24, r:16, b: nS > 3 ? 100 : 84, l:72};
+  const IW = CW - M.l - M.r;
+  const IH = CH - M.t - M.b;
+
+  // Y 스케일
+  let maxV = 0;
+  years.forEach(yr => schools.forEach(s => {
+    const tot = stacks.reduce((a, st) => a + getVal(s, yr, st.cat, st.fld), 0);
+    if (tot > maxV) maxV = tot;
+  }));
+  const yMax  = niceMax(maxV);
+  const yStep = niceStep(yMax);
+
+  // 배경 & 그리드
+  ctx.fillStyle = '#FAFAFA';
+  ctx.fillRect(M.l, M.t, IW, IH);
+  ctx.font = '11px Arial';
+  for (let v = 0; v <= yMax; v += yStep) {
+    const py = M.t + IH - (v/yMax)*IH;
+    ctx.strokeStyle = '#E0E0E0'; ctx.lineWidth = 1; ctx.setLineDash([3,3]);
+    ctx.beginPath(); ctx.moveTo(M.l, py); ctx.lineTo(M.l+IW, py); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#555'; ctx.textAlign = 'right';
+    const lbl = v >= 10000 ? (v/10000).toLocaleString('ko',{maximumFractionDigits:1})+'만' : v.toLocaleString();
+    ctx.fillText(lbl, M.l-6, py+4);
+  }
+
+  // Y축 레이블
+  ctx.save();
+  ctx.translate(13, M.t + IH/2); ctx.rotate(-Math.PI/2);
+  ctx.font = '11px Arial'; ctx.fillStyle='#555'; ctx.textAlign='center';
+  ctx.fillText('인원 (명)', 0, 0);
+  ctx.restore();
+
+  // 바 레이아웃
+  const yearW     = IW / nY;
+  const barAreaW  = yearW * (nS <= 3 ? 0.78 : nS <= 5 ? 0.85 : 0.90);
+  const barTotalW = barAreaW / nS;
+  const barW      = Math.max(3, barTotalW * 0.82);
+  const showSchLbl = barTotalW >= 12;
+
+  HITS = [];
+
+  years.forEach((yr, yi) => {
+    const yearX = M.l + yi*yearW + (yearW - barAreaW)/2;
+
+    // 연도 구분선
+    if (yi > 0) {
+      // 5년 단위(2016→2021 경계, 2021→2026 경계)는 굵게
+      const isMajor = (parseInt(yr) % 5 === 1);
+      ctx.strokeStyle = isMajor ? '#999' : '#CCC';
+      ctx.lineWidth = isMajor ? 1.5 : 1;
+      ctx.setLineDash(isMajor ? [] : [5,4]);
+      ctx.beginPath(); ctx.moveTo(M.l+yi*yearW, M.t); ctx.lineTo(M.l+yi*yearW, M.t+IH); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    schools.forEach((sch, si) => {
+      const bx    = yearX + si*barTotalW + (barTotalW-barW)/2;
+      let   bottY = M.t + IH;
+      const segs  = [];
+      const pal   = PAL[sch] || ['#ccc','#888','#333'];
+
+      stacks.forEach(st => {
+        const val = getVal(sch, yr, st.cat, st.fld);
+        if (val <= 0) return;
+        const bh  = (val/yMax)*IH;
+        const by  = bottY - bh;
+        const col = pal[st.ci];
+        ctx.fillStyle = col;
+        ctx.fillRect(bx, by, barW, bh);
+        if (st.hat) drawHatch(bx, by, barW, bh, col);
+        if (bh > 1.5) {
+          ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+          ctx.lineWidth = 0.5;
+          ctx.strokeRect(bx, by, barW, bh);
+        }
+        segs.push({lbl: st.lbl, val, color: col, hat: st.hat});
+        bottY -= bh;
+      });
+
+      // 부산대 강조 테두리
+      const totalH = M.t + IH - bottY;
+      if (sch === '부산대학교' && totalH > 0) {
+        ctx.strokeStyle = '#1a1a2e'; ctx.lineWidth = 1.8;
+        ctx.strokeRect(bx-0.5, bottY-0.5, barW+1, totalH+1);
+      }
+
+      HITS.push({sch, yr, x:bx, y:bottY, w:barW, h:totalH, segs});
+
+      // 학교 레이블
+      if (showSchLbl) {
+        const cx = bx + barW/2;
+        ctx.save();
+        ctx.translate(cx, M.t+IH+7); ctx.rotate(-Math.PI/4);
+        ctx.font = sch==='부산대학교' ? 'bold 9px Arial' : '9px Arial';
+        ctx.fillStyle = sch==='부산대학교' ? '#B71C1C' : '#444';
+        ctx.textAlign = 'right';
+        ctx.fillText(ALIAS[sch]||sch, 0, 0);
+        ctx.restore();
+      }
+    });
+
+    // 연도 레이블
+    const ylx = M.l + yi*yearW + yearW/2;
+    const ylOffset = showSchLbl ? (nS > 3 ? 80 : 66) : 18;
+    const isBold = (parseInt(yr) % 5 === 1) || yr === '2025';
+    ctx.font = isBold ? 'bold 11px Arial' : '11px Arial';
+    ctx.fillStyle = '#333'; ctx.textAlign = 'center';
+    ctx.fillText(yr+'년', ylx, M.t+IH+ylOffset);
+  });
+
+  // 축선
+  ctx.strokeStyle = '#888'; ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(M.l, M.t); ctx.lineTo(M.l, M.t+IH); ctx.lineTo(M.l+IW, M.t+IH);
+  ctx.stroke();
+
+  renderLegend(schools, stacks);
+  renderNote(comps);
+}
+
+function renderLegend(schools, stacks) {
+  const div = document.getElementById('leg');
+  let h = '<div class="ls"><span class="ls-title">학교</span>';
+  schools.forEach(s => {
+    const col = (PAL[s]||['#888','#555','#333'])[1];
+    const bdr = s==='부산대학교' ? `;outline:2px solid #1a1a2e;outline-offset:1px` : '';
+    h += `<span class="li" title="${s}">
+      <span class="lsw" style="background:${col}${bdr}"></span>
+      <span style="${s==='부산대학교'?'font-weight:700;color:#B71C1C':''}">${ALIAS[s]||s}</span>
+    </span>`;
+  });
+  h += '</div><div class="ls" style="margin-top:4px"><span class="ls-title">구성(음영)</span>';
+  if (ST.metric === 'grad') {
+    h += '<span class="li">중간색 = 일반대학원</span><span class="li">진한색 = 전문대학원</span>';
+    h += '<span class="li"><span class="lsw hatch" style="background:#888;width:14px;height:14px"></span>빗금 = 정원외</span>';
+  } else {
+    ['연한색 = 학부','중간색 = 일반대학원','진한색 = 전문대학원'].forEach(t=>{h+=`<span class="li">${t}</span>`;});
+    h += '<span class="li"><span class="lsw hatch" style="background:#888;width:14px;height:14px"></span>빗금 = 정원외</span>';
+  }
+  h += '</div>';
+  div.innerHTML = h;
+}
+
+function renderNote(comps) {
+  const names = comps.map(s => ALIAS[s]||s).join(', ');
+  let txt = '';
+  if (ST.group === '거점국립대')
+    txt = `비교(거점국립대): ${names}`;
+  else if (ST.group === '개별대학')
+    txt = comps.length ? `비교: ${names}` : '개별 대학을 선택해 주세요.';
+  else
+    txt = `비교: ${names} (전 캠퍼스 합산)`;
+  document.getElementById('note').textContent = '※ ' + txt;
+}
+
+const tip = document.getElementById('tip');
+cv.addEventListener('mousemove', e => {
+  const r   = cv.getBoundingClientRect();
+  const scX = cv.width  / devicePixelRatio / r.width;
+  const scY = cv.height / devicePixelRatio / r.height;
+  const mx  = (e.clientX - r.left) * scX;
+  const my  = (e.clientY - r.top)  * scY;
+  const hit = HITS.find(h => mx>=h.x && mx<=h.x+h.w && my>=h.y && my<=h.y+h.h && h.h>0);
+  if (hit) {
+    const tot = hit.segs.reduce((s,g) => s+g.val, 0);
+    tip.innerHTML = `
+      <div class="tt-title">${ALIAS[hit.sch]||hit.sch} &mdash; ${hit.yr}년</div>
+      ${hit.segs.map(g=>`
+        <div class="tt-row">
+          <span class="tt-dot" style="background:${g.color}${g.hat?`;outline:1px solid #555`:''}"></span>
+          <span>${g.lbl}</span>
+          <span class="tt-val">${g.val.toLocaleString()}</span>
+        </div>`).join('')}
+      <div class="tt-total">합계: ${tot.toLocaleString()}</div>`;
+    tip.style.display = 'block';
+    const tx = e.clientX + 14, ty = e.clientY - 20;
+    tip.style.left = (tx + 220 > window.innerWidth ? e.clientX - 234 : tx) + 'px';
+    tip.style.top  = ty + 'px';
+  } else {
+    tip.style.display = 'none';
+  }
+});
+cv.addEventListener('mouseleave', () => { tip.style.display='none'; });
+
+function setM(m) {
+  ST.metric = m;
+  ['bE','bG'].forEach(id => document.getElementById(id).classList.remove('on'));
+  document.getElementById(m==='grad'?'bG':'bE').classList.add('on');
+  render();
+}
+function setG(g) {
+  ST.group = g;
+  ['b1','b2','b3','b4'].forEach(id => document.getElementById(id).classList.remove('on'));
+  const ids = {'거점국립대':'b1','서울대+과학원':'b2','주요 사립대':'b3','개별대학':'b4'};
+  document.getElementById(ids[g]).classList.add('on');
+  document.getElementById('sw').style.display = g==='개별대학' ? 'flex' : 'none';
+  if (g==='개별대학' && !ST.school) ST.school = document.getElementById('ssel').value;
+  render();
+}
+function setSch(s) { ST.school = s; render(); }
+
+(function init() {
+  const sel = document.getElementById('ssel');
+  Object.keys(CHART_DATA.schools).filter(k=>k!=='부산대학교').forEach(k => {
+    const o = document.createElement('option');
+    o.value = k; o.textContent = ALIAS[k]||k;
+    sel.appendChild(o);
+  });
+  ST.school = sel.value;
+  render();
+  window.addEventListener('resize', render);
+})();
+</script>
+</body>
+</html>

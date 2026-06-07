@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>실행 항목 관리 — ARISE PNU AI</title>
+<style>
+:root{
+  --navy:#0a2463;--blue:#1a4fa0;--mid:#2563eb;--light:#60a5fa;--pale:#dbeafe;
+  --gold:#f59e0b;--gold2:#fbbf24;--green:#10b981;--teal:#0ea5e9;
+  --bg:#f0f4f8;--card:#ffffff;--text:#1e293b;--sub:#64748b;--bdr:#e2e8f0;
+  --red:#ef4444;--amber:#f59e0b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif;background:var(--bg);color:var(--text);line-height:1.65;display:flex;flex-direction:column;min-height:100vh}
+
+/* ── NAV ── */
+nav{background:var(--navy);padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-brand .lb{background:linear-gradient(135deg,var(--gold),#d97706);width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;color:white}
+.nav-brand .bt{color:white;font-weight:800;font-size:14px}
+.nav-links{display:flex;gap:4px}
+.nav-links a{color:rgba(255,255,255,.65);font-size:12px;font-weight:600;padding:6px 12px;border-radius:6px;text-decoration:none;transition:all .2s;white-space:nowrap}
+.nav-links a:hover{background:rgba(255,255,255,.1);color:white}
+.nav-links a.active{background:rgba(37,99,235,.5);color:white}
+
+/* ── PAGE HEADER ── */
+.page-header{background:linear-gradient(135deg,var(--navy) 0%,#1e3a8a 100%);color:white;padding:36px 32px 32px}
+.page-header-inner{max-width:1060px;margin:0 auto}
+.breadcrumb{font-size:12px;color:rgba(255,255,255,.5);margin-bottom:12px}
+.breadcrumb a{color:rgba(255,255,255,.6);text-decoration:none}
+.part-badge{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:4px 14px;font-size:12px;font-weight:700;color:var(--gold2);margin-bottom:12px}
+.page-header h1{font-size:24px;font-weight:900;margin-bottom:8px}
+.page-header p{font-size:14px;color:rgba(255,255,255,.65);line-height:1.7}
+
+/* ── MAIN LAYOUT ── */
+.page-body{max-width:1060px;margin:28px auto;padding:0 24px;width:100%}
+
+/* ── TOOLBAR ── */
+.toolbar{background:var(--card);border:1px solid var(--bdr);border-radius:14px;padding:18px 20px;margin-bottom:20px}
+.stats-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--bdr)}
+.stat-chip{display:flex;align-items:center;gap:6px;background:var(--bg);border:1px solid var(--bdr);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.stat-chip:hover{border-color:var(--mid);color:var(--mid)}
+.stat-chip.active{border-color:var(--mid);background:var(--pale);color:var(--mid)}
+.stat-chip .dot{width:8px;height:8px;border-radius:50%}
+.stat-chip .cnt{font-size:13px;font-weight:800}
+.filter-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.filter-row select,.filter-row input{height:34px;border:1px solid var(--bdr);border-radius:8px;padding:0 10px;font-size:13px;color:var(--text);background:var(--bg);outline:none;transition:border .2s}
+.filter-row select:focus,.filter-row input:focus{border-color:var(--mid)}
+.search-input{min-width:200px;flex:1}
+.filter-row select{min-width:110px}
+.toolbar-right{display:flex;gap:8px;margin-left:auto}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:all .2s;text-decoration:none}
+.btn-primary{background:var(--mid);color:white}
+.btn-primary:hover{background:var(--blue)}
+.btn-outline{background:transparent;border:1px solid var(--bdr);color:var(--sub)}
+.btn-outline:hover{border-color:var(--mid);color:var(--mid);background:var(--pale)}
+.btn-sm{padding:5px 10px;font-size:12px}
+.btn-danger{background:#fee2e2;color:var(--red);border:1px solid #fecaca}
+.btn-danger:hover{background:#fecaca}
+.btn-success{background:#dcfce7;color:#15803d;border:1px solid #bbf7d0}
+.view-btn{width:34px;height:34px;padding:0;justify-content:center;font-size:15px}
+.view-btn.active{background:var(--pale);border-color:var(--mid);color:var(--mid)}
+
+/* ── TABLE VIEW ── */
+.items-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:12px;overflow:hidden;border:1px solid var(--bdr)}
+.items-table thead tr{background:var(--navy);color:white}
+.items-table th{padding:11px 14px;font-size:12px;font-weight:700;text-align:left;white-space:nowrap}
+.items-table tbody tr{border-bottom:1px solid var(--bdr);transition:background .15s}
+.items-table tbody tr:last-child{border-bottom:none}
+.items-table tbody tr:hover{background:#f8faff}
+.items-table td{padding:11px 14px;font-size:13px;vertical-align:middle}
+.td-id{font-size:11px;color:var(--sub);font-family:monospace}
+.td-title{font-weight:700;max-width:240px}
+.td-title small{display:block;font-size:11px;color:var(--sub);font-weight:400;margin-top:2px;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.td-actions{white-space:nowrap;display:flex;gap:6px;align-items:center}
+
+/* ── CARD VIEW ── */
+.items-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.item-card{background:var(--card);border:1px solid var(--bdr);border-radius:12px;padding:18px;transition:box-shadow .2s;position:relative}
+.item-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.08)}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;gap:8px}
+.card-id{font-size:11px;color:var(--sub);font-family:monospace}
+.card-badges{display:flex;gap:5px;flex-wrap:wrap}
+.card-title{font-size:14px;font-weight:800;margin-bottom:6px;line-height:1.4}
+.card-desc{font-size:12px;color:var(--sub);line-height:1.5;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card-meta{display:flex;flex-wrap:wrap;gap:8px;font-size:11px;color:var(--sub);border-top:1px solid var(--bdr);padding-top:10px;margin-top:10px}
+.card-meta-item{display:flex;align-items:center;gap:4px}
+.card-actions{display:flex;gap:6px;margin-top:10px}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:12px;font-size:11px;font-weight:700;white-space:nowrap}
+.badge-plan{background:#f1f5f9;color:#475569}
+.badge-progress{background:#dbeafe;color:#1d4ed8}
+.badge-done{background:#dcfce7;color:#15803d}
+.badge-hold{background:#fef3c7;color:#92400e}
+.badge-cancel{background:#fee2e2;color:#b91c1c}
+.badge-high{background:#fee2e2;color:#b91c1c}
+.badge-mid{background:#fef3c7;color:#92400e}
+.badge-low{background:#dcfce7;color:#15803d}
+.badge-cat{background:#f0f9ff;color:#0369a1}
+.badge-ch{background:#faf5ff;color:#6d28d9}
+
+/* ── EMPTY STATE ── */
+.empty-state{text-align:center;padding:60px 20px;color:var(--sub)}
+.empty-icon{font-size:48px;margin-bottom:16px}
+.empty-state h3{font-size:16px;font-weight:700;margin-bottom:8px;color:var(--text)}
+
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{background:white;border-radius:16px;width:100%;max-width:640px;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.modal-sm{max-width:440px}
+.modal-header{padding:20px 24px 16px;border-bottom:1px solid var(--bdr);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.modal-header h3{font-size:16px;font-weight:800}
+.modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--sub);width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{background:var(--bg)}
+.modal-body{padding:20px 24px;overflow-y:auto;flex:1}
+.modal-footer{padding:16px 24px;border-top:1px solid var(--bdr);display:flex;justify-content:flex-end;gap:10px;flex-shrink:0}
+
+/* ── FORM ── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-full{grid-column:1/-1}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-group label{font-size:12px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px}
+.form-group label span{color:var(--red);margin-left:2px}
+.form-group input,.form-group select,.form-group textarea{border:1px solid var(--bdr);border-radius:8px;padding:8px 11px;font-size:13px;font-family:inherit;color:var(--text);outline:none;transition:border .2s;background:white}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--mid);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.form-group textarea{resize:vertical;min-height:70px}
+.form-section-title{font-size:11px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:1px;padding:6px 0 2px;border-bottom:1px solid var(--pale);grid-column:1/-1;margin-top:4px}
+.org-wrap{display:flex;gap:8px;align-items:center}
+.org-wrap select{flex:1}
+.org-custom{display:none;flex:1}
+.org-custom.show{display:block}
+
+/* ── ADMIN INDICATOR ── */
+.admin-bar{background:linear-gradient(135deg,#fef3c7,#fffbeb);border:1px solid #fde68a;border-radius:10px;padding:10px 16px;margin-bottom:16px;display:none;align-items:center;gap:10px;font-size:13px;font-weight:600;color:#78350f}
+.admin-bar.show{display:flex}
+.admin-dot{width:8px;height:8px;background:#d97706;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* ── LOCK BTN ── */
+.lock-btn{position:fixed;bottom:28px;right:28px;width:50px;height:50px;border-radius:50%;background:var(--navy);color:white;border:none;font-size:20px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.25);z-index:500;transition:all .2s;display:flex;align-items:center;justify-content:center}
+.lock-btn:hover{background:var(--blue);transform:scale(1.05)}
+.lock-btn.unlocked{background:#d97706}
+
+/* ── SORT HEADER ── */
+.sort-th{cursor:pointer;user-select:none}
+.sort-th:hover{background:rgba(255,255,255,.1)}
+.sort-arrow{margin-left:4px;opacity:.5;font-size:10px}
+.sort-th.active .sort-arrow{opacity:1}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:90px;right:28px;background:#1e293b;color:white;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:600;z-index:2000;transform:translateY(20px);opacity:0;transition:all .3s}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{background:#15803d}
+.toast.error{background:#b91c1c}
+
+/* ── RESPONSIVE ── */
+@media(max-width:700px){
+  .form-grid{grid-template-columns:1fr}
+  .filter-row{flex-direction:column;align-items:stretch}
+  .search-input{min-width:auto}
+  .items-table{display:block;overflow-x:auto}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="index.html">
+    <div class="lb">AI</div>
+    <div class="bt">ARISE PNU AI</div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">홈</a>
+    <a href="grad.html">대학원 육성</a>
+    <a href="part1.html">I. 구심점 확립</a>
+    <a href="part2.html">II. 교육과정</a>
+    <a href="part3.html">III. 생태계</a>
+    <a href="actions.html" class="active">실행 항목</a>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="breadcrumb"><a href="index.html">ARISE PNU AI</a> / 실행 항목 관리</div>
+    <div class="part-badge">ACTION ITEMS</div>
+    <h1>실행 항목 관리</h1>
+    <p>사업계획서 기반 실행 항목의 등록·진행 현황 추적 및 담당 기관별 관리</p>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="page-body">
+
+  <!-- ADMIN BAR -->
+  <div class="admin-bar" id="adminBar">
+    <div class="admin-dot"></div>
+    <span>관리자 모드 활성 — 항목 추가·수정·삭제가 가능합니다.</span>
+    <button class="btn btn-sm btn-outline" onclick="logout()" style="margin-left:auto">로그아웃</button>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <!-- STATS -->
+    <div class="stats-bar" id="statsBar">
+      <span style="font-size:12px;color:var(--sub);font-weight:700;align-self:center">전체:</span>
+      <div class="stat-chip" data-status="" onclick="filterByStatus(this)">
+        <div class="dot" style="background:#94a3b8"></div>
+        <span>전체</span>
+        <span class="cnt" id="cnt-all">0</span>
+      </div>
+      <div class="stat-chip" data-status="계획" onclick="filterByStatus(this)">
+        <div class="dot" style="background:#94a3b8"></div>
+        <span>계획</span>
+        <span class="cnt" id="cnt-계획">0</span>
+      </div>
+      <div class="stat-chip" data-status="진행중" onclick="filterByStatus(this)">
+        <div class="dot" style="background:#3b82f6"></div>
+        <span>진행중</span>
+        <span class="cnt" id="cnt-진행중">0</span>
+      </div>
+      <div class="stat-chip" data-status="완료" onclick="filterByStatus(this)">
+        <div class="dot" style="background:#10b981"></div>
+        <span>완료</span>
+        <span class="cnt" id="cnt-완료">0</span>
+      </div>
+      <div class="stat-chip" data-status="보류" onclick="filterByStatus(this)">
+        <div class="dot" style="background:#f59e0b"></div>
+        <span>보류</span>
+        <span class="cnt" id="cnt-보류">0</span>
+      </div>
+      <div class="stat-chip" data-status="취소" onclick="filterByStatus(this)">
+        <div class="dot" style="background:#ef4444"></div>
+        <span>취소</span>
+        <span class="cnt" id="cnt-취소">0</span>
+      </div>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="filter-row">
+      <input class="search-input" type="text" id="searchInput" placeholder="제목, 담당 기관 검색..." oninput="applyFilters()">
+      <select id="fCategory" onchange="applyFilters()">
+        <option value="">분류 전체</option>
+      </select>
+      <select id="fChapter" onchange="applyFilters()">
+        <option value="">챕터 전체</option>
+      </select>
+      <select id="fPriority" onchange="applyFilters()">
+        <option value="">우선순위 전체</option>
+        <option>높음</option>
+        <option>중간</option>
+        <option>낮음</option>
+      </select>
+      <select id="fSort" onchange="applyFilters()">
+        <option value="dueDate-asc">마감일 ↑</option>
+        <option value="dueDate-desc">마감일 ↓</option>
+        <option value="priority-asc">우선순위 ↑</option>
+        <option value="createdAt-desc">최근 등록순</option>
+        <option value="id-asc">ID 순</option>
+      </select>
+      <div class="toolbar-right">
+        <button class="btn btn-outline view-btn active" id="btnTable" onclick="setView('table')" title="테이블 뷰">☰</button>
+        <button class="btn btn-outline view-btn" id="btnCard" onclick="setView('card')" title="카드 뷰">⊞</button>
+        <button class="btn btn-primary" id="addBtn" onclick="openItemModal()" style="display:none">+ 새 항목</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ITEMS -->
+  <div id="itemsContainer"></div>
+
+</div><!-- /page-body -->
+
+<!-- LOCK BUTTON -->
+<button class="lock-btn" id="lockBtn" onclick="openAdminModal()" title="관리자 로그인">🔒</button>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ═══ ADMIN LOGIN MODAL ═══ -->
+<div class="modal-overlay" id="adminModal">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <h3>🔐 관리자 로그인</h3>
+      <button class="modal-close" onclick="closeModal('adminModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:var(--sub);margin-bottom:16px;line-height:1.6">
+        GitHub Personal Access Token(PAT)을 입력하세요.<br>
+        토큰은 이 탭이 닫힐 때까지만 유지됩니다.
+      </p>
+      <div class="form-group">
+        <label>GitHub Personal Access Token <span>*</span></label>
+        <input type="password" id="patInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
+      </div>
+      <p style="font-size:11px;color:var(--sub);margin-top:10px">
+        필요 권한: <code>Contents: Read and Write</code>
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('adminModal')">취소</button>
+      <button class="btn btn-primary" onclick="doLogin()">로그인</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ADD/EDIT ITEM MODAL ═══ -->
+<div class="modal-overlay" id="itemModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="itemModalTitle">새 실행 항목</h3>
+      <button class="modal-close" onclick="closeModal('itemModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+
+        <div class="form-section-title">기본 정보</div>
+
+        <div class="form-group form-full">
+          <label>제목 <span>*</span></label>
+          <input type="text" id="f-title" placeholder="행동 중심으로 간결하게 작성 (예: AI 단과대학 신설 추진)">
+        </div>
+
+        <div class="form-group form-full">
+          <label>설명</label>
+          <textarea id="f-desc" placeholder="배경, 목적, 구체적 실행 내용"></textarea>
+        </div>
+
+        <div class="form-section-title">분류 및 우선순위</div>
+
+        <div class="form-group">
+          <label>분류 <span>*</span></label>
+          <select id="f-category"></select>
+        </div>
+
+        <div class="form-group">
+          <label>관련 챕터</label>
+          <select id="f-chapter">
+            <option value="">— 선택 안 함 —</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>우선순위 <span>*</span></label>
+          <select id="f-priority">
+            <option value="">— 선택 —</option>
+            <option>높음</option>
+            <option>중간</option>
+            <option>낮음</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>상태 <span>*</span></label>
+          <select id="f-status">
+            <option value="">— 선택 —</option>
+          </select>
+        </div>
+
+        <div class="form-section-title">담당</div>
+
+        <div class="form-group form-full">
+          <label>담당 기관 <span>*</span></label>
+          <div class="org-wrap">
+            <select id="f-org" onchange="handleOrgChange()"></select>
+            <input type="text" id="f-org-custom" class="org-custom" placeholder="기관명 직접 입력">
+          </div>
+        </div>
+
+        <div class="form-group form-full">
+          <label>협력 기관</label>
+          <input type="text" id="f-collab" placeholder="복수 기관은 쉼표로 구분">
+        </div>
+
+        <div class="form-section-title">일정</div>
+
+        <div class="form-group">
+          <label>시작일</label>
+          <input type="date" id="f-startDate">
+        </div>
+
+        <div class="form-group">
+          <label>완료 목표일 <span>*</span></label>
+          <input type="date" id="f-dueDate">
+        </div>
+
+        <div class="form-group form-full">
+          <label>실제 완료일</label>
+          <input type="date" id="f-completedDate">
+        </div>
+
+        <div class="form-section-title">진행 현황</div>
+
+        <div class="form-group form-full">
+          <label>진행률</label>
+          <select id="f-progress">
+            <option value="">— 선택 안 함 —</option>
+          </select>
+        </div>
+
+        <div class="form-section-title">기타</div>
+
+        <div class="form-group form-full">
+          <label>비고</label>
+          <textarea id="f-notes" placeholder="회의 결과, 변경 사유, 메모 등"></textarea>
+        </div>
+
+        <div class="form-group form-full">
+          <label>참고 링크</label>
+          <input type="url" id="f-link" placeholder="https://...">
+        </div>
+
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('itemModal')">취소</button>
+      <button class="btn btn-primary" onclick="submitItem()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DELETE CONFIRM MODAL ═══ -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <h3>항목 삭제</h3>
+      <button class="modal-close" onclick="closeModal('deleteModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:14px;line-height:1.7">
+        <strong id="deleteItemTitle"></strong> 항목을 삭제하시겠습니까?<br>
+        <span style="color:var(--sub);font-size:13px">이 작업은 GitHub에 즉시 반영되며 되돌릴 수 없습니다.</span>
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('deleteModal')">취소</button>
+      <button class="btn btn-danger" onclick="confirmDelete()">삭제</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════
+   CONFIG
+═══════════════════════════════════════════════════ */
+const CONFIG = {
+  owner:    'inetguru',
+  repo:     'pnu_ai',
+  branch:   'main',
+  filePath: 'actions-data.json',
+  dataUrl:  './actions-data.json'   // 상대경로: GitHub Pages에서 바로 읽기
+};
+
+/* ═══════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════ */
+let S = {
+  data:       null,   // { meta, items }
+  fileSha:    null,   // GitHub API 업데이트용
+  token:      null,
+  isAdmin:    false,
+  view:       'table',
+  statusFilter: '',
+  filters:    { q:'', category:'', chapter:'', priority:'' },
+  sort:       'dueDate-asc',
+  deletingId: null,
+  editingId:  null
+};
+
+/* ═══════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════ */
+async function init() {
+  // 세션 토큰 복원
+  const saved = sessionStorage.getItem('arise_pat');
+  if (saved) { S.token = saved; S.isAdmin = true; }
+
+  await loadData();
+  populateFilters();
+  populateFormSelects();
+  renderAll();
+  updateAdminUI();
+}
+
+/* ═══════════════════════════════════════════════════
+   DATA LOAD
+═══════════════════════════════════════════════════ */
+async function loadData() {
+  try {
+    // GitHub API로 읽기 (SHA 포함)
+    const apiUrl = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${CONFIG.filePath}`;
+    const headers = { 'Accept': 'application/vnd.github.v3+json' };
+    if (S.token) headers['Authorization'] = `token ${S.token}`;
+
+    const res = await fetch(apiUrl, { headers });
+    if (res.ok) {
+      const json = await res.json();
+      S.fileSha = json.sha;
+      S.data = JSON.parse(b64DecodeUTF8(json.content));
+      return;
+    }
+  } catch(e) {}
+
+  // 폴백: 상대경로로 직접 읽기 (SHA 없음, 읽기만 가능)
+  try {
+    const res = await fetch(CONFIG.dataUrl + '?t=' + Date.now());
+    if (res.ok) S.data = await res.json();
+  } catch(e) {
+    S.data = { meta: {categories:[],orgs:[],priorities:[],statuses:[],progress:[],chapters:[]}, items:[] };
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   RENDER
+═══════════════════════════════════════════════════ */
+function renderAll() {
+  renderStats();
+  renderItems();
+}
+
+function renderStats() {
+  const items = S.data ? S.data.items : [];
+  const counts = { '계획':0,'진행중':0,'완료':0,'보류':0,'취소':0 };
+  items.forEach(i => { if(counts[i.status] !== undefined) counts[i.status]++; });
+
+  document.getElementById('cnt-all').textContent = items.length;
+  Object.keys(counts).forEach(k => {
+    const el = document.getElementById('cnt-'+k);
+    if (el) el.textContent = counts[k];
+  });
+}
+
+function renderItems() {
+  const container = document.getElementById('itemsContainer');
+  const items = getFilteredItems();
+
+  if (!items.length) {
+    container.innerHTML = `<div class="empty-state">
+      <div class="empty-icon">📋</div>
+      <h3>표시할 항목이 없습니다</h3>
+      <p>조건에 맞는 실행 항목이 없거나 아직 등록된 항목이 없습니다.</p>
+    </div>`;
+    return;
+  }
+
+  if (S.view === 'card') {
+    container.innerHTML = `<div class="items-cards">${items.map(renderCard).join('')}</div>`;
+  } else {
+    container.innerHTML = renderTable(items);
+  }
+}
+
+function renderTable(items) {
+  const adminCols = S.isAdmin ? '<th>관리</th>' : '';
+  const rows = items.map(item => {
+    const adminBtns = S.isAdmin ? `
+      <td class="td-actions">
+        <button class="btn btn-sm btn-outline" onclick="openItemModal('${item.id}')">수정</button>
+        <button class="btn btn-sm btn-danger" onclick="openDeleteModal('${item.id}')">삭제</button>
+      </td>` : '';
+    return `<tr>
+      <td class="td-id">${item.id}</td>
+      <td class="td-title">
+        ${esc(item.title)}
+        ${item.description ? `<small title="${esc(item.description)}">${esc(item.description)}</small>` : ''}
+      </td>
+      <td>${badgeStatus(item.status)}</td>
+      <td>${badgePriority(item.priority)}</td>
+      <td>${item.category ? `<span class="badge badge-cat">${esc(item.category)}</span>` : '—'}</td>
+      <td>${item.org ? esc(item.org) : '—'}</td>
+      <td>${item.dueDate ? fmtDate(item.dueDate) : '—'}</td>
+      <td>${item.progress ? `<span class="badge" style="background:#f0fdf4;color:#15803d">${esc(item.progress)}</span>` : '—'}</td>
+      ${adminBtns}
+    </tr>`;
+  }).join('');
+
+  return `<table class="items-table">
+    <thead><tr>
+      <th>ID</th><th>제목</th><th>상태</th><th>우선순위</th><th>분류</th>
+      <th>담당 기관</th><th>완료 목표일</th><th>진행률</th>${adminCols}
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+function renderCard(item) {
+  const adminBtns = S.isAdmin ? `
+    <div class="card-actions">
+      <button class="btn btn-sm btn-outline" onclick="openItemModal('${item.id}')">수정</button>
+      <button class="btn btn-sm btn-danger" onclick="openDeleteModal('${item.id}')">삭제</button>
+    </div>` : '';
+  const chapter = item.chapter ? `<span class="badge badge-ch">${esc(item.chapter.split('—')[0].trim())}</span>` : '';
+
+  return `<div class="item-card">
+    <div class="card-top">
+      <span class="card-id">${item.id}</span>
+      <div class="card-badges">${badgeStatus(item.status)}${badgePriority(item.priority)}</div>
+    </div>
+    <div class="card-title">${esc(item.title)}</div>
+    ${item.description ? `<div class="card-desc">${esc(item.description)}</div>` : ''}
+    <div class="card-meta">
+      ${item.category ? `<span class="badge badge-cat">${esc(item.category)}</span>` : ''}
+      ${chapter}
+      ${item.org ? `<span class="card-meta-item">🏢 ${esc(item.org)}</span>` : ''}
+      ${item.dueDate ? `<span class="card-meta-item">📅 ${fmtDate(item.dueDate)}</span>` : ''}
+      ${item.progress ? `<span class="card-meta-item">📊 ${esc(item.progress)}</span>` : ''}
+    </div>
+    ${adminBtns}
+  </div>`;
+}
+
+/* ═══════════════════════════════════════════════════
+   FILTER & SORT
+═══════════════════════════════════════════════════ */
+function getFilteredItems() {
+  if (!S.data) return [];
+  let items = [...S.data.items];
+
+  // 상태 필터 (stats bar)
+  if (S.statusFilter) items = items.filter(i => i.status === S.statusFilter);
+
+  // 검색
+  const q = S.filters.q.trim().toLowerCase();
+  if (q) items = items.filter(i =>
+    (i.title||'').toLowerCase().includes(q) ||
+    (i.org||'').toLowerCase().includes(q) ||
+    (i.description||'').toLowerCase().includes(q)
+  );
+
+  if (S.filters.category) items = items.filter(i => i.category === S.filters.category);
+  if (S.filters.chapter)  items = items.filter(i => i.chapter === S.filters.chapter);
+  if (S.filters.priority) items = items.filter(i => i.priority === S.filters.priority);
+
+  // 정렬
+  const [field, dir] = S.sort.split('-');
+  const priMap = { '높음':0,'중간':1,'낮음':2 };
+  items.sort((a,b) => {
+    let va = a[field]||'', vb = b[field]||'';
+    if (field === 'priority') { va = priMap[va]??9; vb = priMap[vb]??9; }
+    if (va < vb) return dir==='asc' ? -1 : 1;
+    if (va > vb) return dir==='asc' ? 1 : -1;
+    return 0;
+  });
+
+  return items;
+}
+
+function applyFilters() {
+  S.filters.q        = document.getElementById('searchInput').value;
+  S.filters.category = document.getElementById('fCategory').value;
+  S.filters.chapter  = document.getElementById('fChapter').value;
+  S.filters.priority = document.getElementById('fPriority').value;
+  S.sort             = document.getElementById('fSort').value;
+  renderItems();
+}
+
+function filterByStatus(chip) {
+  S.statusFilter = chip.dataset.status;
+  document.querySelectorAll('.stat-chip').forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+  renderItems();
+}
+
+/* ═══════════════════════════════════════════════════
+   VIEW TOGGLE
+═══════════════════════════════════════════════════ */
+function setView(v) {
+  S.view = v;
+  document.getElementById('btnTable').classList.toggle('active', v==='table');
+  document.getElementById('btnCard').classList.toggle('active',  v==='card');
+  renderItems();
+}
+
+/* ═══════════════════════════════════════════════════
+   ADMIN
+═══════════════════════════════════════════════════ */
+function openAdminModal() {
+  if (S.isAdmin) { logout(); return; }
+  document.getElementById('patInput').value = '';
+  openModal('adminModal');
+}
+
+async function doLogin() {
+  const pat = document.getElementById('patInput').value.trim();
+  if (!pat) { showToast('토큰을 입력하세요.','error'); return; }
+
+  // 토큰 검증: 파일 읽기 시도
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${CONFIG.filePath}`,
+      { headers: { 'Authorization':`token ${pat}`, 'Accept':'application/vnd.github.v3+json' } }
+    );
+    if (res.status === 401 || res.status === 403) throw new Error('토큰 인증 실패 (권한을 확인하세요)');
+    if (res.status === 404) throw new Error('파일을 찾을 수 없습니다 (filePath 설정 확인)');
+    if (!res.ok) throw new Error(`오류 ${res.status}`);
+    const json = await res.json();
+    S.fileSha = json.sha;
+    S.data = JSON.parse(b64DecodeUTF8(json.content));
+  } catch(e) {
+    showToast('토큰이 올바르지 않거나 권한이 없습니다.','error');
+    return;
+  }
+
+  S.token   = pat;
+  S.isAdmin = true;
+  sessionStorage.setItem('arise_pat', pat);
+  closeModal('adminModal');
+  updateAdminUI();
+  renderAll();
+  showToast('관리자 모드 활성화','success');
+}
+
+function logout() {
+  S.token = null; S.isAdmin = false;
+  sessionStorage.removeItem('arise_pat');
+  updateAdminUI();
+  renderAll();
+  showToast('로그아웃되었습니다.');
+}
+
+function updateAdminUI() {
+  document.getElementById('adminBar').classList.toggle('show', S.isAdmin);
+  document.getElementById('addBtn').style.display = S.isAdmin ? 'inline-flex' : 'none';
+  document.getElementById('lockBtn').textContent  = S.isAdmin ? '🔓' : '🔒';
+  document.getElementById('lockBtn').classList.toggle('unlocked', S.isAdmin);
+  document.getElementById('lockBtn').title = S.isAdmin ? '관리자 로그아웃' : '관리자 로그인';
+}
+
+/* ═══════════════════════════════════════════════════
+   ITEM MODAL (ADD / EDIT)
+═══════════════════════════════════════════════════ */
+function openItemModal(id) {
+  S.editingId = id || null;
+  document.getElementById('itemModalTitle').textContent = id ? '실행 항목 수정' : '새 실행 항목';
+
+  // 폼 초기화
+  const fields = ['title','desc','category','chapter','priority','status','org','collab','startDate','dueDate','completedDate','progress','notes','link'];
+  fields.forEach(f => {
+    const el = document.getElementById('f-'+f);
+    if (el) el.value = '';
+  });
+  document.getElementById('f-org-custom').value = '';
+  document.getElementById('f-org-custom').classList.remove('show');
+
+  if (id) {
+    const item = S.data.items.find(i => i.id === id);
+    if (!item) return;
+    document.getElementById('f-title').value         = item.title      || '';
+    document.getElementById('f-desc').value          = item.description|| '';
+    document.getElementById('f-category').value      = item.category   || '';
+    document.getElementById('f-chapter').value       = item.chapter    || '';
+    document.getElementById('f-priority').value      = item.priority   || '';
+    document.getElementById('f-status').value        = item.status     || '';
+    document.getElementById('f-collab').value        = item.collab     || '';
+    document.getElementById('f-startDate').value     = item.startDate  || '';
+    document.getElementById('f-dueDate').value       = item.dueDate    || '';
+    document.getElementById('f-completedDate').value = item.completedDate || '';
+    document.getElementById('f-progress').value      = item.progress   || '';
+    document.getElementById('f-notes').value         = item.notes      || '';
+    document.getElementById('f-link').value          = item.link       || '';
+
+    // 담당 기관: 목록에 있으면 선택, 없으면 직접입력
+    const orgSel = document.getElementById('f-org');
+    const orgOpts = Array.from(orgSel.options).map(o => o.value);
+    if (item.org && orgOpts.includes(item.org)) {
+      orgSel.value = item.org;
+    } else if (item.org) {
+      orgSel.value = '__custom__';
+      document.getElementById('f-org-custom').value = item.org;
+      document.getElementById('f-org-custom').classList.add('show');
+    }
+  }
+
+  openModal('itemModal');
+}
+
+function handleOrgChange() {
+  const sel = document.getElementById('f-org');
+  const custom = document.getElementById('f-org-custom');
+  custom.classList.toggle('show', sel.value === '__custom__');
+  if (sel.value !== '__custom__') custom.value = '';
+}
+
+function submitItem() {
+  const title    = document.getElementById('f-title').value.trim();
+  const category = document.getElementById('f-category').value;
+  const priority = document.getElementById('f-priority').value;
+  const status   = document.getElementById('f-status').value;
+  const dueDate  = document.getElementById('f-dueDate').value;
+  const orgSel   = document.getElementById('f-org').value;
+  const org      = orgSel === '__custom__'
+    ? document.getElementById('f-org-custom').value.trim()
+    : orgSel;
+
+  if (!title)    { showToast('제목을 입력하세요.','error'); return; }
+  if (!category) { showToast('분류를 선택하세요.','error'); return; }
+  if (!priority) { showToast('우선순위를 선택하세요.','error'); return; }
+  if (!status)   { showToast('상태를 선택하세요.','error'); return; }
+  if (!dueDate)  { showToast('완료 목표일을 입력하세요.','error'); return; }
+  if (!org)      { showToast('담당 기관을 입력하세요.','error'); return; }
+
+  const now = new Date().toISOString();
+
+  if (S.editingId) {
+    // 수정
+    const idx = S.data.items.findIndex(i => i.id === S.editingId);
+    if (idx === -1) return;
+    S.data.items[idx] = {
+      ...S.data.items[idx],
+      title, category, priority, status, org, dueDate,
+      description:    document.getElementById('f-desc').value.trim(),
+      chapter:        document.getElementById('f-chapter').value,
+      collab:         document.getElementById('f-collab').value.trim(),
+      startDate:      document.getElementById('f-startDate').value,
+      completedDate:  document.getElementById('f-completedDate').value,
+      progress:       document.getElementById('f-progress').value,
+      notes:          document.getElementById('f-notes').value.trim(),
+      link:           document.getElementById('f-link').value.trim(),
+      updatedAt:      now
+    };
+  } else {
+    // 추가
+    const newItem = {
+      id:             generateId(),
+      title, category, priority, status, org, dueDate,
+      description:    document.getElementById('f-desc').value.trim(),
+      chapter:        document.getElementById('f-chapter').value,
+      collab:         document.getElementById('f-collab').value.trim(),
+      startDate:      document.getElementById('f-startDate').value,
+      completedDate:  document.getElementById('f-completedDate').value,
+      progress:       document.getElementById('f-progress').value,
+      notes:          document.getElementById('f-notes').value.trim(),
+      link:           document.getElementById('f-link').value.trim(),
+      createdAt:      now,
+      updatedAt:      now
+    };
+    S.data.items.push(newItem);
+  }
+
+  closeModal('itemModal');
+  saveToGitHub(S.editingId ? '수정' : '추가');
+}
+
+/* ═══════════════════════════════════════════════════
+   DELETE
+═══════════════════════════════════════════════════ */
+function openDeleteModal(id) {
+  S.deletingId = id;
+  const item = S.data.items.find(i => i.id === id);
+  document.getElementById('deleteItemTitle').textContent = item ? `[${id}] ${item.title}` : id;
+  openModal('deleteModal');
+}
+
+function confirmDelete() {
+  if (!S.deletingId) return;
+  S.data.items = S.data.items.filter(i => i.id !== S.deletingId);
+  closeModal('deleteModal');
+  saveToGitHub('삭제');
+  S.deletingId = null;
+}
+
+/* ═══════════════════════════════════════════════════
+   GITHUB API SAVE
+═══════════════════════════════════════════════════ */
+async function saveToGitHub(action) {
+  if (!S.token) { showToast('저장 권한이 없습니다.','error'); return; }
+
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(S.data, null, 2))));
+  const body = {
+    message: `[ARISE] 실행항목 ${action} — ${new Date().toLocaleString('ko-KR')}`,
+    content,
+    branch: CONFIG.branch
+  };
+  if (S.fileSha) body.sha = S.fileSha;
+
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${CONFIG.filePath}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Authorization': `token ${S.token}`,
+          'Accept': 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      }
+    );
+    const json = await res.json();
+    if (!res.ok) throw new Error(json.message || '저장 실패');
+    S.fileSha = json.content.sha;
+    renderAll();
+    showToast(`항목이 GitHub에 저장되었습니다. (${action})`,'success');
+  } catch(e) {
+    showToast(`저장 오류: ${e.message}`,'error');
+    // 로컬 상태 복원
+    loadData().then(() => renderAll());
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   FORM POPULATION
+═══════════════════════════════════════════════════ */
+function populateFilters() {
+  if (!S.data) return;
+  const m = S.data.meta;
+
+  const fCat = document.getElementById('fCategory');
+  fCat.innerHTML = '<option value="">분류 전체</option>' +
+    (m.categories||[]).map(c => `<option>${c}</option>`).join('');
+
+  const fCh = document.getElementById('fChapter');
+  fCh.innerHTML = '<option value="">챕터 전체</option>' +
+    (m.chapters||[]).map(c => `<option>${c}</option>`).join('');
+}
+
+function populateFormSelects() {
+  if (!S.data) return;
+  const m = S.data.meta;
+
+  // 분류
+  const fsCat = document.getElementById('f-category');
+  fsCat.innerHTML = '<option value="">— 선택 —</option>' +
+    (m.categories||[]).map(c => `<option>${c}</option>`).join('');
+
+  // 챕터
+  const fsCh = document.getElementById('f-chapter');
+  fsCh.innerHTML = '<option value="">— 선택 안 함 —</option>' +
+    (m.chapters||[]).map(c => `<option>${c}</option>`).join('');
+
+  // 상태
+  const fsSt = document.getElementById('f-status');
+  fsSt.innerHTML = '<option value="">— 선택 —</option>' +
+    (m.statuses||[]).map(s => `<option>${s}</option>`).join('');
+
+  // 진행률
+  const fsPr = document.getElementById('f-progress');
+  fsPr.innerHTML = '<option value="">— 선택 안 함 —</option>' +
+    (m.progress||[]).map(p => `<option>${p}</option>`).join('');
+
+  // 담당 기관
+  const fsOrg = document.getElementById('f-org');
+  fsOrg.innerHTML = '<option value="">— 선택 —</option>' +
+    (m.orgs||[]).map(o => `<option>${o}</option>`).join('') +
+    '<option value="__custom__">직접 입력...</option>';
+}
+
+/* ═══════════════════════════════════════════════════
+   HELPERS
+═══════════════════════════════════════════════════ */
+function generateId() {
+  if (!S.data || !S.data.items.length) return 'ACT-001';
+  const nums = S.data.items
+    .map(i => parseInt((i.id||'').replace('ACT-',''), 10))
+    .filter(n => !isNaN(n));
+  const next = (nums.length ? Math.max(...nums) : 0) + 1;
+  return 'ACT-' + String(next).padStart(3, '0');
+}
+
+function fmtDate(d) {
+  if (!d) return '';
+  const [y,m,dd] = d.split('-');
+  return `${y}.${m}.${dd}`;
+}
+
+function esc(s) {
+  if (!s) return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function badgeStatus(s) {
+  const cls = {계획:'badge-plan',진행중:'badge-progress',완료:'badge-done',보류:'badge-hold',취소:'badge-cancel'};
+  return s ? `<span class="badge ${cls[s]||''}">${esc(s)}</span>` : '—';
+}
+
+function badgePriority(p) {
+  const cls = {높음:'badge-high',중간:'badge-mid',낮음:'badge-low'};
+  return p ? `<span class="badge ${cls[p]||''}">${esc(p)}</span>` : '—';
+}
+
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// 모달 외부 클릭 시 닫기
+document.querySelectorAll('.modal-overlay').forEach(el =>
+  el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); })
+);
+
+// ESC 키
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
+});
+
+let toastTimer;
+function showToast(msg, type='') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast show' + (type ? ' '+type : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+/* base64(UTF-8) → JS 문자열 (한국어 등 멀티바이트 대응) */
+function b64DecodeUTF8(b64) {
+  const bytes = atob(b64.replace(/\n/g,''));
+  const uint8 = new Uint8Array(bytes.length);
+  for (let i = 0; i < bytes.length; i++) uint8[i] = bytes.charCodeAt(i);
+  return new TextDecoder('utf-8').decode(uint8);
+}
+
+/* ── START ── */
+init();
+</script>
+</body>
+</html>

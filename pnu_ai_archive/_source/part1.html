@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Part I — 구심점 확립 및 기반 확충 | ARISE PNU AI</title>
+  <style>
+    :root{
+      --navy:#0a2463;--blue:#1a4fa0;--mid:#2563eb;--light:#60a5fa;--pale:#dbeafe;
+      --gold:#f59e0b;--gold2:#fbbf24;--green:#10b981;--teal:#0ea5e9;
+      --bg:#f0f4f8;--card:#ffffff;--text:#1e293b;--sub:#64748b;--bdr:#e2e8f0;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif;background:var(--bg);color:var(--text);line-height:1.65;display:flex;flex-direction:column;min-height:100vh}
+
+    /* ── NAV ── */
+    nav{background:var(--navy);padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+    .nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .nav-brand .lb{background:linear-gradient(135deg,var(--gold),#d97706);width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;color:white}
+    .nav-brand .bt{color:white;font-weight:800;font-size:14px}
+    .nav-links{display:flex;gap:4px}
+    .nav-links a{color:rgba(255,255,255,.65);font-size:12px;font-weight:600;padding:6px 12px;border-radius:6px;text-decoration:none;transition:all .2s;white-space:nowrap}
+    .nav-links a:hover{background:rgba(255,255,255,.1);color:white}
+    .nav-links a.active{background:rgba(37,99,235,.5);color:white}
+    .nav-badge{background:var(--gold);color:var(--navy);font-size:9px;font-weight:800;padding:2px 5px;border-radius:3px;margin-left:4px}
+    .nav-qr{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2) !important;color:rgba(255,255,255,.7) !important}
+    .nav-qr:hover{background:rgba(255,255,255,.2) !important;color:white !important}
+    @media(max-width:800px){.nav-qr{display:none}}
+
+    /* ── PAGE HEADER ── */
+    .page-header{background:linear-gradient(135deg,var(--navy),var(--blue));padding:44px 40px 36px;color:white}
+    .page-header-inner{max-width:1060px;margin:0 auto}
+    .breadcrumb{font-size:12px;color:rgba(255,255,255,.5);margin-bottom:12px}
+    .breadcrumb a{color:rgba(255,255,255,.6);text-decoration:none}
+    .breadcrumb a:hover{color:white}
+    .part-badge{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:4px 14px;font-size:12px;font-weight:700;color:var(--gold2);margin-bottom:12px}
+    .page-header h1{font-size:26px;font-weight:900;margin-bottom:8px;line-height:1.3}
+    .page-header p{font-size:14px;color:rgba(255,255,255,.65);max-width:700px;line-height:1.7}
+    .task-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+    .task-pill{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:5px 14px;font-size:12px;color:rgba(255,255,255,.85);font-weight:600}
+
+    /* ── LAYOUT ── */
+    .layout{display:flex;max-width:1060px;margin:32px auto;padding:0 24px;gap:28px;align-items:flex-start;flex:1}
+    .sidebar{width:220px;flex-shrink:0;position:sticky;top:76px;background:#fff;border-radius:12px;padding:16px 8px;box-shadow:0 1px 8px rgba(0,0,0,.07);align-self:flex-start}
+    .side-title{font-size:11px;font-weight:700;color:var(--sub);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;padding:0 8px}
+    .side-link{display:block;font-size:13px;padding:8px 12px;border-radius:8px;color:var(--sub);text-decoration:none;transition:all .2s;border-left:3px solid transparent;margin-bottom:2px}
+    .side-link:hover{background:rgba(37,99,235,.06);color:var(--blue)}
+    .side-link.active{background:var(--pale);color:var(--blue);border-left-color:var(--mid);font-weight:700}
+    .side-link .arrow{float:right;opacity:.4;font-size:11px}
+    .main{flex:1;min-width:0}
+
+    /* ── SECTION BLOCKS ── */
+    .block{background:var(--card);border:1px solid var(--bdr);border-radius:16px;padding:32px;margin-bottom:24px;scroll-margin-top:80px}
+    .block-num{font-size:11px;font-weight:700;color:var(--sub);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+    .block-title{font-size:19px;font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+    .block-title .icon{font-size:22px}
+    .block-desc{font-size:14px;color:var(--sub);margin-bottom:22px;line-height:1.7}
+    .block-divider{height:1px;background:var(--bdr);margin:24px 0}
+
+    /* ── TASK CHIPS (overview) ── */
+    .overview-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .ov-card{border-radius:12px;padding:18px;text-align:center}
+    .ov-card .ov-icon{font-size:28px;margin-bottom:10px}
+    .ov-card .ov-name{font-size:13px;font-weight:800;margin-bottom:6px}
+    .ov-card .ov-desc{font-size:12px;line-height:1.6}
+
+    /* ── ADP+X DIAGRAM ── */
+    .adpx-wrap{background:linear-gradient(135deg,#040d1a,#0f2d6e);border-radius:16px;padding:36px;color:white;margin-top:16px}
+    .adpx-title{text-align:center;font-size:16px;font-weight:800;margin-bottom:4px}
+    .adpx-sub{text-align:center;font-size:12px;color:rgba(255,255,255,.5);margin-bottom:32px}
+    .adpx-diagram{display:grid;grid-template-columns:1fr auto 1fr;grid-template-rows:1fr auto 1fr;gap:12px;align-items:center;justify-items:center}
+    .adpx-node{border-radius:14px;padding:16px 12px;text-align:center;min-width:140px}
+    .adpx-node .nd-label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;opacity:.7;margin-bottom:4px}
+    .adpx-node .nd-name{font-size:15px;font-weight:900;margin-bottom:6px}
+    .adpx-node .nd-dept{font-size:11px;opacity:.7;line-height:1.5}
+    .adpx-center{border:2px solid rgba(255,255,255,.3);border-radius:50%;width:110px;height:110px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,.05)}
+    .adpx-center .ac-label{font-size:10px;opacity:.6;margin-bottom:2px}
+    .adpx-center .ac-name{font-size:22px;font-weight:900;color:var(--gold2)}
+    .adpx-arrow{font-size:24px;opacity:.4;color:white}
+    .adpx-slogan{margin-top:24px;background:rgba(255,255,255,.06);border-radius:10px;padding:14px 20px;font-size:13px;color:rgba(255,255,255,.7);line-height:1.8;font-style:italic;text-align:center}
+    .adpx-slogan strong{color:var(--gold2);font-style:normal}
+
+    /* ── EXCELLENCE GRID ── */
+    .excel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+    .excel-card{border-radius:12px;padding:20px;position:relative;overflow:hidden}
+    .excel-card .ec-num{font-size:34px;font-weight:900;margin-bottom:4px}
+    .excel-card .ec-label{font-size:13px;font-weight:800;margin-bottom:8px}
+    .excel-card .ec-desc{font-size:12px;line-height:1.7}
+
+    /* ── BK21 TABLE ── */
+    .bk-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:16px}
+    .bk-table thead th{background:#f8fafc;padding:10px 12px;text-align:left;font-size:11px;font-weight:700;color:var(--sub);letter-spacing:.5px;text-transform:uppercase;border-bottom:1px solid var(--bdr)}
+    .bk-table tbody td{padding:11px 12px;border-bottom:1px solid #f1f5f9;vertical-align:top}
+    .bk-table tbody tr:last-child td{border-bottom:none}
+    .bk-table tbody tr:hover{background:#fafbfd}
+
+    /* ── GOVERNANCE ── */
+    .gov-wrap{background:linear-gradient(135deg,#040d1a,#0a2463);border-radius:16px;padding:32px;color:white;margin-top:16px}
+    .gov-title{text-align:center;font-size:16px;font-weight:800;margin-bottom:28px;color:var(--gold2)}
+    .org-tree{display:flex;flex-direction:column;align-items:center;gap:0}
+    .org-node{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:12px 28px;text-align:center;position:relative}
+    .org-node .on-title{font-size:14px;font-weight:800;color:white}
+    .org-node .on-sub{font-size:11px;color:rgba(255,255,255,.5);margin-top:3px}
+    .org-connector{width:2px;height:24px;background:rgba(255,255,255,.2);margin:0 auto}
+    .org-horiz{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;width:100%;margin-top:0}
+    .org-branch{display:flex;flex-direction:column;align-items:center;gap:0}
+    .org-branch .org-connector{height:20px}
+    .org-leaf{background:rgba(37,99,235,.25);border:1px solid rgba(37,99,235,.45);border-radius:10px;padding:14px 10px;text-align:center;width:100%}
+    .org-leaf .ol-icon{font-size:20px;margin-bottom:8px}
+    .org-leaf .ol-name{font-size:12px;font-weight:800;line-height:1.4;margin-bottom:6px}
+    .org-leaf .ol-desc{font-size:11px;color:rgba(255,255,255,.55);line-height:1.5}
+    .gov-note{margin-top:20px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);border-radius:10px;padding:14px 18px;font-size:12px;color:rgba(255,255,255,.7);line-height:1.7}
+    .gov-note strong{color:var(--gold2)}
+
+    /* ── INSTITUTE CARDS ── */
+    .institute-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+    .inst-card{border-radius:12px;padding:20px;border:1px solid}
+    .inst-card .ic-icon{font-size:24px;margin-bottom:10px}
+    .inst-card .ic-name{font-size:14px;font-weight:800;margin-bottom:8px}
+    .inst-card .ic-role{font-size:12px;line-height:1.7}
+
+    /* ── EMBED NOTE ── */
+    .embed-note{background:#f8fafc;border:1px solid var(--bdr);border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:12px;font-size:13px;color:var(--sub);margin-bottom:20px}
+    .embed-note .en-icon{font-size:20px;flex-shrink:0}
+    .embed-note a{color:var(--mid);font-weight:700;text-decoration:none}
+    .embed-note a:hover{text-decoration:underline}
+
+    /* ── TODO NOTE ── */
+    .todo-note{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:12px 16px;font-size:13px;color:#92400e;display:flex;align-items:flex-start;gap:8px;margin-top:12px}
+
+    /* ── FOOTER ── */
+    footer{background:var(--navy);color:rgba(255,255,255,.4);text-align:center;padding:24px;font-size:12px;margin-top:auto}
+
+    @media(max-width:800px){
+      .layout{flex-direction:column}
+      .sidebar{width:100%;position:static}
+      .overview-grid,.excel-grid,.institute-grid{grid-template-columns:1fr}
+      .org-horiz{grid-template-columns:repeat(2,1fr)}
+      .adpx-diagram{grid-template-columns:1fr;grid-template-rows:auto}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a class="nav-brand" href="index.html">
+    <div class="lb">AI</div>
+    <div class="bt">ARISE PNU AI</div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">홈</a>
+    <a href="grad.html">대학원 육성</a>
+    <a href="part1.html" class="active">I. 구심점 확립</a>
+    <a href="part2.html">II. 교육과정</a>
+    <a href="part3.html">III. 생태계</a>
+    <a href="actions.html">실행 항목</a>
+    <a href="QRCode.html" class="nav-qr">📱 QR</a>
+  </div>
+</nav>
+
+<!-- ── PAGE HEADER ── -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="breadcrumb"><a href="index.html">ARISE PNU AI</a> / Part I</div>
+    <div class="part-badge">PART I · ver 0.5071</div>
+    <h1>대학 AI 교육·연구의 구심점 확립 및 기반 확충</h1>
+    <p>AI 관련 학사조직 재편, 총장 직속 AI 거버넌스 기구 구성, AI 인프라 확충·집적화를 통해 부산대학교를 <strong style="color:var(--gold2);">동남권 AI 교육·연구의 실질적 구심점</strong>으로 확립합니다.</p>
+    <div class="task-pills">
+      <span class="task-pill">🏛️ AI 학사조직 개편</span>
+      <span class="task-pill">⚙️ AI 거버넌스 설치</span>
+      <span class="task-pill">🖥️ AI 인프라 확충·집적화</span>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="side-title">목차</div>
+    <a class="side-link" href="#overview">1. 개요</a>
+    <a class="side-link" href="#aura">2. A.U.R.A. 계획</a>
+    <a class="side-link" href="#org">3. AI 학사조직 개편</a>
+    <a class="side-link" href="#adpx" style="padding-left:22px;font-size:12px">— ADP+X 구조</a>
+    <a class="side-link" href="#excellence" style="padding-left:22px;font-size:12px">— AI대학 우수성</a>
+    <a class="side-link" href="#fusion" style="padding-left:22px;font-size:12px">— AX 융합전공</a>
+    <a class="side-link" href="#gov">4. AI 거버넌스</a>
+    <a class="side-link" href="#gov-struct" style="padding-left:22px;font-size:12px">— 거버넌스 구조</a>
+    <a class="side-link" href="#gov-head" style="padding-left:22px;font-size:12px">— 전담기구 권한</a>
+
+    <a class="side-link" href="#infra">5. AI 인프라 확충·집적화</a>
+    <a class="side-link" href="#infra-0" style="padding-left:22px;font-size:12px">— 개요</a>
+    <a class="side-link" href="#infra-1" style="padding-left:22px;font-size:12px">— PNU-AXIS</a>
+    <a class="side-link" href="#infra-2" style="padding-left:22px;font-size:12px">— Hub Space</a>
+    <a class="side-link" href="#infra-3" style="padding-left:22px;font-size:12px">— AIaaS · MLSecOps</a>
+
+    <div style="height:1px;background:var(--bdr);margin:18px 8px 14px"></div>
+    <div class="side-title">참고 자료</div>
+
+    <a href="pdf/교육부-AI거점대학-과업1-대학AI 교육연구의 구심점 확립 및 기반 확충.pdf" target="_blank"
+       style="display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border-radius:8px;text-decoration:none;color:var(--sub);font-size:12px;line-height:1.5;transition:all .2s;margin-bottom:4px"
+       onmouseover="this.style.background='rgba(37,99,235,.06)';this.style.color='var(--blue)'"
+       onmouseout="this.style.background='';this.style.color='var(--sub)'">
+      <span style="font-size:14px;flex-shrink:0;margin-top:1px">📄</span>
+      <span>과업1 가이드라인<br><span style="font-size:10px;opacity:.6">교육부 공식 과업 명세 PDF</span></span>
+    </a>
+
+    <a href="부산대_AX_AURA.html" target="_blank"
+       style="display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border-radius:8px;text-decoration:none;color:var(--sub);font-size:12px;line-height:1.5;transition:all .2s;margin-bottom:4px"
+       onmouseover="this.style.background='rgba(37,99,235,.06)';this.style.color='var(--blue)'"
+       onmouseout="this.style.background='';this.style.color='var(--sub)'">
+      <span style="font-size:14px;flex-shrink:0;margin-top:1px">🌟</span>
+      <span>부산대 AX AURA<br><span style="font-size:10px;opacity:.6">PNU-AX 마스터플랜 소개</span></span>
+    </a>
+
+    <a href="AX융합학부_융합전공.html" target="_blank"
+       style="display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border-radius:8px;text-decoration:none;color:var(--sub);font-size:12px;line-height:1.5;transition:all .2s;margin-bottom:4px"
+       onmouseover="this.style.background='rgba(37,99,235,.06)';this.style.color='var(--blue)'"
+       onmouseout="this.style.background='';this.style.color='var(--sub)'">
+      <span style="font-size:14px;flex-shrink:0;margin-top:1px">🏛️</span>
+      <span>AX융합학부 융합전공<br><span style="font-size:10px;opacity:.6">18개 융합전공 목록 시각화</span></span>
+    </a>
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <main class="main">
+
+    <!-- ─── 1. 개요 ─── -->
+    <div class="block" id="overview">
+      <div class="block-num">Section 1</div>
+      <div class="block-title"><span class="icon">📋</span>개요</div>
+      <div class="block-desc">대학 AI 교육·연구의 구심점 확립 및 기반 확충 분야 (과업 1) 교육부 지정 세부 과업과 부산대학교 접근 방안</div>
+
+      <div class="embed-note">
+        <span class="en-icon">📄</span>
+        <span>대학 AI 교육·연구의 구심점 확립 및 기반 확충 분야:<a href="pdf/교육부-AI거점대학-과업1-대학AI 교육연구의 구심점 확립 및 기반 확충.pdf" target="_blank"> 과업1 가이드라인 PDF ↗</a></span>
+      </div>
+
+      <div class="overview-grid">
+        <div class="ov-card" style="background:#dbeafe;">
+          <div class="ov-icon">🏛️</div>
+          <div class="ov-name" style="color:#1e3a8a;">AI 학사조직 개편</div>
+          <div class="ov-desc" style="color:#1e40af;">AI 융합이 필요한 여러 단과대학·학과 간 연계를 기반으로 AI 융합교육과정을 개발·운영하는 학사조직 마련</div>
+        </div>
+        <div class="ov-card" style="background:#ede9fe;">
+          <div class="ov-icon">⚙️</div>
+          <div class="ov-name" style="color:#4c1d95;">AI 거버넌스 설치</div>
+          <div class="ov-desc" style="color:#5b21b6;">학내 AI 융합교육의 전방위 확산을 위한 총장 직속 전담기구 마련 및 다양한 구성원 참여 유도</div>
+        </div>
+        <div class="ov-card" style="background:#dcfce7;">
+          <div class="ov-icon">🖥️</div>
+          <div class="ov-name" style="color:#14532d;">AI 인프라 확충·집적화</div>
+          <div class="ov-desc" style="color:#166534;">GPU 서버, 실습실 등 AI 교육·연구 인프라 확충 및 클라우드 기반 컴퓨팅 서비스 지원 (별도 장에서 상세 기술)</div>
+        </div>
+      </div>
+
+      <div class="block-divider"></div>
+      <div style="background:#f0f7ff;border-radius:10px;padding:16px 20px;">
+        <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:8px;">📌 접근 전략</div>
+        <div style="font-size:13px;color:var(--text);line-height:1.8;">
+          <strong>준비되어 있음 · 규모 · 우수성</strong>을 핵심 키워드로 강조<br>
+          부산대학교는 <br>✦ A.U.R.A. 마스터플랜 <br>✦ 총장 직속 3개 AI 전담 기구 <br>✦ AI대학 (2027년 출범) 등 <br>실질적 AI 대전환 체계를 이미 마련하였음을 부각
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── 2. A.U.R.A ─── -->
+    <div class="block" id="aura">
+      <div class="block-num">Section 2</div>
+      <div class="block-title"><span class="icon">🌟</span>부산대학교 A.U.R.A. 계획</div>
+      <div class="block-desc">전사적 AI 대전환을 위한 PNU-AX 마스터플랜<br><strong>A</strong>I Philosophy · <strong>U</strong>nified Research · <strong>R</strong>einforced Education · <strong>A</strong>daptive Administration</div>
+
+      <div class="embed-note">
+        <span class="en-icon">🔗</span>
+        <span>별도 제작된 상세 소개 페이지 참조: <a href="부산대_AX_AURA.html" target="_blank">부산대 AX AURA 소개 페이지 열기 ↗</a></span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
+        <div style="background:#f0f7ff;border-radius:10px;padding:16px;">
+          <div style="font-size:13px;font-weight:800;color:var(--blue);margin-bottom:8px;">📐 마스터플랜 규모</div>
+          <div style="font-size:13px;color:var(--sub);line-height:1.8">
+            ✦ 8대 전략목표<br>
+            ✦ 22개 전략과제<br>
+            ✦ 47개 실행과제<br>
+            ✦ 3개년 로드맵
+          </div>
+        </div>
+        <div style="background:#fffbeb;border-radius:10px;padding:16px;">
+          <div style="font-size:13px;font-weight:800;color:#92400e;margin-bottom:8px;">🏆 주요 성과 (2025~2026)</div>
+          <div style="font-size:13px;color:var(--sub);line-height:1.8">
+            ✦ 한국의 경영대상 AI 혁신 부문 대상<br>
+            ✦ University AI-MASTER 국내 대학 최초 인증<br>
+            ✦ 지도교수상담 AI 도우미 국립대 최초 구축<br>
+            ✦ 산지니 AI 플랫폼 자체 구축·운영
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── 3. AI 학사조직 개편 ─── -->
+    <div class="block" id="org">
+      <div class="block-num">Section 3</div>
+      <div class="block-title"><span class="icon">🏛️</span>AI 학사조직 개편</div>
+      <div class="block-desc">AI 관련 전공의 집적화와 여러 단과대학·학과 간 연계를 주도하는 구심점으로서 AI단과대학을 구성합니다.</div>
+
+      <!-- 3-1: ADP+X 구조 -->
+      <div id="adpx">
+        <div style="font-size:14px;font-weight:700;margin-bottom:4px;color:var(--text);">① AI대학 구성과 설립 — ADP+X 구조</div>
+        <div style="font-size:13px;color:var(--sub);margin-bottom:12px;line-height:1.7">
+          AI대학은 <strong>AI · Data · Process + X(AX)</strong>의 통합 구조로 설계되어, 단순 기술교육을 넘어 다양한 도메인에서 AI 혁신을 실현하는 인재를 양성합니다. 2027년 3월 출범 예정입니다.
+        </div>
+
+        <div class="adpx-wrap">
+          <div class="adpx-title">부산대학교 AI대학 — ADP+X 구조</div>
+          <div class="adpx-sub">AI is created from Data, applied to Process, and realized as AX.</div>
+
+          <div style="display:grid;grid-template-columns:1fr auto 1fr;grid-template-rows:auto auto auto;gap:10px 20px;align-items:center;justify-items:center;max-width:640px;margin:0 auto">
+
+            <!-- Row 1: Data (top) -->
+            <div></div>
+            <div class="adpx-node" style="background:rgba(6,182,212,.2);border:1px solid rgba(6,182,212,.4);">
+              <div class="nd-label">Data</div>
+              <div class="nd-name" style="color:#67e8f9;">데이터사이언스학부<br><span style="font-size:12px;opacity:.7">+ 통계학과</span></div>
+              <div class="nd-dept">AI를 만들고 성장시키는 원천 자원</div>
+            </div>
+            <div></div>
+
+            <!-- Row 2: AI (left) + CENTER + Process (right) -->
+            <div class="adpx-node" style="background:rgba(37,99,235,.2);border:1px solid rgba(37,99,235,.45);">
+              <div class="nd-label">AI</div>
+              <div class="nd-name" style="color:#93c5fd;">AI컴퓨터공학부</div>
+              <div class="nd-dept">데이터로부터 지능을 창출하고 지속 진화</div>
+            </div>
+
+            <div class="adpx-center">
+              <div class="ac-label" style="color:rgba(255,255,255,.5);font-size:9px">AI대학</div>
+              <div class="ac-name">AX</div>
+              <div style="font-size:10px;color:rgba(255,255,255,.5);margin-top:2px">AI Transformation</div>
+            </div>
+
+            <div class="adpx-node" style="background:rgba(139,92,246,.2);border:1px solid rgba(139,92,246,.4);">
+              <div class="nd-label">Process</div>
+              <div class="nd-name" style="color:#c4b5fd;">산업공학부</div>
+              <div class="nd-dept">현실 세계 활동 구조화, Data 생성, <BR> AI 적용의 대상</div>
+            </div>
+
+            <!-- Row 3: AX융합학부 (bottom) -->
+            <div></div>
+            <div class="adpx-node" style="background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.4);">
+              <div class="nd-label" style="color:rgba(251,191,36,.7)">X (AX)</div>
+              <div class="nd-name" style="color:var(--gold2);">AX융합학부</div>
+              <div class="nd-dept">AI·Data·Process 통합, 도메인 혁신 실현</div>
+            </div>
+            <div></div>
+          </div>
+
+          <div style="text-align:center;margin:20px 0 0;display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+            <div style="background:rgba(255,255,255,.06);border-radius:10px;padding:12px 20px;max-width:240px">
+              <div style="font-size:11px;color:rgba(255,255,255,.5);margin-bottom:4px">대학원 (BK21) 연계</div>
+              <div style="font-size:13px;color:white;line-height:1.7">AI대학원<br>데이터사이언스대학원<br>산업공학과 대학원</div>
+            </div>
+            <div style="background:rgba(255,255,255,.06);border-radius:10px;padding:12px 20px;max-width:240px">
+              <div style="font-size:11px;color:rgba(255,255,255,.5);margin-bottom:4px">전 학문 분야 확산</div>
+              <div style="font-size:13px;color:white;line-height:1.7">다양한 AX 융합전공으로<br>학내 전 학문분야<br>AX 연계 및 확산</div>
+            </div>
+          </div>
+
+          <div class="adpx-slogan">
+            <strong>ADP is the foundation, AX is the realization.</strong><br>
+            AI · Data · Process의 통합을 통해 다양한 도메인에서 혁신을 실현하는 전환 패러다임
+          </div>
+        </div>
+      </div>
+
+      <div class="block-divider"></div>
+
+      <!-- 3-2: 우수성 -->
+      <div id="excellence">
+        <div style="font-size:14px;font-weight:700;margin-bottom:4px;">② 부산대학교 AI대학의 우수성</div>
+        <div style="font-size:13px;color:var(--sub);margin-bottom:14px;">규모·우수성·융합성 세 가지 축에서 동남권 최고 수준의 AI 교육 역량을 입증합니다.</div>
+
+        <div class="excel-grid">
+          <div class="excel-card" style="background:#dbeafe;">
+            <div class="ec-num" style="color:#1e3a8a;">424명</div>
+            <div class="ec-label" style="color:#1e3a8a;">2027 학부 입학 정원</div>
+            <div class="ec-desc" style="color:#1e40af;">다른 대학들의 AI단과대학 입학정원 규모는 보통 150여명 수준, 가장 적극적이라고 알려진 전남대도 250여명 수준, 규모가 클 뿐 아니라 ADP+X라는 짜임새 있는 구성</div>
+          </div>
+          <div class="excel-card" style="background:#dcfce7;">
+            <div class="ec-num" style="color:#14532d;">300+</div>
+            <div class="ec-label" style="color:#14532d;">BK21 대학원생</div>
+            <div class="ec-desc" style="color:#166534;">AI대학원, 데이터사이언스대학원, 산업공학과 대학원 등 ADP 분야의 대학원을 활발히 운영 중이며 3개 분야 모두 BK21 사업에 선정되었음. BK21 사업단에서 300명 이상의 대학원생 활발히 연구 중</div>
+          </div>
+          <div class="excel-card" style="background:#fef3c7;">
+            <div class="ec-num" style="color:#92400e;">18개</div>
+            <div class="ec-label" style="color:#92400e;">AX 융합전공</div>
+            <div class="ec-desc" style="color:#92400e;">바이오·신약, 푸드테크, 인문·사회, 경영, 제조AI, 항만물류, 디지털트윈, 스마트시티 등 9개 분야</div>
+          </div>
+        </div>
+
+        <div class="todo-note">
+          ⚠️ <strong>향후 보완 필요:</strong> 전임 교원 수 및 확충 계획, 겸임 교원 확보 내역 추가 필요
+        </div>
+
+        <div style="margin-top:20px;">
+          <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px">AI대학 대학원과 BK21 연구사업단 현황</div>
+          <table class="bk-table">
+            <thead>
+              <tr>
+                <th>사업단명</th>
+                <th>소속 대학원</th>
+                <th>특성</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>동남권4차산업혁명리더양성사업단</strong></td>
+                <td>AI 대학원<br><small style="color:var(--sub)">(대학원 정보융합공학과 — AI전공, 컴퓨터공학전공)</small></td>
+                <td>AI 전문 석·박사 인재 양성, 동남권 4차 산업혁명 리더 배출</td>
+              </tr>
+              <tr>
+                <td><strong>GLOW-AI 혁신인재양성교육연구단</strong></td>
+                <td>데이터사이언스 대학원</td>
+                <td>데이터사이언스·AI 혁신 인재 양성, 글로벌 AI 교육연구 네트워크 구축</td>
+              </tr>
+              <tr>
+                <td><strong>글로벌 공급망 혁신을 위한 산업 빅데이터교육연구단</strong></td>
+                <td>대학원 산업공학과</td>
+                <td>공급망·빅데이터 분석, 제조·물류·서비스 AI 융합 및 Process 혁신 연구</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="embed-note">
+        <span class="en-icon">📄</span>
+        <span>AI대학 구성도 (대학원 부각): <a href="pdf/부산대_AI대학구성도_출처AI대학신설안.pdf" target="_blank"> 출처 - AI대학 신설(안) 보고서 ↗</a></span>
+      </div>
+
+      <div class="block-divider"></div>
+
+      <!-- 3-3: AX 융합전공 -->
+      <div id="fusion">
+        <div style="font-size:14px;font-weight:700;margin-bottom:4px;">③ AX융합학부 — 지역 성장 엔진 분야 융합전공</div>
+        <div style="font-size:13px;color:var(--sub);margin-bottom:12px;line-height:1.7">
+          단순 AI 기술 교육을 넘어, 지역 성장 엔진 산업과 직결된 9개 분야 18개 AX 융합전공을 통해 다양한 단과대학·학과와 연계합니다.
+        </div>
+        <div class="embed-note">
+          <span class="en-icon">🔗</span>
+          <span>상세 목록 시각화 페이지: <a href="AX융합학부_융합전공.html" target="_blank">AX융합학부 융합전공 목록 열기 ↗</a></span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <span style="background:#d1fae5;color:#065f46;font-size:12px;font-weight:700;padding:5px 12px;border-radius:8px">🧬 바이오·신약 (2개)</span>
+          <span style="background:#fef3c7;color:#92400e;font-size:12px;font-weight:700;padding:5px 12px;border-radius:8px">🌾 푸드테크AX (1개)</span>
+          <span style="background:#ede9fe;color:#4c1d95;font-size:12px;font-weight:700;padding:5px 12px;border-radius:8px">📚 인문·사회·문화 (2개)</span>
+          <span style="background:#dbeafe;color:#1e3a8a;font-size:12px;font-weight:700;padding:5px 12px;border-radius:8px">💼 경영·경통 (2개)</span>
+          <span style="background:#ffedd5;color:#7c2d12;font-size:12px;font-weight:700;padding:5px 12px;border-radius:8px">🏭 제조AI (3개)</span>
+          <span style="background:#e0f2fe;color:#0c4a6e;font-size:12px;font-weight:700;padding:5px 12px;border-radius:8px">⚓ 항만물류AI (1개)</span>
+          <span style="background:#e0e7ff;color:#312e81;font-size:12px;font-weight:700;padding:5px 12px;border-radius:8px">💻 AX계산과학·디지털트윈 (4개)</span>
+          <span style="background:#ccfbf1;color:#134e4a;font-size:12px;font-weight:700;padding:5px 12px;border-radius:8px">🌍 스마트시티·환경 (2개)</span>
+          <span style="background:#f1f5f9;color:#1e293b;font-size:12px;font-weight:700;padding:5px 12px;border-radius:8px">⛵ 조선해양 (1개)</span>
+        </div>
+
+        <div style="margin-top:20px;">
+          <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;">🏗️ AX 융합전공 소속 구성 - AI대학 + X모빌리티대학</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div style="background:linear-gradient(135deg,#1e3a8a,#1d4ed8);border-radius:12px;padding:20px;">
+              <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.6);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">AI 대학 · AX융합학부</div>
+              <div style="font-size:14px;font-weight:800;color:white;margin-bottom:10px;">일반 AX 융합전공</div>
+              <div style="font-size:12px;color:rgba(255,255,255,.75);line-height:1.8;">
+                바이오·신약, 푸드테크AX, 인문·사회·문화,<br>
+                경영·경통, AX계산과학·디지털트윈,<br>
+                스마트시티·환경, 조선해양 등
+              </div>
+              <div style="margin-top:10px;background:rgba(255,255,255,.1);border-radius:8px;padding:8px 12px;font-size:11px;color:rgba(255,255,255,.6);">
+                ✦ 기존 융합전공 소속 변경·개편 검토<br>
+                ✦ <a href="https://con.pusan.ac.kr/con/74187/subview.do" target="_blank" style="color:#93c5fd;">교육혁신본부 융합교육센터</a> 기존 전공 재편 반영
+              </div>
+            </div>
+            <div style="background:linear-gradient(135deg,#7c2d12,#dc2626);border-radius:12px;padding:20px;">
+              <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.6);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">X-모빌리티 대학 내 생성</div>
+              <div style="font-size:14px;font-weight:800;color:white;margin-bottom:10px;">성장엔진 특화 AI 융합전공</div>
+              <div style="font-size:12px;color:rgba(255,255,255,.75);line-height:1.8;">
+                항만물류AI, 제조AI,<br>
+                자율주행·모빌리티,<br>
+                조선해양 AX 특화 등
+              </div>
+              <div style="margin-top:10px;background:rgba(255,255,255,.1);border-radius:8px;padding:8px 12px;font-size:11px;color:rgba(255,255,255,.6);">
+                ✦ 동남권 지역 성장엔진 산업 직결<br>
+                ✦ X-모빌리티 대학 제안 내용과 연계
+              </div>
+            </div>
+          </div>
+          <!-- Inetguru 추가 이미지 -->
+          <div style="margin-top:10px;background:white;border:1px solid #bfdbfe;border-radius:8px;overflow:hidden;cursor:zoom-in;"
+                onclick="openImgPopup('image/AX융합전공과대학구조.png','융합 전공 - AI 대학 + X-Mobility 대학')">
+            <img src="image/AX융합전공과대학구조.png" alt="융합 전공 - AI 대학 + X-Mobility 대학"
+                  style="width:100%;display:block;max-height:300px;object-fit:contain;background:#f8faff;"
+                  onerror="this.parentElement.style.display='none'">
+            <div style="padding:5px 10px;font-size:10px;color:#1e3a8a;background:#eff6ff;border-top:1px solid #bfdbfe;">
+              📐 AX 융합 전공 - AI 대학 + X-Mobility 대학 구조 
+            </div>
+          </div>
+          <div style="margin-top:10px;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;font-size:12px;color:#92400e;">
+            💡융합전공 구성 예시는 최종 명칭이 아닌 분야 예시이며, 실제 전공명과 다를 수 있습니다.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── 4. AI 거버넌스 ─── -->
+    <div class="block" id="gov">
+      <div class="block-num">Section 4</div>
+      <div class="block-title"><span class="icon">⚙️</span>AI 거버넌스</div>
+      <div class="block-desc">총장 직속의 3개 AI 전담기구와 교학부총장 중심의 의사결정 체계로 전사적 AI 대전환을 실행합니다.</div>
+
+      <!-- 4-1: 거버넌스 구조 -->
+      <div id="gov-struct">
+        <div style="font-size:14px;font-weight:700;margin-bottom:12px;">① AI거점대학 거버넌스 구조</div>
+
+        <div class="gov-wrap">
+          <div class="gov-title">부산대학교 AI 거점대학 거버넌스 체계</div>
+
+          <div class="org-tree">
+            <!-- 총장 -->
+            <div class="org-node" style="background:rgba(245,158,11,.2);border-color:rgba(245,158,11,.4);min-width:180px">
+              <div class="on-title">총 장</div>
+              <div class="on-sub">부산대학교</div>
+            </div>
+            <div class="org-connector"></div>
+
+            <!-- 교학부총장 -->
+            <div class="org-node" style="background:rgba(37,99,235,.3);border-color:rgba(37,99,235,.5);min-width:260px">
+              <div class="on-title">교학부총장</div>
+              <div class="on-sub">AI 거점대학 사업 추진의 장</div>
+            </div>
+            <div class="org-connector"></div>
+
+            <!-- 운영위원회 -->
+            <div class="org-node" style="min-width:200px">
+              <div class="on-title">운영위원회</div>
+              <div class="on-sub">전략 조율 및 의사결정 지원</div>
+            </div>
+            <div class="org-connector" style="height:28px"></div>
+
+            <!-- 4개 기관 -->
+            <div class="org-horiz">
+              <div class="org-branch">
+                <div class="org-connector" style="height:20px"></div>
+                <div class="org-leaf">
+                  <div class="ol-icon">🏛️</div>
+                  <div class="ol-name">AI 대학</div>
+                  <div class="ol-desc">AI 전문·융합 학사 교육의 핵심 조직 (2027.3 출범)</div>
+                </div>
+              </div>
+              <div class="org-branch">
+                <div class="org-connector" style="height:20px"></div>
+                <div class="org-leaf" style="background:rgba(16,185,129,.2);border-color:rgba(16,185,129,.4)">
+                  <div class="ol-icon">🎓</div>
+                  <div class="ol-name">AI융합교육원</div>
+                  <div class="ol-desc">학내 AI 기초·융합교육 전방위 확산 컨트롤타워</div>
+                </div>
+              </div>
+              <div class="org-branch">
+                <div class="org-connector" style="height:20px"></div>
+                <div class="org-leaf" style="background:rgba(245,158,11,.2);border-color:rgba(245,158,11,.4)">
+                  <div class="ol-icon">🔬</div>
+                  <div class="ol-name">장영실 AI융합연구원</div>
+                  <div class="ol-desc">AI 기반 융합연구 선도·혁신 창출 연구 컨트롤타워</div>
+                </div>
+              </div>
+              <div class="org-branch">
+                <div class="org-connector" style="height:20px"></div>
+                <div class="org-leaf" style="background:rgba(139,92,246,.2);border-color:rgba(139,92,246,.4)">
+                  <div class="ol-icon">⚙️</div>
+                  <div class="ol-name">AX정보화혁신본부</div>
+                  <div class="ol-desc">디지털 인프라·플랫폼 구축 실행 컨트롤타워</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="embed-note">
+        <span class="en-icon">📄</span>
+        <span>AI대학 거버넌스 구성도, X-Mobility와의 관계 표현(?) : <a href="pdf/부산대_AI거버넌스_출처AI대학신설안.pdf" target="_blank"> 출처 - AI대학 신설(안) 보고서 ↗</a></span>
+      </div>
+
+      <div class="block-divider"></div>
+
+      <!-- 4-2: 3개 기관 역할 -->
+      <div id="gov-head">
+        <div style="font-size:14px;font-weight:700;margin-bottom:12px;">② 전담 기구의 역할과 권한</div>
+
+        <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:14px 18px;font-size:13px;color:#92400e;margin-bottom:16px;line-height:1.8">
+          ✦<strong>교학부총장</strong>이 AI 거점대학 사업 추진의 장으로서 역할하며, AI대학·AI융합교육원·장영실AI융합연구원·AX정보화혁신본부 간 원활한 학내 의견 조율을 주도합니다.<br>
+          ➤ <strong>기획 및 예산 배분</strong>, <strong>교내 위원회 권한 위임</strong>을 통한 대체 심의 등 실질적 의사결정 권한 부여 <br>
+          ✦ AI대학 신설안에 제시한 <stroong>AX선도위원회(위원장 : 대외전략부총장, X-모빌리티 대학 사업 총괄?)</stroong>을 참고하여 X-모빌리티 대학과의 연계 구조 포함
+        </div>
+
+        <!-- 조직 실체 강조 배너 -->
+        <div style="background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fde68a;border-radius:12px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;gap:12px;">
+          <span style="font-size:22px;flex-shrink:0;">🏗️</span>
+          <div style="font-size:13px;color:#92400e;line-height:1.7;">
+            <strong>실체가 있는 조직 — 이미 구성·운영 중</strong><br>
+            3개 전담기구는 계획 단계가 아닌 <strong>실제 조직과 구성원을 갖추고 현재 운영 중</strong>인 기구입니다.
+            부산대학교의 AI 대전환이 체계적 실행 단계에 있음을 나타냅니다.
+          </div>
+        </div>
+
+        <div class="institute-grid">
+          <!-- AI융합교육원 -->
+          <div class="inst-card" style="background:#dbeafe;border-color:#93c5fd;">
+            <div class="ic-icon">🎓</div>
+            <div class="ic-name" style="color:#1e3a8a;">AI융합교육원</div>
+            <div class="ic-role" style="color:#1e40af;">
+              학내 AI 기초 및 융합 교육의 전방위 확산을 위한 <strong>총장 직속</strong> AI 융합교육 컨트롤 타워.
+            </div>
+            <div style="margin-top:10px;background:rgba(255,255,255,.6);border-radius:8px;padding:10px 12px;">
+              <div style="font-size:11px;font-weight:700;color:#1e3a8a;margin-bottom:6px;">주요 역할</div>
+              <ul style="font-size:11px;color:#1e40af;line-height:1.8;padding-left:14px;">
+                <li>전교생 대상 AI 기초교육 기획·운영 (인공지능과 디지털 사고)</li>
+                <li>비전공 교원 AI 연수 프로그램 운영</li>
+                <li>AI 역량 교육 교과목 개발·운영</li>
+                <li>AI 융합 교과목 개발 지원</li>
+                <li>AI Enhanced 교육 콘텐츠 표준화·확산</li>
+              </ul>
+            </div>
+            <div style="margin-top:8px;background:rgba(37,99,235,.1);border-radius:6px;padding:6px 10px;font-size:11px;color:#1e3a8a;">
+              {향후 보완} 원장, 주요 구성원, 조직도 추가 예정
+            </div>
+            <!-- AI융합교육원 구조도 이미지 -->
+            <div style="margin-top:10px;background:white;border:1px solid #bfdbfe;border-radius:8px;overflow:hidden;cursor:zoom-in;"
+                 onclick="openImgPopup('image/AI융합교육원.png','AI융합교육원 구조도')">
+              <img src="image/AI융합교육원.png" alt="AI융합교육원 구조도"
+                   style="width:100%;display:block;max-height:180px;object-fit:contain;background:#f8faff;"
+                   onerror="this.parentElement.style.display='none'">
+              <div style="padding:5px 10px;font-size:10px;color:#1e3a8a;background:#eff6ff;border-top:1px solid #bfdbfe;">
+                📐 AI융합교육원 구조도 (클릭하여 확대)
+              </div>
+            </div>
+          </div>
+
+          <!-- 장영실AI융합연구원 -->
+          <div class="inst-card" style="background:#fef3c7;border-color:#fde68a;">
+            <div class="ic-icon">🔬</div>
+            <div class="ic-name" style="color:#92400e;">장영실AI융합연구원</div>
+            <div class="ic-role" style="color:#92400e;">
+              AI 기반 융합 연구를 선도하고 혁신을 창출하는 <strong>총장 직속</strong> AI 융합연구 컨트롤 타워.
+            </div>
+            <div style="margin-top:10px;background:rgba(255,255,255,.6);border-radius:8px;padding:10px 12px;">
+              <div style="font-size:11px;font-weight:700;color:#92400e;margin-bottom:6px;">주요 역할</div>
+              <ul style="font-size:11px;color:#a16207;line-height:1.8;padding-left:14px;">
+                <li>AI 실전형 교육(AX-PBL) 기획·운영 주도</li>
+                <li>대학원 AI 공통 핵심 교육과정 개발</li>
+                <li>Sovereign AI 특화 교육·연구 연계</li>
+                <li>동남권 산업 데이터 기반 AX 연구 수행</li>
+                <li>Top-Down형 전략 연구 과제 관리</li>
+              </ul>
+            </div>
+            <div style="margin-top:8px;background:rgba(245,158,11,.15);border-radius:6px;padding:6px 10px;font-size:11px;color:#92400e;">
+              📌 실체가 있는 기존 연구센터를 산하 기관으로 등록하려면 <strong>연구시설</strong>이 아닌 <strong>부속기관</strong>으로 격상 필요 - 연구진흥과  
+              <br>{향후 보완} 원장, 주요 구성원, 센터·연구단 조직도 추가 예정
+            </div>
+          </div>
+
+          <!-- AX정보화혁신본부 -->
+          <div class="inst-card" style="background:#ede9fe;border-color:#c4b5fd;">
+            <div class="ic-icon">⚙️</div>
+            <div class="ic-name" style="color:#4c1d95;">AX정보화혁신본부</div>
+            <div class="ic-role" style="color:#5b21b6;">
+              부산대 AI Transformation을 실현하는 디지털 인프라·플랫폼 구축의 <strong>실행 컨트롤 타워</strong>.
+            </div>
+            <div style="margin-top:10px;background:rgba(255,255,255,.6);border-radius:8px;padding:10px 12px;">
+              <div style="font-size:11px;font-weight:700;color:#4c1d95;margin-bottom:6px;">주요 역할 및 성과</div>
+              <ul style="font-size:11px;color:#5b21b6;line-height:1.8;padding-left:14px;">
+                <li>산지니 AI 플랫폼 자체 구축·운영 중</li>
+                <li>지도교수상담 AI 도우미 국립대 최초 구축</li>
+                <li>AI 거버넌스 데이터 체계 관리</li>
+                <li>AI 교육·연구용 컴퓨팅 인프라 운영</li>
+                <li>University AI-MASTER 인증 지원</li>
+              </ul>
+            </div>
+            <div style="margin-top:8px;background:rgba(124,58,237,.1);border-radius:6px;padding:6px 10px;font-size:11px;color:#4c1d95;">
+              {향후 보완} 본부장, 주요 구성원, 세부 조직도 추가 예정
+            </div>
+          </div>
+
+        </div><!-- /institute-grid -->
+      </div><!-- /gov-head -->
+    </div><!-- /block #gov -->
+
+
+    <!-- ─── 5. AI 인프라 확충·집적화 ─── -->
+    <div class="block" id="infra">
+      <div class="block-num">Section 5</div>
+      <div class="block-title"><span class="icon">🖥️</span>AI 인프라 확충·집적화</div>
+      <div class="block-desc">분산된 GPU 자원의 전략적 집적과 MLOps·보안 플랫폼 기반의 AI Computing as a Service로, 교육·연구·산학협력의 컴퓨팅 환경을 혁신합니다.</div>
+
+      <!-- 5-0: 개요 -->
+      <div id="infra-0">
+        <div style="font-size:14px;font-weight:700;margin-bottom:12px;">① AI 인프라 구축 비전과 구성 체계</div>
+
+        <!-- Vision 배너 -->
+        <div style="background:linear-gradient(135deg,var(--navy),var(--blue));border-radius:14px;padding:24px 28px;color:white;margin-bottom:16px;text-align:center;">
+          <div style="font-size:12px;color:rgba(255,255,255,.6);margin-bottom:8px;">🎯 비전</div>
+          <div style="font-size:20px;font-weight:900;color:var(--gold2);margin-bottom:10px;">"AI for All, Secure for Strategic"</div>
+          <div style="font-size:13px;color:rgba(255,255,255,.7);max-width:500px;margin:0 auto;line-height:1.7;">누구나 AI 컴퓨팅을 활용하는 개방형 환경을 구축하고, 전략적 연구에는 철저한 보안을 보장합니다.</div>
+        </div>
+
+        <!-- 2-트랙 카드 -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
+          <div style="background:#dbeafe;border-radius:12px;padding:18px;">
+            <div style="font-size:20px;margin-bottom:8px;">🧠</div>
+            <div style="font-size:13px;font-weight:800;color:#1e3a8a;margin-bottom:4px;">PNU-AXIS</div>
+            <div style="font-size:11px;color:#1e40af;margin-bottom:8px;">AI Transformation &amp; Intelligent Systems</div>
+            <div style="font-size:12px;color:#1e40af;line-height:1.7;">분산된 연구실 GPU를 하나의 통합 허브로 집적. 교육용·연구용 Pool 분리 운영 및 AIaaS 서비스 제공</div>
+          </div>
+          <div style="background:#d1fae5;border-radius:12px;padding:18px;">
+            <div style="font-size:20px;margin-bottom:8px;">🏗️</div>
+            <div style="font-size:13px;font-weight:800;color:#065f46;margin-bottom:4px;">PNU AI Innovation Hub Space</div>
+            <div style="font-size:11px;color:#047857;margin-bottom:8px;">&nbsp;</div>
+            <div style="font-size:12px;color:#047857;line-height:1.7;">AI 교육·연구·산학협력이 물리적으로 집약되는 개방형 복합 공간. PNU-AXIS와 유기적 연동</div>
+          </div>
+        </div>
+
+        <!-- 주요 구성 요소 4개 -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
+          <div style="background:#f0f7ff;border-radius:10px;padding:14px 12px;text-align:center;">
+            <div style="font-size:22px;margin-bottom:6px;">⚡</div>
+            <div style="font-size:12px;font-weight:800;color:var(--navy);margin-bottom:4px;">컴퓨팅 인프라</div>
+            <div style="font-size:11px;color:var(--sub);line-height:1.6;">GPU 집적 허브 PNU-AXIS (100+→1,000+ GPU)</div>
+          </div>
+          <div style="background:#f0fdf4;border-radius:10px;padding:14px 12px;text-align:center;">
+            <div style="font-size:22px;margin-bottom:6px;">🏛️</div>
+            <div style="font-size:12px;font-weight:800;color:#065f46;margin-bottom:4px;">물리적 공간</div>
+            <div style="font-size:11px;color:var(--sub);line-height:1.6;">교육·연구·협업 복합 공간 Hub Space</div>
+          </div>
+          <div style="background:#fffbeb;border-radius:10px;padding:14px 12px;text-align:center;">
+            <div style="font-size:22px;margin-bottom:6px;">☁️</div>
+            <div style="font-size:12px;font-weight:800;color:#92400e;margin-bottom:4px;">클라우드 플랫폼</div>
+            <div style="font-size:11px;color:var(--sub);line-height:1.6;">MLOps 기반 AIaaS + 하이브리드 클라우드</div>
+          </div>
+          <div style="background:#fdf4ff;border-radius:10px;padding:14px 12px;text-align:center;">
+            <div style="font-size:22px;margin-bottom:6px;">🔒</div>
+            <div style="font-size:12px;font-weight:800;color:#6b21a8;margin-bottom:4px;">보안 체계</div>
+            <div style="font-size:11px;color:var(--sub);line-height:1.6;">MLSecOps Dual-Zone (폐쇄·개방 이중 영역)</div>
+          </div>
+        </div>
+      </div><!-- /infra-0 -->
+
+      <div class="block-divider"></div>
+
+      <!-- 5-1: PNU-AXIS -->
+      <div id="infra-1">
+        <div style="font-size:14px;font-weight:700;margin-bottom:12px;">② PNU-AXIS — AI 컴퓨팅 인프라 집적 허브</div>
+
+        <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:14px 18px;font-size:13px;color:#92400e;margin-bottom:16px;line-height:1.8;">
+          현재 교내 GPU 자원(303+장)이 연구실 단위로 분산되어 있어 전력·냉각·관리 비효율이 발생합니다. <strong>PNU-AXIS</strong>는 분산 자원을 단일 허브로 집적하여 교육·연구·산학협력의 컴퓨팅 파워를 통합 관리 체계 아래 운영합니다.
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
+          <div>
+            <div style="font-size:13px;font-weight:700;margin-bottom:8px;color:var(--text);">현재 GPU 보유 현황</div>
+            <table class="bk-table">
+              <thead><tr><th>구분</th><th>하이엔드</th><th>기타</th><th>합계</th></tr></thead>
+              <tbody>
+                <tr><td>PNU-IDC 입주</td><td>23장</td><td>140장</td><td><strong>163장</strong></td></tr>
+                <tr><td>교내 학과 (교육용)</td><td>—</td><td>245장</td><td><strong>245장</strong></td></tr>
+                <tr><td style="font-weight:700;">합계</td><td style="font-weight:700;">23장</td><td style="font-weight:700;">385장</td><td style="font-weight:700;color:var(--blue);">303+장</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:700;margin-bottom:8px;color:var(--text);">데이터센터 사양</div>
+            <div style="background:#f0f7ff;border-radius:10px;padding:12px 14px;font-size:12px;line-height:2.1;">
+              <div>⚡ <strong>전력:</strong> 2MW 이중화 (GPU 100대×10kW + 기타 400kW)</div>
+              <div>🔗 <strong>네트워크:</strong> 400Gbps+ InfiniBand / 고성능 이더넷</div>
+              <div>🛡️ <strong>가용성:</strong> Tier 2 이상 (연간 22h 이하 다운타임)</div>
+              <div>💰 <strong>전력 비용:</strong> 약 15억원/년</div>
+            </div>
+            <!-- PNU AXIS-IDC 이미지 -->
+            <div style="margin-top:10px;background:white;border:1px solid #bfdbfe;border-radius:8px;overflow:hidden;cursor:zoom-in;"
+                 onclick="openImgPopup('image/pnu_axis_idc.png','PNU-AXIS IDC')">
+              <img src="image/pnu_axis_idc.png" alt="PNU-AXIS IDC"
+                   style="width:100%;display:block;max-height:180px;object-fit:contain;background:#f8faff;"
+                   onerror="this.parentElement.style.display='none'">
+              <div style="padding:5px 10px;font-size:10px;color:#1e3a8a;background:#eff6ff;border-top:1px solid #bfdbfe;">
+                📐 PNU-AXIS IDC (클릭하여 확대)
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="font-size:13px;font-weight:700;margin-bottom:8px;color:var(--text);">향후 확보 계획 (총 800장, 500억원)</div>
+        <table class="bk-table" style="margin-bottom:16px;">
+          <thead><tr><th>구분</th><th>모델</th><th>수량</th><th>주요 용도</th></tr></thead>
+          <tbody>
+            <tr><td><strong>연구 서비스</strong></td><td>H200</td><td>400장</td><td>초거대모델 학습·추론 (400B+ 모델)</td></tr>
+            <tr><td><strong>시각화 서비스</strong></td><td>L40S</td><td>200장</td><td>중형 LLM, 이미지 생성 (7B~14B)</td></tr>
+            <tr><td><strong>가상화 서비스</strong></td><td>A10/A30</td><td>200장</td><td>챗봇·임베딩·교육 실습</td></tr>
+          </tbody>
+        </table>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+          <div style="background:#dbeafe;border-radius:10px;padding:14px 16px;">
+            <div style="font-size:12px;font-weight:800;color:#1e3a8a;margin-bottom:6px;">🎓 교육용 GPU Pool</div>
+            <div style="font-size:12px;color:#1e40af;line-height:1.7;">전공·교양 실습 수업 자동 배정<br>학생 AI 실습 크레딧 연계</div>
+          </div>
+          <div style="background:#ede9fe;border-radius:10px;padding:14px 16px;">
+            <div style="font-size:12px;font-weight:800;color:#4c1d95;margin-bottom:6px;">🔬 연구용 GPU Pool</div>
+            <div style="font-size:12px;color:#5b21b6;line-height:1.7;">LLM 학습·도메인 AI 연구<br>SLA 기반 자원 배분, 연구비 차감 과금</div>
+          </div>
+        </div>
+
+        <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:14px 18px;font-size:13px;color:#14532d;margin-bottom:16px;line-height:1.8;">
+          <div style="font-weight:700;margin-bottom:6px;">🔄 집적화 이관 인센티브</div>
+          ✦ 이관 시 혜택: 전기료 면제 + 우선 사용권 + 신규 자원 매칭<br>
+          ✦ 노후 서버 단계적 폐기 후 통합 자원으로 전환<br>
+          ✦ 신규 도입은 중앙구매(공동조달)로 일원화
+        </div>
+
+        <div style="background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fde68a;border-radius:12px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;gap:12px;">
+          <span style="font-size:22px;flex-shrink:0;">🌐</span>
+          <div style="font-size:13px;color:#92400e;line-height:1.7;">
+            <strong>부·울·경 AI 컴퓨팅 거점</strong><br>
+            PNU-AXIS는 부산대 전용을 넘어, 부·울·경 지역 대학·산업체·스타트업이 공동 활용하는 <strong>AI 컴퓨팅 지역 허브</strong>로 기능합니다. RISE 사업·AI 컴퓨팅 바우처 사업과 연계하여 지역 AI 생태계를 견인합니다.
+          </div>
+        </div>
+        <!-- 금액 정보 제거 - inetguru
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <div style="background:#dbeafe;border-radius:10px;padding:12px 20px;text-align:center;flex:1;min-width:110px;">
+            <div style="font-size:20px;font-weight:900;color:#1e3a8a;">300억</div>
+            <div style="font-size:11px;color:#1e40af;margin-top:2px;">건축비</div>
+          </div>
+          <div style="background:#d1fae5;border-radius:10px;padding:12px 20px;text-align:center;flex:1;min-width:110px;">
+            <div style="font-size:20px;font-weight:900;color:#065f46;">250억</div>
+            <div style="font-size:11px;color:#047857;margin-top:2px;">인프라 (GPU·네트워크·전력)</div>
+          </div>
+          <div style="background:var(--navy);border-radius:10px;padding:12px 20px;text-align:center;flex:1;min-width:110px;">
+            <div style="font-size:20px;font-weight:900;color:var(--gold2);">550억</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:2px;">총 소요 예산</div>
+          </div>
+        </div>
+      -->
+      </div><!-- /infra-1 -->
+
+      <div class="block-divider"></div>
+
+      <!-- 5-2: Hub Space -->
+      <div id="infra-2">
+        <div style="font-size:14px;font-weight:700;margin-bottom:12px;">③ PNU AI Innovation Hub Space — 개방형 복합 혁신 공간</div>
+
+        <div style="background:#f8fafc;border-left:4px solid var(--gold);border-radius:0 10px 10px 0;padding:14px 18px;margin-bottom:16px;font-size:13px;color:var(--sub);line-height:1.8;">
+          <em>"PNU-AXIS가 AI 혁신의 두뇌라면, Hub Space는 심장입니다"</em><br>
+          <span style="font-size:12px;">AI 교육·연구·창업이 물리적으로 집약되는 개방형 복합 공간</span>
+        </div>
+
+        <div style="font-size:13px;font-weight:700;margin-bottom:10px;color:var(--text);">5대 공간 구성</div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px;">
+          <div style="background:#dbeafe;border-radius:10px;padding:12px 10px;text-align:center;">
+            <div style="font-size:18px;margin-bottom:6px;">🔬</div>
+            <div style="font-size:11px;font-weight:800;color:#1e3a8a;margin-bottom:4px;">AI Co-Lab Zone</div>
+            <div style="font-size:10px;color:#1e40af;line-height:1.5;">AI+X 융합연구실, 스타트업 인큐베이션, 공동장비 센터</div>
+          </div>
+          <div style="background:#d1fae5;border-radius:10px;padding:12px 10px;text-align:center;">
+            <div style="font-size:18px;margin-bottom:6px;">📡</div>
+            <div style="font-size:11px;font-weight:800;color:#065f46;margin-bottom:4px;">스마트 강의실</div>
+            <div style="font-size:10px;color:#047857;line-height:1.5;">실시간 원격수업, 세미나, MOOC 제작 스튜디오</div>
+          </div>
+          <div style="background:#ede9fe;border-radius:10px;padding:12px 10px;text-align:center;">
+            <div style="font-size:18px;margin-bottom:6px;">🥽</div>
+            <div style="font-size:11px;font-weight:800;color:#4c1d95;margin-bottom:4px;">AX 체험·실습</div>
+            <div style="font-size:10px;color:#5b21b6;line-height:1.5;">XR·디지털 트윈, 제조·의료·해양 시뮬레이션</div>
+          </div>
+          <div style="background:#fef3c7;border-radius:10px;padding:12px 10px;text-align:center;">
+            <div style="font-size:18px;margin-bottom:6px;">💬</div>
+            <div style="font-size:11px;font-weight:800;color:#92400e;margin-bottom:4px;">AI Collaboration</div>
+            <div style="font-size:10px;color:#a16207;line-height:1.5;">24h 개방형 오픈랩, 학생·연구자·산업체 상시 협업</div>
+          </div>
+          <div style="background:#f1f0fe;border-radius:10px;padding:12px 10px;text-align:center;">
+            <div style="font-size:18px;margin-bottom:6px;">🖼️</div>
+            <div style="font-size:11px;font-weight:800;color:#1e1b4b;margin-bottom:4px;">AI Media Facade</div>
+            <div style="font-size:10px;color:#312e81;line-height:1.5;">건물 내외벽 연구 성과 실시간 시각화 랜드마크</div>
+          </div>
+        </div>
+
+        <div style="font-size:13px;font-weight:700;margin-bottom:8px;color:var(--text);">현재 공간 현황 (합계 10,067㎡)</div>
+        <table class="bk-table" style="margin-bottom:16px;">
+          <thead><tr><th>기관</th><th>위치</th><th>면적(㎡)</th></tr></thead>
+          <tbody>
+            <tr><td>컴퓨터공학·AI (IT관)</td><td>부산캠퍼스</td><td>5,470</td></tr>
+            <tr><td>AI미디어테크놀로지 (조형관)</td><td>부산캠퍼스</td><td>507</td></tr>
+            <tr><td>의생명융합 (경암공학관)</td><td>양산캠퍼스</td><td>1,946</td></tr>
+            <tr><td>산업공학과 (10공학관)</td><td>부산캠퍼스</td><td>1,617</td></tr>
+            <tr><td>데이터사이언스전문대학원 (12공학관)</td><td>부산캠퍼스</td><td>527</td></tr>
+            <tr><td style="font-weight:700;">합계</td><td></td><td style="font-weight:700;color:var(--blue);">10,067</td></tr>
+          </tbody>
+        </table>
+
+        <div style="background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fde68a;border-radius:12px;padding:14px 20px;display:flex;align-items:center;gap:12px;">
+          <span style="font-size:22px;flex-shrink:0;">🏗️</span>
+          <div style="font-size:13px;color:#92400e;line-height:1.7;">
+            <strong>장영실AI융합연구원 · AI융합교육원 · AI대학원 집적</strong><br>
+            장기적으로 장영실AI융합연구원, AI융합교육원, 대학원 유관기관을 <strong>PNU AI Innovation Hub Space를 중심으로 물리적 집적</strong>하여, 부산대 AI 혁신 생태계의 공간적 구심점을 조성합니다.
+          </div>
+        </div>
+      </div><!-- /infra-2 -->
+
+      <div class="block-divider"></div>
+
+      <!-- 5-3: AIaaS + MLSecOps -->
+      <div id="infra-3">
+        <div style="font-size:14px;font-weight:700;margin-bottom:12px;">④ AI Computing as a Service — MLOps·보안 플랫폼</div>
+
+        <div style="background:#dbeafe;border-radius:10px;padding:14px 18px;font-size:13px;color:#1e3a8a;margin-bottom:16px;line-height:1.8;display:flex;align-items:flex-start;gap:10px;">
+          <span style="font-size:20px;flex-shrink:0;">☁️</span>
+          <div><strong>단순 GPU 서버 보유에서 서비스로의 전환.</strong> MLOps 전 주기를 지원하는 셀프서비스 플랫폼을 운영하여, 연구자·학생·기업이 웹 포털만으로 컴퓨팅 자원을 신청·사용·반납할 수 있습니다.</div>
+        </div>
+
+        <table class="bk-table" style="margin-bottom:16px;">
+          <thead><tr><th>서비스 레이어</th><th>내용</th></tr></thead>
+          <tbody>
+            <tr><td><strong>개발 환경</strong></td><td>JupyterHub, 컨테이너(Docker/K8s), 모델 레지스트리, 실험 추적(MLflow 등) 일원화</td></tr>
+            <tr><td><strong>자원 접근</strong></td><td>웹 포털 셀프서비스 — GPU·스토리지·데이터셋 직접 신청·할당·사용</td></tr>
+            <tr><td><strong>하이브리드 연동</strong></td><td>온프레미스(PNU-AXIS) + 퍼블릭 클라우드(AWS·NCP) 피크 수요 탄력 대응</td></tr>
+            <tr><td><strong>학생 크레딧</strong></td><td>AI 실습 컴퓨팅 크레딧 지원 (정규 교과 자동배정 + 도전과제 심사지급)</td></tr>
+          </tbody>
+        </table>
+
+        <div style="background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fde68a;border-radius:12px;padding:14px 20px;margin-bottom:20px;display:flex;align-items:flex-start;gap:12px;">
+          <span style="font-size:22px;flex-shrink:0;">🎓</span>
+          <div style="font-size:13px;color:#92400e;line-height:1.7;">
+            <strong>학생 AI 실습 크레딧 지원</strong><br>
+            <span style="font-size:12px;">지원 항목: GPU 컴퓨팅 시간 + 대용량 스토리지 + 상용 API 비용 + 데이터셋 구매·라벨링 패키지<br>재원: 대학 자체예산 + RISE·글로컬30·BK21 + 산학 매칭(기업 후원 크레딧) + 정부 AI 인재양성 사업비</span>
+          </div>
+        </div>
+
+        <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:8px;">
+          <span>🔒</span> MLSecOps — 보안 강화 이중 영역 구조
+        </div>
+        <div style="font-size:13px;color:var(--sub);margin-bottom:14px;line-height:1.7;">
+          MLOps에 보안 절차를 통합한 <strong>MLSecOps</strong> 플랫폼. 산학협력 AX 융합연구의 핵심 차별화 요소.
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
+          <div style="background:linear-gradient(135deg,#1e1b4b,#3730a3);border-radius:12px;padding:20px;color:white;">
+            <div style="font-size:22px;margin-bottom:8px;">🔒</div>
+            <div style="font-size:14px;font-weight:800;margin-bottom:4px;color:#c7d2fe;">Secure AI Zone</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.6);margin-bottom:12px;">권한 부여된 제한 인원 · 폐쇄망 On-Premise</div>
+            <div style="font-size:12px;color:rgba(255,255,255,.8);line-height:1.8;">
+              ✦ 국방·방산·산업 민감 데이터 학습·파인튜닝<br>
+              ✦ 기밀 AI 모델 개발<br>
+              ✦ CSAP·CII 요건 준수 데이터 처리
+            </div>
+          </div>
+          <div style="background:#dbeafe;border-radius:12px;padding:20px;">
+            <div style="font-size:22px;margin-bottom:8px;">🌐</div>
+            <div style="font-size:14px;font-weight:800;color:#1e3a8a;margin-bottom:4px;">Open AI Zone</div>
+            <div style="font-size:11px;color:#1e40af;margin-bottom:12px;">일반 연구자·학생·민간기업</div>
+            <div style="font-size:12px;color:#1e40af;line-height:1.8;">
+              ✦ 일반 AI 연구 및 교육 실습<br>
+              ✦ 스타트업 프로토타입 개발<br>
+              ✦ 산학협력 공개 데이터 기반 연구
+            </div>
+          </div>
+        </div>
+
+        <table class="bk-table" style="margin-bottom:16px;">
+          <thead><tr><th>기능</th><th>내용</th></tr></thead>
+          <tbody>
+            <tr><td><strong>전 주기 보안</strong></td><td>개발·배포·운영·모니터링·재학습 전 수명주기에 보안 절차 통합</td></tr>
+            <tr><td><strong>데이터 안심존</strong></td><td>민감 산업 데이터(조선·방산·의료 등) 안전 보관·가공 환경</td></tr>
+            <tr><td><strong>접근 통제</strong></td><td>RBAC(역할 기반 접근 통제), 멀티팩터 인증, 네트워크 망 분리</td></tr>
+            <tr><td><strong>규제 준수</strong></td><td>CSAP 공공 클라우드 보안인증, CII 중요정보통신기반시설 요건</td></tr>
+          </tbody>
+        </table>
+        <!-- Inetguru 추가 이미지 -->
+        <div style="margin-top:10px;background:white;border:1px solid #bfdbfe;border-radius:8px;overflow:hidden;cursor:zoom-in;"
+              onclick="openImgPopup('image/국방안심존.png','국방데이터 기반 AX 센터 시스템 구조')">
+          <img src="image/국방안심존.png" alt="국방데이터 기반 AX 센터 시스템 구조"
+                style="width:100%;display:block;max-height:300px;object-fit:contain;background:#f8faff;"
+                onerror="this.parentElement.style.display='none'">
+          <div style="padding:5px 10px;font-size:10px;color:#1e3a8a;background:#eff6ff;border-top:1px solid #bfdbfe;">
+            📐 참고 자료 - 군산학 협력센터 RFP - 국방데이터 안심존 등 국방데이터 기반 AX 센터 시스템 구조
+          </div>
+        </div>
+        <div style="background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fde68a;border-radius:12px;padding:14px 20px;display:flex;align-items:center;gap:12px;">
+          <span styl
+
+<!-- ── 이미지 라이트박스 팝업 ── -->
+<div id="imgPopupOverlay" onclick="closeImgPopup()"
+     style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);
+            z-index:9999;align-items:center;justify-content:center;cursor:zoom-out;">
+  <div style="position:relative;max-width:92vw;max-height:92vh;
+               display:flex;flex-direction:column;align-items:center" onclick="event.stopPropagation()">
+    <button onclick="closeImgPopup()"
+            style="position:absolute;top:-38px;right:0;background:rgba(255,255,255,.15);
+                   border:none;color:white;font-size:22px;width:36px;height:36px;
+                   border-radius:50%;cursor:pointer;line-height:1">&#10005;</button>
+    <img id="imgPopupImg" src="" alt=""
+         style="max-width:90vw;max-height:85vh;object-fit:contain;
+                border-radius:8px;box-shadow:0 8px 48px rgba(0,0,0,.6)">
+    <div id="imgPopupCap"
+         style="color:rgba(255,255,255,.7);font-size:12px;margin-top:10px;text-align:center"></div>
+    <button id="imgPopupPrev" onclick="stepImgPopup(-1)"
+            style="position:absolute;top:50%;left:-52px;transform:translateY(-50%);
+                   background:rgba(255,255,255,.15);border:none;color:white;
+                   font-size:24px;width:40px;height:40px;border-radius:50%;cursor:pointer">&#8249;</button>
+    <button id="imgPopupNext" onclick="stepImgPopup(1)"
+            style="position:absolute;top:50%;right:-52px;transform:translateY(-50%);
+                   background:rgba(255,255,255,.15);border:none;color:white;
+                   font-size:24px;width:40px;height:40px;border-radius:50%;cursor:pointer">&#8250;</button>
+  </div>
+</div>
+
+<script>
+/* ── 이미지 라이트박스 ── */
+var _popupSrcs = [];
+var _popupIdx  = 0;
+
+function openImgPopup(src, caption) {
+  var allCards = Array.from(document.querySelectorAll('.img-card'));
+  var srcFile  = src.split('/').pop();
+  var clicked  = allCards.find(function(el) {
+    var img = el.querySelector('img');
+    return img && (img.src.includes(srcFile) || img.getAttribute('src') === src);
+  });
+
+  if (clicked) {
+    var parent   = clicked.closest('.info-card') || clicked.closest('.section') || document.body;
+    var siblings = Array.from(parent.querySelectorAll('.img-card')).filter(function(el){ return el.querySelector('img'); });
+    _popupSrcs = siblings.map(function(el) {
+      return {
+        src: el.querySelector('img').src,
+        cap: el.querySelector('.ic-cap') ? el.querySelector('.ic-cap').textContent.trim() : ''
+      };
+    });
+    _popupIdx = siblings.indexOf(clicked);
+    if (_popupIdx < 0) _popupIdx = 0;
+  } else {
+    _popupSrcs = [{ src: src, cap: caption || '' }];
+    _popupIdx  = 0;
+  }
+  _renderPopup();
+  document.getElementById('imgPopupOverlay').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function _renderPopup() {
+  var item = _popupSrcs[_popupIdx];
+  document.getElementById('imgPopupImg').src = item.src;
+  document.getElementById('imgPopupCap').textContent = item.cap;
+  var show = _popupSrcs.length > 1;
+  document.getElementById('imgPopupPrev').style.display = show ? '' : 'none';
+  document.getElementById('imgPopupNext').style.display = show ? '' : 'none';
+}
+
+function stepImgPopup(dir) {
+  _popupIdx = (_popupIdx + dir + _popupSrcs.length) % _popupSrcs.length;
+  _renderPopup();
+}
+
+function closeImgPopup() {
+  document.getElementById('imgPopupOverlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', function(e) {
+  var overlay = document.getElementById('imgPopupOverlay');
+  if (!overlay || overlay.style.display === 'none') return;
+  if (e.key === 'Escape')     closeImgPopup();
+  if (e.key === 'ArrowLeft')  stepImgPopup(-1);
+  if (e.key === 'ArrowRight') stepImgPopup(1);
+});
+</script>
+</body>
+</html>

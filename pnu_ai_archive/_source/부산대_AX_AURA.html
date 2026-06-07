@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>부산대학교 AX 대전환 — A.U.R.A. Project</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --navy:   #0a1628;
+      --blue:   #1e3a6e;
+      --mid:    #2563eb;
+      --light:  #3b82f6;
+      --pale:   #dbeafe;
+      --gold:   #f59e0b;
+      --gold2:  #fbbf24;
+      --green:  #10b981;
+      --teal:   #0ea5e9;
+      --bg:     #f0f4f8;
+      --card:   #ffffff;
+      --text:   #1e293b;
+      --sub:    #64748b;
+      --border: #e2e8f0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ════════════════ NAV ════════════════ */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10,22,40,0.97);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; height: 58px;
+    }
+    .nav-logo {
+      color: white; font-weight: 800; font-size: 15px; letter-spacing: 0.5px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .nav-logo .aura { color: var(--gold2); }
+    .nav-links { display: flex; gap: 28px; }
+    .nav-links a {
+      color: rgba(255,255,255,0.65); font-size: 13px; text-decoration: none;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--gold2); }
+
+    /* ════════════════ HERO ════════════════ */
+    .hero {
+      min-height: 92vh;
+      background: linear-gradient(145deg, #040d1a 0%, #0a1e3f 40%, #0f2d6e 75%, #1a4299 100%);
+      display: flex; align-items: center;
+      padding: 80px 40px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 70% 50%, rgba(37,99,235,0.25) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 20% 80%, rgba(245,158,11,0.12) 0%, transparent 60%);
+    }
+    .hero-inner {
+      max-width: 1100px; margin: 0 auto; width: 100%;
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+    }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(245,158,11,0.15);
+      border: 1px solid rgba(245,158,11,0.4);
+      border-radius: 24px; padding: 5px 14px;
+      font-size: 12px; color: var(--gold2); font-weight: 600;
+      letter-spacing: 0.5px; margin-bottom: 20px;
+    }
+    .hero-tag .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold2); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    .hero h1 {
+      font-size: 52px; font-weight: 900; line-height: 1.15;
+      color: white; letter-spacing: -1px; margin-bottom: 10px;
+    }
+    .hero h1 .aura-word {
+      font-size: 64px;
+      background: linear-gradient(135deg, #f59e0b, #fcd34d, #fbbf24);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      display: block;
+    }
+    .hero-sub {
+      font-size: 15px; color: rgba(255,255,255,0.65);
+      margin-bottom: 32px; line-height: 1.8;
+    }
+    .hero-cta {
+      display: flex; gap: 12px; flex-wrap: wrap;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: white; padding: 13px 28px; border-radius: 10px;
+      font-weight: 700; font-size: 14px; text-decoration: none;
+      box-shadow: 0 4px 20px rgba(245,158,11,0.4);
+      transition: all .2s;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(245,158,11,0.5); }
+    .btn-ghost {
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white; padding: 13px 28px; border-radius: 10px;
+      font-weight: 600; font-size: 14px; text-decoration: none;
+      transition: all .2s;
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,0.08); }
+
+    /* AURA acronym box */
+    .aura-box {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px; padding: 32px;
+    }
+    .aura-title {
+      font-size: 12px; color: var(--gold2); font-weight: 700;
+      letter-spacing: 2px; margin-bottom: 24px; text-transform: uppercase;
+    }
+    .aura-item {
+      display: flex; align-items: flex-start; gap: 18px;
+      margin-bottom: 22px;
+    }
+    .aura-item:last-child { margin-bottom: 0; }
+    .aura-letter {
+      width: 48px; height: 48px; border-radius: 12px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; font-weight: 900; color: white;
+    }
+    .aura-desc { color: rgba(255,255,255,0.9); }
+    .aura-desc .en { font-size: 14px; font-weight: 700; color: white; }
+    .aura-desc .ko { font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 2px; }
+
+    /* ════════════════ KPI STRIP ════════════════ */
+    .kpi-strip {
+      background: var(--navy);
+      padding: 36px 40px;
+    }
+    .kpi-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+      background: rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden;
+    }
+    .kpi-item {
+      background: rgba(255,255,255,0.04);
+      padding: 28px 24px; text-align: center;
+    }
+    .kpi-value {
+      font-size: 38px; font-weight: 900; color: var(--gold2);
+      line-height: 1;
+    }
+    .kpi-unit { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.6); }
+    .kpi-label { font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 8px; }
+    .kpi-badge {
+      display: inline-block; margin-top: 8px;
+      background: rgba(16,185,129,0.2); border: 1px solid rgba(16,185,129,0.4);
+      color: #6ee7b7; font-size: 11px; border-radius: 10px; padding: 2px 8px;
+    }
+
+    /* ════════════════ SECTIONS ════════════════ */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
+    .section { padding: 80px 0; }
+    .section-head { margin-bottom: 48px; }
+    .section-tag {
+      display: inline-block;
+      background: var(--pale); color: var(--mid);
+      font-size: 12px; font-weight: 700; letter-spacing: 1px;
+      border-radius: 6px; padding: 4px 12px; margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+    .section-title { font-size: 28px; font-weight: 800; margin-bottom: 8px; line-height: 1.3; }
+    .section-desc { color: var(--sub); font-size: 15px; max-width: 600px; }
+
+    /* ════════════════ STRATEGY FRAMEWORK ════════════════ */
+    .strategy-wrap {
+      background: linear-gradient(135deg, #040d1a, #0f2d6e);
+      border-radius: 24px;
+      padding: 48px;
+      color: white;
+    }
+    .strategy-center {
+      text-align: center; margin-bottom: 40px;
+    }
+    .strategy-center h3 {
+      font-size: 20px; font-weight: 800; margin-bottom: 6px;
+    }
+    .strategy-center p { font-size: 13px; color: rgba(255,255,255,0.5); }
+    .strategy-stats {
+      display: flex; justify-content: center; gap: 40px; margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+    .s-stat { text-align: center; }
+    .s-stat .n {
+      font-size: 42px; font-weight: 900;
+      background: linear-gradient(135deg, #f59e0b, #fcd34d);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .s-stat .l { font-size: 13px; color: rgba(255,255,255,0.55); margin-top: 4px; }
+
+    .strategy-cols {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+    }
+    .strategy-col {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px; padding: 20px 16px;
+    }
+    .strategy-col .s-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin-bottom: 14px;
+    }
+    .strategy-col .s-name {
+      font-size: 14px; font-weight: 800; margin-bottom: 10px; color: white;
+    }
+    .strategy-col ul {
+      list-style: none; display: flex; flex-direction: column; gap: 6px;
+    }
+    .strategy-col li {
+      font-size: 12px; color: rgba(255,255,255,0.6);
+      padding-left: 10px; position: relative;
+    }
+    .strategy-col li::before {
+      content: '→'; position: absolute; left: 0;
+      color: rgba(255,255,255,0.3); font-size: 10px;
+    }
+
+    /* ════════════════ ACHIEVEMENT TIMELINE ════════════════ */
+    .timeline { position: relative; padding-left: 40px; }
+    .timeline::before {
+      content: '';
+      position: absolute; left: 15px; top: 8px; bottom: 8px;
+      width: 2px; background: linear-gradient(to bottom, var(--gold), var(--mid), var(--green));
+      border-radius: 2px;
+    }
+    .tl-item { position: relative; margin-bottom: 36px; }
+    .tl-dot {
+      position: absolute; left: -33px; top: 14px;
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 2px solid white;
+      box-shadow: 0 0 0 4px rgba(37,99,235,0.3);
+    }
+    .tl-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px 28px;
+      transition: box-shadow .2s, transform .2s;
+    }
+    .tl-card:hover {
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      transform: translateX(4px);
+    }
+    .tl-date {
+      font-size: 12px; font-weight: 700; color: var(--sub);
+      letter-spacing: 0.5px; margin-bottom: 6px;
+    }
+    .tl-title {
+      font-size: 17px; font-weight: 800; margin-bottom: 10px; line-height: 1.4;
+    }
+    .tl-body { font-size: 14px; color: var(--sub); line-height: 1.75; }
+    .tl-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+    .tl-tag {
+      font-size: 11px; font-weight: 700; border-radius: 6px; padding: 3px 10px;
+    }
+
+    /* ════════════════ ACHIEVEMENT CARDS ════════════════ */
+    .achieve-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;
+    }
+    .achieve-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px; padding: 32px;
+      position: relative; overflow: hidden;
+      transition: box-shadow .2s;
+    }
+    .achieve-card:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.1); }
+    .achieve-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    }
+    .achieve-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; margin-bottom: 18px;
+    }
+    .achieve-title { font-size: 17px; font-weight: 800; margin-bottom: 8px; line-height: 1.4; }
+    .achieve-sub { font-size: 13px; color: var(--sub); line-height: 1.75; }
+    .achieve-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      margin-top: 14px; font-size: 12px; font-weight: 700;
+      border-radius: 8px; padding: 4px 12px;
+    }
+
+    /* ════════════════ ROAD MAP ════════════════ */
+    .roadmap-wrap {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    }
+    .rm-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+    }
+    .rm-head {
+      padding: 18px 20px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .rm-step {
+      width: 32px; height: 32px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 900; color: white;
+    }
+    .rm-head h4 { font-size: 14px; font-weight: 800; }
+    .rm-head p { font-size: 12px; color: var(--sub); margin-top: 2px; }
+    .rm-body { padding: 0 20px 20px; }
+    .rm-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 9px 0;
+      border-top: 1px solid var(--border);
+      font-size: 13px; color: var(--sub);
+    }
+    .rm-item:first-child { border-top: none; }
+    .rm-check {
+      width: 18px; height: 18px; border-radius: 5px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; margin-top: 2px;
+    }
+
+    /* ════════════════ CHART SECTION ════════════════ */
+    .chart-grid {
+      display: grid; grid-template-columns: 3fr 2fr; gap: 24px;
+    }
+    .chart-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px;
+    }
+    .chart-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+    .chart-card p { font-size: 13px; color: var(--sub); margin-bottom: 20px; }
+
+    /* ════════════════ QUOTE ════════════════ */
+    .quote-section {
+      background: linear-gradient(135deg, #0a1628, #1e3a6e);
+      padding: 72px 40px;
+      text-align: center;
+    }
+    .quote-inner { max-width: 760px; margin: 0 auto; }
+    .quote-mark { font-size: 72px; color: var(--gold2); line-height: 0.5; margin-bottom: 20px; opacity: 0.6; }
+    .quote-text {
+      font-size: 20px; color: white; font-weight: 500; line-height: 1.8;
+      margin-bottom: 24px;
+    }
+    .quote-author { font-size: 13px; color: rgba(255,255,255,0.5); }
+    .quote-author strong { color: var(--gold2); }
+
+    /* ════════════════ FOOTER ════════════════ */
+    footer {
+      background: #040d1a;
+      color: rgba(255,255,255,0.4);
+      text-align: center;
+      padding: 32px;
+      font-size: 12px;
+    }
+
+    /* ════════════════ UTILITIES ════════════════ */
+    .divider {
+      height: 1px; background: var(--border); margin: 0;
+    }
+
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .strategy-cols { grid-template-columns: repeat(2, 1fr); }
+      .achieve-grid, .roadmap-wrap, .chart-grid { grid-template-columns: 1fr; }
+      .kpi-inner { grid-template-columns: repeat(2, 1fr); }
+      .hero h1 { font-size: 36px; }
+      .hero h1 .aura-word { font-size: 48px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════ NAV ════════════════ -->
+<nav>
+  <div class="nav-logo">
+    🏛️ 부산대학교 &nbsp;<span class="aura">A.U.R.A.</span>
+  </div>
+  <div class="nav-links">
+    <a href="#about">소개</a>
+    <a href="#strategy">전략체계</a>
+    <a href="#achievements">성과</a>
+    <a href="#services">서비스</a>
+    <a href="#roadmap">로드맵</a>
+  </div>
+</nav>
+
+<!-- ════════════════ HERO ════════════════ -->
+<section class="hero" id="about">
+  <div class="hero-inner">
+    <!-- LEFT -->
+    <div>
+      <div class="hero-tag">
+        <span class="dot"></span>
+        PNU AX 마스터플랜 · 2025–2027
+      </div>
+      <h1>
+        AI 대전환<br>
+        <span class="aura-word">A.U.R.A.</span>
+        <span style="font-size:22px; font-weight:500; color:rgba(255,255,255,0.55); display:block; margin-top:6px;">부산대학교 전사적 AI Transformation</span>
+      </h1>
+      <p class="hero-sub">
+        동남권 거점 국립대학 부산대학교가 교육·연구·행정·산학협력 전 영역을 아우르는
+        중장기 AX 통합전략 <strong style="color:white;">PNU-AX 마스터플랜 A.U.R.A. 2.0</strong>을 수립하여
+        고등교육의 새로운 표준을 제시합니다.
+      </p>
+      <div class="hero-cta">
+        <a href="#achievements" class="btn-primary">주요 성과 보기 ↓</a>
+        <a href="#strategy" class="btn-ghost">전략체계 살펴보기</a>
+      </div>
+    </div>
+
+    <!-- RIGHT: AURA Acronym -->
+    <div class="aura-box">
+      <div class="aura-title">A.U.R.A. 의미</div>
+
+      <div class="aura-item">
+        <div class="aura-letter" style="background:linear-gradient(135deg,#f59e0b,#d97706);">A</div>
+        <div class="aura-desc">
+          <div class="en">AI Philosophy</div>
+          <div class="ko">AI 철학 — AI 기반 대학 철학과 리더십 재정립</div>
+        </div>
+      </div>
+      <div class="aura-item">
+        <div class="aura-letter" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8);">U</div>
+        <div class="aura-desc">
+          <div class="en">Unified Research</div>
+          <div class="ko">융합 연구 — AI 융합연구원 중심 연구 생태계 구축</div>
+        </div>
+      </div>
+      <div class="aura-item">
+        <div class="aura-letter" style="background:linear-gradient(135deg,#10b981,#059669);">R</div>
+        <div class="aura-desc">
+          <div class="en">Reinforced Education</div>
+          <div class="ko">증강 인재 양성 — AI+X 인재 4,000명 목표</div>
+        </div>
+      </div>
+      <div class="aura-item">
+        <div class="aura-letter" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9);">A</div>
+        <div class="aura-desc">
+          <div class="en">Adaptive Administration</div>
+          <div class="ko">적응형 행정 — AI 기반 지능형 행정 체계 구축</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ KPI STRIP ════════════════ -->
+<div class="kpi-strip">
+  <div class="kpi-inner">
+    <div class="kpi-item">
+      <div class="kpi-value">100<span class="kpi-unit">억</span></div>
+      <div class="kpi-label">2년간 AX 전략 투자 예산</div>
+      <div class="kpi-badge">✓ 확정</div>
+    </div>
+    <div class="kpi-item">
+      <div class="kpi-value">4,000<span class="kpi-unit">명</span></div>
+      <div class="kpi-label">AI+X 증강인재 양성 목표</div>
+    </div>
+    <div class="kpi-item">
+      <div class="kpi-value">국내 최초</div>
+      <div class="kpi-label">대학 AI 인증(AI-MASTER) 획득</div>
+      <div class="kpi-badge">✓ 달성 (2026.03)</div>
+    </div>
+    <div class="kpi-item">
+      <div class="kpi-value">8·22·47</div>
+      <div class="kpi-label">전략목표·전략과제·실행과제</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ STRATEGY FRAMEWORK ════════════════ -->
+<section class="section" id="strategy">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-tag">전략체계</div>
+      <div class="section-title">PNU-AX 마스터플랜 A.U.R.A. 2.0</div>
+      <div class="section-desc">교육·연구·행정·산학협력 전 영역을 구조적으로 혁신하는 중장기 AX 통합전략</div>
+    </div>
+
+    <div class="strategy-wrap">
+      <div class="strategy-center">
+        <h3>8대 전략목표 · 22개 전략과제 · 47개 실행과제</h3>
+        <p>학내 전 부서가 참여하는 실행 중심 AX 추진 체계</p>
+      </div>
+      <div class="strategy-stats">
+        <div class="s-stat"><div class="n">8</div><div class="l">전략목표</div></div>
+        <div class="s-stat"><div class="n">22</div><div class="l">전략과제</div></div>
+        <div class="s-stat"><div class="n">47</div><div class="l">실행과제</div></div>
+        <div class="s-stat"><div class="n">3년</div><div class="l">추진 로드맵</div></div>
+      </div>
+
+      <div class="strategy-cols">
+        <!-- A: AI Philosophy -->
+        <div class="strategy-col">
+          <div class="s-icon" style="background:rgba(245,158,11,0.2);">🧭</div>
+          <div class="s-name" style="color:#fbbf24;">A — AI Philosophy<br><span style="font-weight:500;font-size:13px;color:rgba(255,255,255,0.6);">AI 철학·정책</span></div>
+          <ul>
+            <li>AX 철학·정책 재정립</li>
+            <li>AI 기반 리더십 설정</li>
+            <li>전사적 AX 확산·관리</li>
+            <li>AI 시대 사회적 책임</li>
+            <li>AI 윤리헌장 수립</li>
+          </ul>
+        </div>
+
+        <!-- U: Unified Research -->
+        <div class="strategy-col">
+          <div class="s-icon" style="background:rgba(59,130,246,0.2);">🔬</div>
+          <div class="s-name" style="color:#60a5fa;">U — Unified Research<br><span style="font-weight:500;font-size:13px;color:rgba(255,255,255,0.6);">AI 융합연구</span></div>
+          <ul>
+            <li>AI 융합연구원 설립·운영</li>
+            <li>AI 연구 Boost-Up 기반</li>
+            <li>AI 융합 주권 강화</li>
+            <li>글로벌 연구네트워크 10개</li>
+            <li>AI 연구 공유·협력</li>
+          </ul>
+        </div>
+
+        <!-- R: Reinforced Education -->
+        <div class="strategy-col">
+          <div class="s-icon" style="background:rgba(16,185,129,0.2);">🎓</div>
+          <div class="s-name" style="color:#6ee7b7;">R — Reinforced Education<br><span style="font-weight:500;font-size:13px;color:rgba(255,255,255,0.6);">증강 인재 양성</span></div>
+          <ul>
+            <li>AI 교육 표준 수립</li>
+            <li>AI+X 증강인재 4,000명</li>
+            <li>AI 네이티브 교육 혁신</li>
+            <li>AI 기반 교수학습 역량</li>
+            <li>스마트글라스 언어장벽 해소</li>
+          </ul>
+        </div>
+
+        <!-- A: Adaptive Administration -->
+        <div class="strategy-col">
+          <div class="s-icon" style="background:rgba(139,92,246,0.2);">⚙️</div>
+          <div class="s-name" style="color:#c4b5fd;">A — Adaptive Administration<br><span style="font-weight:500;font-size:13px;color:rgba(255,255,255,0.6);">지능형 행정</span></div>
+          <ul>
+            <li>AI 행정 표준 수립</li>
+            <li>지능형 행정체계 구축</li>
+            <li>AI 기반 행정업무 효율화</li>
+            <li>행정 만족도 70→80→90점</li>
+            <li>AI 스마트캠퍼스 구현</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════ ACHIEVEMENTS TIMELINE ════════════════ -->
+<section class="section" id="achievements">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-tag">주요 성과</div>
+      <div class="section-title">AX 대전환 추진 성과 타임라인</div>
+      <div class="section-desc">2025년 7월 선언 이후 지속적으로 창출해 온 국내 최초·최고 수준의 AX 혁신 성과</div>
+    </div>
+
+    <div class="timeline">
+
+      <!-- 1 -->
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#f59e0b;"></div>
+        <div class="tl-card">
+          <div class="tl-date">📅 2025년 7월 31일 · 뉴시스</div>
+          <div class="tl-title">🚀 'A.U.R.A. 프로젝트' 공식 선언 — 교육·행정 AI 대전환 발족식</div>
+          <div class="tl-body">
+            부산대가 AI 시대의 급변하는 환경에 선제적으로 대응하고 미래 고등교육의 새로운 표준을 제시하기 위한
+            <strong>AI 대전환 통합전략</strong> 추진을 선언했습니다. 총장 직속 AX 선도위원회를 구성하고,
+            정책·교육·연구·행정·인프라 전 분야를 아우르는 <strong>3개년 로드맵</strong>을 공개했습니다.
+            2년간 총 <strong>100억 원</strong>의 예산을 투입해 국가재정지원사업과 연계 추진할 계획입니다.
+          </div>
+          <div class="tl-tags">
+            <span class="tl-tag" style="background:#fef3c7;color:#92400e;">전략 선언</span>
+            <span class="tl-tag" style="background:#dbeafe;color:#1e40af;">3개년 로드맵</span>
+            <span class="tl-tag" style="background:#dcfce7;color:#166534;">100억 투자</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2 -->
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#2563eb;"></div>
+        <div class="tl-card">
+          <div class="tl-date">📅 2025년 12월 9일 · 중앙일보</div>
+          <div class="tl-title">🏆 「2025 한국의 경영대상」 AI 혁신 부문 대상 수상 — 대학 유일</div>
+          <div class="tl-body">
+            한국능률협회컨설팅(KMAC) 주관, 1988년 제정된 국내 최고 권위 경영혁신 평가인
+            <strong>한국의 경영대상</strong>에서 올해 처음 신설된 <strong>AI 혁신 부문 대상</strong>을 수상했습니다.
+            수상 기관 중 <strong>대학은 부산대가 유일</strong>합니다. △장영실 AI융합연구원 출범
+            △국립대 최초 LLM 기반 '산지니 AI' 개발 △국내 최초 AI 통번역 스마트글라스 도입 등
+            대학 최초로 AI 철학(AX Philosophy)을 정립한 점이 높은 평가를 받았습니다.
+          </div>
+          <div class="tl-tags">
+            <span class="tl-tag" style="background:#fef3c7;color:#92400e;">🥇 대상</span>
+            <span class="tl-tag" style="background:#f3e8ff;color:#6b21a8;">대학 유일</span>
+            <span class="tl-tag" style="background:#dbeafe;color:#1e40af;">KMAC 공인</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 -->
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#10b981;"></div>
+        <div class="tl-card">
+          <div class="tl-date">📅 2025년 12월 24일 · 중앙이코노미뉴스</div>
+          <div class="tl-title">🤝 「지도교수상담 AI 도우미」 국립대 최초 자체 구축·시범 오픈</div>
+          <div class="tl-body">
+            부산대 자체 구축·운영 AI 서비스 플랫폼 <strong>'산지니 AI'</strong> 기반으로,
+            <strong>국립대 최초로 「지도교수상담 AI 도우미」를 자체 개발</strong>해 시범 오픈했습니다.
+            △성적 요약 △지난 상담 요약 △상담 방향 제시 △취업 도우미 정보를 AI가 자동 분석·제공하며,
+            상담 결과 초안 자동 생성 기능을 통해 교원의 행정 부담을 획기적으로 줄입니다.
+            개인정보 보호와 보안 기준을 강화하고 생성 정보는 저장·학습에 사용하지 않는 원칙을 적용했습니다.
+          </div>
+          <div class="tl-tags">
+            <span class="tl-tag" style="background:#dcfce7;color:#166534;">국립대 최초</span>
+            <span class="tl-tag" style="background:#cffafe;color:#164e63;">산지니 AI</span>
+            <span class="tl-tag" style="background:#fef3c7;color:#92400e;">학생 맞춤형</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 -->
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#8b5cf6;"></div>
+        <div class="tl-card">
+          <div class="tl-date">📅 2026년 3월 5일 · 공식 보도자료</div>
+          <div class="tl-title">🏅 「University AI-MASTER」 국내 대학 최초 인증 획득</div>
+          <div class="tl-body">
+            한국인공지능산업협회 주관 <strong>국내 최초 민간 AI 신뢰성 인증 제도 'University AI-MASTER'</strong>를
+            국내 대학 최초로 최종 승인받았습니다. ①시스템 전반의 신뢰성 ②알고리즘 윤리성(편향 방지)
+            ③기술적 안정성(강건성) 항목 모두 <strong>'적합'</strong> 판정을 받았습니다.
+            국제 기준(EU AI Act)에 부합하는 AI 거버넌스 및 <AI 윤리헌장·활용 가이드라인> 수립,
+            AX·정보화혁신본부 신설을 통한 의사결정 체계 구축이 높이 평가받았습니다.
+          </div>
+          <div class="tl-tags">
+            <span class="tl-tag" style="background:#f3e8ff;color:#6b21a8;">국내 최초</span>
+            <span class="tl-tag" style="background:#dbeafe;color:#1e40af;">EU AI Act 준수</span>
+            <span class="tl-tag" style="background:#dcfce7;color:#166534;">신뢰성·윤리성·안정성 전부 적합</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════ KEY SERVICES ════════════════ -->
+<section class="section" id="services">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-tag">핵심 서비스·인프라</div>
+      <div class="section-title">AX 대전환을 이끄는 혁신 시스템</div>
+      <div class="section-desc">부산대가 직접 구축·운영하는 AI 서비스와 인프라로 실질적 대전환을 구현합니다.</div>
+    </div>
+
+    <div class="achieve-grid">
+
+      <!-- 산지니 AI -->
+      <div class="achieve-card">
+        <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#3b82f6,#06b6d4);border-radius:18px 18px 0 0;"></div>
+        <div class="achieve-icon" style="background:#dbeafe;">🤖</div>
+        <div class="achieve-title">산지니 AI — PNU 자체 AI 서비스 플랫폼</div>
+        <div class="achieve-sub">
+          국립대 최초로 LLM 기반 AI 서비스 플랫폼을 자체 구축·운영합니다.
+          전 구성원 및 지역사회를 대상으로 생성형 AI 서비스를 제공하며,
+          개인정보 보호와 보안이 강화된 PNU 전용 AI 환경을 제공합니다.
+        </div>
+        <div class="achieve-badge" style="background:#dbeafe;color:#1e40af;">🏆 국립대 최초 자체 구축</div>
+      </div>
+
+      <!-- 장영실 AI융합연구원 -->
+      <div class="achieve-card">
+        <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#f59e0b,#d97706);border-radius:18px 18px 0 0;"></div>
+        <div class="achieve-icon" style="background:#fef3c7;">🔬</div>
+        <div class="achieve-title">장영실 AI융합연구원</div>
+        <div class="achieve-sub">
+          산학 협력 중심의 AI 융합연구 허브로 출범했습니다.
+          지역 산업과의 연계를 통해 현장 중심 연구·개발 실행력을 확보하고,
+          동남권 AI 혁신 생태계의 거점 역할을 수행합니다.
+        </div>
+        <div class="achieve-badge" style="background:#fef3c7;color:#92400e;">⚗️ 2025년 12월 개원</div>
+      </div>
+
+      <!-- 지도교수상담 AI 도우미 -->
+      <div class="achieve-card">
+        <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#10b981,#059669);border-radius:18px 18px 0 0;"></div>
+        <div class="achieve-icon" style="background:#dcfce7;">👨‍🏫</div>
+        <div class="achieve-title">지도교수상담 AI 도우미</div>
+        <div class="achieve-sub">
+          성적 요약, 이전 상담 요약, 상담 방향 제시, 취업 정보를 AI가 자동 분석해 제공합니다.
+          상담 결과 초안 자동 생성으로 교원 행정 부담을 획기적으로 줄이며,
+          교수-학생 간 깊이 있는 소통을 지원합니다.
+        </div>
+        <div class="achieve-badge" style="background:#dcfce7;color:#166534;">🎓 국립대 최초 자체 개발</div>
+      </div>
+
+      <!-- AI 통번역 스마트글라스 -->
+      <div class="achieve-card">
+        <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#8b5cf6,#6d28d9);border-radius:18px 18px 0 0;"></div>
+        <div class="achieve-icon" style="background:#f3e8ff;">🕶️</div>
+        <div class="achieve-title">AI 통번역 스마트글라스</div>
+        <div class="achieve-sub">
+          국내 최초로 AI 통번역 스마트글라스를 도입해 교육·연구의 언어 장벽을 해소했습니다.
+          외국인 유학생과 글로벌 연구자를 위한 맞춤형 지원 서비스로,
+          국제화 캠퍼스 구현을 가속화합니다.
+        </div>
+        <div class="achieve-badge" style="background:#f3e8ff;color:#6b21a8;">🌐 국내 최초 도입</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════ CHART ════════════════ -->
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-tag">AX 목표 현황</div>
+      <div class="section-title">핵심 KPI 달성 현황 및 계획</div>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <h4>행정 효율화 만족도 로드맵</h4>
+        <p>AX 추진 전→1차년도→2차년도→3차년도 목표 점수</p>
+        <canvas id="roadmapChart" height="200"></canvas>
+      </div>
+      <div class="chart-card">
+        <h4>A.U.R.A. 4대 전략 분야 추진 현황</h4>
+        <p>각 분야별 추진 완성도 (목표 기준)</p>
+        <canvas id="radarChart" height="240"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════ ROADMAP ════════════════ -->
+<section class="section" id="roadmap">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-tag">향후 계획</div>
+      <div class="section-title">AX 대전환 3개년 로드맵</div>
+      <div class="section-desc">단계별로 심화하는 AI 전환 — 기반 구축 → 확산·고도화 → 선도 생태계 완성</div>
+    </div>
+
+    <div class="roadmap-wrap">
+
+      <!-- 1단계 -->
+      <div class="rm-card">
+        <div class="rm-head" style="background:#fef3c7;">
+          <div class="rm-step" style="background:#f59e0b;">1</div>
+          <div>
+            <h4>기반 구축</h4>
+            <p>2025년 · 완료</p>
+          </div>
+        </div>
+        <div class="rm-body">
+          <div class="rm-item">
+            <div class="rm-check" style="background:#dcfce7;color:#166534;">✓</div>
+            A.U.R.A. 프로젝트 선언 및 발족
+          </div>
+          <div class="rm-item">
+            <div class="rm-check" style="background:#dcfce7;color:#166534;">✓</div>
+            AX·정보화혁신본부 확대 신설
+          </div>
+          <div class="rm-item">
+            <div class="rm-check" style="background:#dcfce7;color:#166534;">✓</div>
+            산지니 AI 플랫폼 자체 구축
+          </div>
+          <div class="rm-item">
+            <div class="rm-check" style="background:#dcfce7;color:#166534;">✓</div>
+            장영실 AI융합연구원 개원
+          </div>
+          <div class="rm-item">
+            <div class="rm-check" style="background:#dcfce7;color:#166534;">✓</div>
+            한국의 경영대상 AI 혁신 대상
+          </div>
+          <div class="rm-item">
+            <div class="rm-check" style="background:#dcfce7;color:#166534;">✓</div>
+            지도교수상담 AI 도우미 구축
+          </div>
+        </div>
+      </div>
+
+      <!-- 2단계 -->
+      <div class="rm-card">
+        <div class="rm-head" style="background:#dbeafe;">
+          <div class="rm-step" style="background:#2563eb;">2</div>
+          <div>
+            <h4>확산·고도화</h4>
+            <p>2026년 · 진행 중</p>
+          </div>
+        </div>
+        <div class="rm-body">
+          <div class="rm-item">
+            <div class="rm-check" style="background:#dcfce7;color:#166534;">✓</div>
+            University AI-MASTER 인증 획득
+          </div>
+          <div class="rm-item">
+            <div class="rm-check" style="background:#dbeafe;color:#1e40af;">→</div>
+            AI 기반 학생 맞춤형 교과·비교과 추천
+          </div>
+          <div class="rm-item">
+            <div class="rm-check" style="background:#dbeafe;color:#1e40af;">→</div>
+            AI 기반 학사행정 시스템 에이전트
+          </div>
+          <div class="rm-item">
+            <div class="rm-check" style="background:#dbeafe;color:#1e40af;">→</div>
+            AI 기반 학습관리시스템(LMS) 구축
+          </div>
+          <div class="rm-item">
+            <div class="rm-check" style="background:#dbeafe;color:#1e40af;">→</div>
+            산지니 AI 플랫폼 고도화
+          </div>
+          <div class="rm-item">
+            <div class="rm-check" style="background:#dbeafe;color:#1e40af;">→</div>
+            글로벌 AI 연구 네트워크 구축
+          </div>
+        </div>
+      </div>
+
+      <!-- 3단계 -->
+      <div class="rm-card">
+        <div class="rm-head" style="background:#dcfce7;">
+          <div class="rm-step" style="background:#10b981;">3</div>
+          <div>
+            <h4>선도 생태계 완성</h4>
+            <p>2027년 · 목표</p>
+          </div>
+        </div>
+        <div class="rm-body">
+          <div class="rm-item">
+            <div class="rm-check" style="background:#f1f5f9;color:#64748b;">◦</div>
+            AI+X 증강인재 4,000명 달성
+          </div>
+          <div class="rm-item">
+            <div class="rm-check" style="background:#f1f5f9;color:#64748b;">◦</div>
+            행정 효율화 만족도 90점 달성
+          </div>
+          <div class="rm-item">
+            <div class="rm-check" style="background:#f1f5f9;color:#64748b;">◦</div>
+            글로벌 대학 AI 연구 네트워크 10개
+          </div>
+          <div class="rm-item">
+            <div class="rm-check" style="background:#f1f5f9;color:#64748b;">◦</div>
+            동남권 AX 허브 대학 완성
+          </div>
+          <div class="rm-item">
+            <div class="rm-check" style="background:#f1f5f9;color:#64748b;">◦</div>
+            지역 산업 AI 전환 생태계 거점화
+          </div>
+          <div class="rm-item">
+            <div class="rm-check" style="background:#f1f5f9;color:#64748b;">◦</div>
+            AI 스마트캠퍼스 구현 완료
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ QUOTE ════════════════ -->
+<div class="quote-section">
+  <div class="quote-inner">
+    <div class="quote-mark">"</div>
+    <div class="quote-text">
+      AI는 단순한 기술혁신을 넘어 국가 경쟁력을 좌우하는 구조적 변화의 중심에 있습니다.
+      부산대는 이러한 흐름을 정확히 읽고, 대학의 모든 영역을 AI 기반으로 재설계하는
+      'PNU AX 대전환'을 통해 고등교육 혁신의 새로운 기준을 만들고 있습니다.
+    </div>
+    <div class="quote-author">
+      <strong>최재원</strong> 부산대학교 총장 &nbsp;|&nbsp; 2025 한국의 경영대상 수상 소감
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>🏛️ 부산대학교 AX 대전환 — PNU-AX 마스터플랜 A.U.R.A. 2.0</p>
+  <p style="margin-top:6px;">본 페이지는 공식 보도자료 및 A.U.R.A. 마스터플랜 자료를 바탕으로 제작되었습니다.</p>
+</footer>
+
+<!-- ════════════════ CHARTS JS ════════════════ -->
+<script>
+  // ── 행정 만족도 로드맵 차트 ──
+  new Chart(document.getElementById('roadmapChart'), {
+    type: 'line',
+    data: {
+      labels: ['추진 전', '1차년도 (2025)', '2차년도 (2026)', '3차년도 (2027)'],
+      datasets: [{
+        label: '행정 효율화 만족도 (점)',
+        data: [70, 75, 80, 90],
+        borderColor: '#2563eb',
+        backgroundColor: 'rgba(37,99,235,0.08)',
+        borderWidth: 3,
+        pointBackgroundColor: ['#94a3b8','#f59e0b','#2563eb','#10b981'],
+        pointBorderColor: 'white',
+        pointBorderWidth: 3,
+        pointRadius: 8,
+        fill: true,
+        tension: 0.4,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: c => ` ${c.raw}점` } }
+      },
+      scales: {
+        y: {
+          min: 60, max: 100,
+          grid: { color: '#f1f5f9' },
+          ticks: { callback: v => v + '점' }
+        },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+
+  // ── 레이더 차트 ──
+  new Chart(document.getElementById('radarChart'), {
+    type: 'radar',
+    data: {
+      labels: ['AI 철학\n(Philosophy)', '융합연구\n(Unified Research)', '증강교육\n(Reinforced Edu)', '적응행정\n(Adaptive Admin)', 'AI 인프라\n(Infrastructure)'],
+      datasets: [
+        {
+          label: '현재 달성',
+          data: [85, 70, 65, 72, 75],
+          borderColor: '#f59e0b',
+          backgroundColor: 'rgba(245,158,11,0.15)',
+          borderWidth: 2,
+          pointBackgroundColor: '#f59e0b',
+        },
+        {
+          label: '2027 목표',
+          data: [100, 100, 100, 100, 100],
+          borderColor: 'rgba(37,99,235,0.4)',
+          backgroundColor: 'rgba(37,99,235,0.05)',
+          borderWidth: 1.5,
+          borderDash: [5, 4],
+          pointBackgroundColor: '#3b82f6',
+          pointRadius: 3,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        r: {
+          min: 0, max: 100,
+          ticks: { display: false },
+          grid: { color: 'rgba(0,0,0,0.07)' },
+          pointLabels: { font: { size: 11 } }
+        }
+      },
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: { size: 12 }, padding: 12, boxWidth: 14 }
+        }
+      }
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회의록 — ARISE PNU AI</title>
+  <style>
+    :root{
+      --navy:#0a2463;--blue:#1a4fa0;--mid:#2563eb;--light:#60a5fa;--pale:#dbeafe;
+      --gold:#f59e0b;--gold2:#fbbf24;--green:#10b981;--teal:#0ea5e9;
+      --bg:#f0f4f8;--card:#ffffff;--text:#1e293b;--sub:#64748b;--bdr:#e2e8f0;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif;
+         background:var(--bg);color:var(--text);line-height:1.65;
+         display:flex;flex-direction:column;min-height:100vh}
+
+    /* NAV */
+    nav{background:var(--navy);padding:0 32px;height:60px;display:flex;align-items:center;
+        justify-content:space-between;position:sticky;top:0;z-index:100;
+        box-shadow:0 2px 12px rgba(0,0,0,.3)}
+    .nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .nav-brand .lb{background:linear-gradient(135deg,var(--gold),#d97706);width:30px;height:30px;
+                    border-radius:7px;display:flex;align-items:center;justify-content:center;
+                    font-weight:900;font-size:12px;color:white}
+    .nav-brand .bt{color:white;font-weight:800;font-size:14px}
+    .nav-links{display:flex;gap:4px}
+    .nav-links a{color:rgba(255,255,255,.65);font-size:12px;font-weight:600;padding:6px 12px;
+                  border-radius:6px;text-decoration:none;transition:all .2s;white-space:nowrap}
+    .nav-links a:hover{background:rgba(255,255,255,.1);color:white}
+    .nav-links a.active{background:rgba(37,99,235,.5);color:white}
+
+    /* HERO */
+    .hero{background:linear-gradient(145deg,#040d1a 0%,#0a1e3f 40%,#1a4fa0 80%,#0c4a6e 100%);
+          padding:56px 40px 48px;text-align:center;position:relative;overflow:hidden}
+    .hero::before{content:'';position:absolute;inset:0;
+                   background:radial-gradient(ellipse 70% 60% at 50% 110%,
+                   rgba(99,102,241,.25) 0%,transparent 60%)}
+    .hero-inner{position:relative;z-index:1;max-width:760px;margin:0 auto}
+    .hero-eyebrow{display:inline-flex;align-items:center;gap:8px;
+                   background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.35);
+                   border-radius:20px;padding:5px 16px;font-size:12px;color:var(--gold2);
+                   font-weight:700;letter-spacing:.5px;margin-bottom:18px}
+    .hero h1{font-size:36px;font-weight:900;color:white;letter-spacing:-1px;
+              margin-bottom:8px;line-height:1.2}
+    .hero-sub{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8}
+
+    /* CONTAINER */
+    .container{max-width:900px;margin:0 auto;padding:0 24px}
+    .section{padding:48px 0}
+
+    /* MEETING LIST */
+    .meeting-list{display:flex;flex-direction:column;gap:14px;margin-top:28px}
+    .meeting-card{background:var(--card);border:1px solid var(--bdr);border-radius:14px;
+                   padding:22px 26px;display:flex;align-items:center;gap:20px;
+                   text-decoration:none;color:inherit;
+                   transition:box-shadow .2s,transform .2s,border-color .2s}
+    .meeting-card:hover{box-shadow:0 8px 28px rgba(0,0,0,.1);transform:translateY(-2px);
+                          border-color:var(--light)}
+    .meeting-date-badge{background:linear-gradient(135deg,var(--navy),var(--blue));
+                          color:white;border-radius:10px;padding:10px 16px;
+                          text-align:center;min-width:72px;flex-shrink:0}
+    .meeting-date-badge .mon{font-size:10px;font-weight:700;letter-spacing:1px;opacity:.7}
+    .meeting-date-badge .day{font-size:22px;font-weight:900;line-height:1}
+    .meeting-date-badge .year{font-size:10px;opacity:.6;margin-top:2px}
+    .meeting-info{flex:1}
+    .meeting-title{font-size:16px;font-weight:700;margin-bottom:4px;color:var(--text)}
+    .meeting-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+    .meta-chip{font-size:11px;background:var(--pale);color:var(--blue);
+                padding:3px 9px;border-radius:20px;font-weight:600}
+    .meeting-arrow{color:var(--sub);font-size:18px;flex-shrink:0}
+
+    /* SECTION HEADER */
+    .sec-label{font-size:11px;font-weight:700;color:var(--sub);letter-spacing:1px;
+                text-transform:uppercase;margin-bottom:6px}
+    .sec-title{font-size:20px;font-weight:800;margin-bottom:6px}
+    .sec-desc{color:var(--sub);font-size:13px;line-height:1.7}
+
+    /* EMPTY STATE */
+    .empty-note{text-align:center;padding:40px;color:var(--sub);font-size:13px}
+
+    footer{background:var(--navy);color:rgba(255,255,255,.45);text-align:center;
+           font-size:11px;padding:20px;margin-top:auto}
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="index.html">
+    <div class="lb">PNU</div>
+    <span class="bt">ARISE PNU AI</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">제안서</a>
+    <a href="actions.html">실행항목</a>
+    <a href="meeting_index.html" class="active">회의록</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">📋 Meeting Notes</div>
+    <h1>AI 거점대학 회의록</h1>
+    <p class="hero-sub">제안 준비 및 추진 과정에서 진행된 회의의 기록입니다.<br>
+    각 회의별 안건, 논의사항, 결정사항을 확인할 수 있습니다.</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="section">
+    <div class="sec-label">All Meetings</div>
+    <div class="sec-title">회의 목록</div>
+    <p class="sec-desc">최신순으로 정렬됩니다.</p>
+
+    <div class="meeting-list">
+
+      <!-- 2026-05-08 -->
+      <a class="meeting-card" href="meeting_20260508.html">
+        <div class="meeting-date-badge">
+          <div class="mon">MAY</div>
+          <div class="day">08</div>
+          <div class="year">2026</div>
+        </div>
+        <div class="meeting-info">
+          <div class="meeting-title">AI 거점대학 총괄 TF 미팅</div>
+          <div class="meeting-meta">
+            <span class="meta-chip">6명 참석</span>
+            <span class="meta-chip">홍보·시스템</span>
+            <span class="meta-chip">가시적 협력활동</span>
+            <span class="meta-chip">소속 학과 협력</span>
+          </div>
+        </div>
+        <div class="meeting-arrow">›</div>
+      </a>
+
+      <!-- 추후 회의들이 여기에 추가됩니다 -->
+
+    </div>
+  </div>
+</div>
+
+<footer>ARISE PNU AI — 부산대학교 AI 거점대학 추진 TF &nbsp;|&nbsp; Internal Use Only</footer>
+
+</body>
+</html>
