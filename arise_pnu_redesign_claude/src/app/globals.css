@@ -1,8 +1,8 @@
-/* --- External fonts (loaded at runtime via CDN, so the build never depends on font fetches) --- */
+/* --- External fonts (loaded locally for offline support) --- */
 /* Pretendard: the de-facto Korean web font — universal base for all variants */
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
+/* @import url("./fonts/pretendard-variable-local.css"); */
 /* Latin display + Korean display faces, mapped per reference variant */
-@import url("https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;800;900&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&family=Black+Han+Sans&family=Jua&family=Do+Hyeon&family=Nanum+Myeongjo:wght@400;700;800&family=Gowun+Batang:wght@400;700&display=swap");
+/* @import url("./fonts/google-fonts-local.css"); */
 
 @import "tailwindcss";
 

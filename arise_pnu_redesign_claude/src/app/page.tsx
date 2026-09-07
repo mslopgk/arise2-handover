@@ -36,13 +36,12 @@ export default function Hub() {
             컬러·스크롤 연출로 구현했습니다.
           </p>
         </header>
-
         {/* Variant gallery */}
-        <ul className="grid grid-cols-1 gap-5 md:grid-cols-2">
+        <ul className="grid grid-cols-1 gap-5 md:grid-cols-3">
           {variants.map((v, i) => (
             <li key={v.slug}>
               <Link
-                href={`/${v.slug}`}
+                href={v.slug.startsWith("s30") ? `/s30/about/aura.html` : `/${v.slug}`}
                 className="group relative flex min-h-[240px] flex-col justify-between overflow-hidden rounded-2xl border border-white/10 p-7 transition-colors duration-300 hover:border-white/25 md:min-h-[280px] md:p-9"
                 style={{ background: v.bg }}
               >
@@ -91,7 +90,6 @@ export default function Hub() {
             </li>
           ))}
         </ul>
-
         <footer className="mt-20 flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-8 font-mono text-[11px] uppercase tracking-[0.2em] text-[#6b6b66]">
           <span>arise@pusan.ac.kr · Next.js 16 · Tailwind v4 · GSAP · Lenis</span>
         </footer>

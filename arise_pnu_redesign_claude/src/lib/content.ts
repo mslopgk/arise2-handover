@@ -593,6 +593,14 @@ export const variants = [
     accent: "#e2231a",
     bg: "#ffffff",
   },
+  {
+    slug: "s30",
+    name: "기존 s30",
+    vibe: "Original",
+    desc: "기존 A.U.R.A 마스터플랜 페이지",
+    accent: "#00a651",
+    bg: "#0b2a55",
+  },
 ] as const;
 
 export type Variant = (typeof variants)[number];
